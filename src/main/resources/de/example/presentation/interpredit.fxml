@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19">
+   <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Menu mnemonicParsing="false" text="Interpredit">
+         <MenuItem mnemonicParsing="false" text="Close" />
+      </Menu>
+      <Menu mnemonicParsing="false" text="File">
+         <MenuItem mnemonicParsing="false" text="Open..." />
+         <SeparatorMenuItem mnemonicParsing="false" />
+         <MenuItem mnemonicParsing="false" text="Save" />
+         <MenuItem mnemonicParsing="false" text="Delete" />
+         <SeparatorMenuItem mnemonicParsing="false" />
+         <MenuItem mnemonicParsing="false" text="Run" />
+         <MenuItem disable="true" mnemonicParsing="false" text="Stop" />
+      </Menu>
+   </MenuBar>
+   <SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+      <SplitPane dividerPositions="0.6423248882265276" orientation="VERTICAL">
+         <VBox>
+            <Label maxHeight="-Infinity" minHeight="-Infinity" text=" " VBox.vgrow="NEVER">
+               <padding>
+                  <Insets bottom="5.0" left="7.0" right="7.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+            <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+               <TextArea promptText="&gt;" HBox.hgrow="ALWAYS">
+                  <font>
+                     <Font name="SF Mono Regular" size="12.0" />
+                  </font>
+               </TextArea>
+            </HBox>
+            <BorderPane maxHeight="-Infinity" minHeight="-Infinity" VBox.vgrow="NEVER">
+               <center>
+                  <TextField maxHeight="-Infinity" minHeight="-Infinity" promptText="&gt;" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="SF Mono Regular" size="12.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </BorderPane.margin>
+                  </TextField>
+               </center>
+            </BorderPane>
+         </VBox>
+         <VBox>
+            <TextArea editable="false" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="SF Mono Regular" size="12.0" />
+               </font>
+            </TextArea>
+         </VBox>
+      </SplitPane>
+   </SplitPane>
+</AnchorPane>

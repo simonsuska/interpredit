@@ -1,0 +1,33 @@
+# Compiled class files
+.class
+
+# Log files
+.log
+
+# IntelliJ
+.iml
+.ipr
+.iws
+.idea/
+target/
+
+# BlueJ
+.ctxt
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/
+build/
+
+# Atom
+.atom/
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store

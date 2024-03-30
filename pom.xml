@@ -18,13 +18,13 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21.0.2</version>
+            <version>19.0.2.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>21.0.2</version>
+            <version>19.0.2.1</version>
         </dependency>
 
         <!-- JUnit -->
@@ -61,7 +61,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>HelloFX</mainClass>
+                    <mainClass>de.example.presentation.Interpredit</mainClass>
                 </configuration>
             </plugin>
         </plugins>

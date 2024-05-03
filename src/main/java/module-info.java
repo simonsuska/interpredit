@@ -1,7 +1,10 @@
 module Interpredit {
     requires javafx.controls;
     requires javafx.fxml;
+    requires io.vavr;
 
     opens de.example.presentation to javafx.fxml;
     exports de.example.presentation;
+    exports de.example.presentation.controller;
+    opens de.example.presentation.controller to javafx.fxml;
 }

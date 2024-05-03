@@ -1,5 +1,6 @@
-package de.example.presentation;
+package de.example.presentation.controller;
 
+import de.example.presentation.Model;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;

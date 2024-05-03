@@ -8,6 +8,11 @@ public class RepositoryImpl implements Repository {
     private File file;
 
     @Override
+    public void open(String content) {
+        // TODO: Implement
+    }
+
+    @Override
     public void save(String content) {
         // TODO: Implement
     }

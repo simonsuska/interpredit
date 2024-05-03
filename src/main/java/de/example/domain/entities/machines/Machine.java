@@ -1,8 +1,6 @@
 package de.example.domain.entities.machines;
 
-import de.example.core.exceptions.InputException;
-import de.example.core.exceptions.InterpreditException;
-import de.example.domain.entities.ExitStatus;
+import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.FileExtension;
 
 public abstract class Machine {
@@ -21,7 +19,7 @@ public abstract class Machine {
         return this.interrupted;
     }
 
-    public abstract ExitStatus run(String program) throws InterpreditException;
+    public abstract ExitStatus run(String cmd);
     public abstract String write();
-    public abstract void read(String input) throws InputException;
+    public abstract ExitStatus read(String input);
 }

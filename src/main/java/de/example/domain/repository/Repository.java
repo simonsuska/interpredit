@@ -1,8 +1,7 @@
 package de.example.domain.repository;
 
-import java.io.File;
-
 public interface Repository {
+    void open(String content);
     void save(String content);
     void delete();
 }

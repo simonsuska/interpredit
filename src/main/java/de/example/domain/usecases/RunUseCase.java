@@ -1,8 +1,13 @@
 package de.example.domain.usecases;
 
-public class RunUseCase implements Executor {
+import de.example.domain.entities.exit.ExitStatus;
+
+import java.util.function.Function;
+
+public class RunUseCase implements Function<String, ExitStatus> {
     @Override
-    public void call() {
+    public ExitStatus apply(String cmd) {
         // TODO: Implement
+        return null;
     }
 }

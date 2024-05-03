@@ -1,8 +1,7 @@
 package de.example.domain.entities.machines;
 
-import de.example.core.exceptions.CommandExecutionException;
-import de.example.domain.entities.ExitStatus;
+import de.example.domain.entities.exit.ExitStatus;
 
 public interface Command {
-    ExitStatus execute() throws CommandExecutionException;
+    ExitStatus execute();
 }

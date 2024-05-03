@@ -1,8 +1,13 @@
 package de.example.domain.usecases;
 
-public class StopUsecase implements Executor {
+import de.example.domain.entities.exit.ExitStatus;
+
+import java.util.function.Supplier;
+
+public class StopUsecase implements Supplier<ExitStatus> {
     @Override
-    public void call() {
+    public ExitStatus get() {
         // TODO: Implement
+        return null;
     }
 }

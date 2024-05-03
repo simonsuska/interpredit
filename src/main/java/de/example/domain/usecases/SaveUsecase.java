@@ -1,10 +1,16 @@
 package de.example.domain.usecases;
 
-import java.util.function.Consumer;
+import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.repository.Repository;
 
-public class SaveUsecase implements Consumer<String> {
+import java.util.function.Function;
+
+public class SaveUsecase implements Function<String, ExitStatus> {
+    private Repository repository;
+
     @Override
-    public void accept(String content) {
+    public ExitStatus apply(String content) {
         // TODO: Implement
+        return null;
     }
 }

@@ -1,8 +1,16 @@
 package de.example.domain.usecases;
 
-public class DeleteUsecase implements Executor {
+import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.repository.Repository;
+
+import java.util.function.Supplier;
+
+public class DeleteUsecase implements Supplier<ExitStatus> {
+    private Repository repository;
+
     @Override
-    public void call() {
+    public ExitStatus get() {
         // TODO: Implement
+        return null;
     }
 }

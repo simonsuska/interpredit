@@ -1,21 +1,16 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.core.exceptions.InputException;
-import de.example.core.exceptions.InterpreditException;
-import de.example.core.exceptions.commandExecutionExceptions.InvalidAddressException;
-import de.example.core.exceptions.commandExecutionExceptions.InvalidValueException;
-import de.example.domain.entities.Arithmetic;
-import de.example.domain.entities.Condition;
-import de.example.domain.entities.ExitStatus;
-import de.example.domain.entities.buffers.IntBuffer;
+import de.example.domain.entities.operations.Arithmetic;
+import de.example.domain.entities.operations.Condition;
+import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.Buffer;
 import de.example.domain.entities.machines.Machine;
 
 public class RandomAccessMachine extends Machine {
     private int pc;
-    private IntBuffer buffer;
+    private Buffer<Integer> buffer;
     private int[] memory;
 
-    private RandomAccessMachineCommand[] program;
     private RandomAccessMachineDecoder decoder;
 
     private void forward() {
@@ -26,20 +21,22 @@ public class RandomAccessMachine extends Machine {
         // TODO: Implement
     }
 
-    private void checkMemoryValidity(int address) throws InvalidAddressException {
-        // TODO: Implement
-    }
-
-    private void checkProgramValidity(int address) throws InvalidAddressException {
-        // TODO: Implement
-    }
-
-    private ExitStatus performArithmetic(int address, Arithmetic arithmetic) throws InvalidAddressException {
+    private ExitStatus checkMemoryValidity(int address) {
         // TODO: Implement
         return null;
     }
 
-    private ExitStatus performBranch(int address, Condition condition) throws InvalidAddressException {
+    private ExitStatus checkProgramValidity(int address){
+        // TODO: Implement
+        return null;
+    }
+
+    private ExitStatus performArithmetic(int address, Arithmetic arithmetic) {
+        // TODO: Implement
+        return null;
+    }
+
+    private ExitStatus performBranch(int address, Condition condition) {
         // TODO: Implement
         return null;
     }
@@ -49,12 +46,7 @@ public class RandomAccessMachine extends Machine {
     }
 
     @Override
-    public ExitStatus run(String program) throws InterpreditException {
-        // TODO: Implement
-        return null;
-    }
-
-    public ExitStatus resume() throws InterpreditException {
+    public ExitStatus run(String cmd) {
         // TODO: Implement
         return null;
     }
@@ -66,36 +58,37 @@ public class RandomAccessMachine extends Machine {
     }
 
     @Override
-    public void read(String input) throws InputException {
-        // TODO: Implement
-    }
-
-    public ExitStatus set(int value) throws InvalidValueException {
+    public ExitStatus read(String input) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus add(int address) throws InvalidAddressException {
+    public ExitStatus set(int value) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus sub(int address) throws InvalidAddressException {
+    public ExitStatus add(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus mul(int address) throws InvalidAddressException {
+    public ExitStatus sub(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus div(int address) throws InvalidAddressException {
+    public ExitStatus mul(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus lda(int address) throws InvalidAddressException {
+    public ExitStatus div(int address) {
+        // TODO: Implement
+        return null;
+    }
+
+    public ExitStatus lda(int address) {
         // TODO: Implement
         return null;
     }
@@ -105,52 +98,52 @@ public class RandomAccessMachine extends Machine {
         return null;
     }
 
-    public ExitStatus sta(int address) throws InvalidAddressException {
+    public ExitStatus sta(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus inp(int address) throws InvalidAddressException {
+    public ExitStatus inp(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus out(int address) throws InvalidAddressException {
+    public ExitStatus out(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jmp(int address) throws InvalidAddressException {
+    public ExitStatus jmp(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jez(int address) throws InvalidAddressException {
+    public ExitStatus jez(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jne(int address) throws InvalidAddressException {
+    public ExitStatus jne(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jlz(int address) throws InvalidAddressException {
+    public ExitStatus jlz(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jle(int address) throws InvalidAddressException {
+    public ExitStatus jle(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jgz(int address) throws InvalidAddressException {
+    public ExitStatus jgz(int address) {
         // TODO: Implement
         return null;
     }
 
-    public ExitStatus jge(int address) throws InvalidAddressException {
+    public ExitStatus jge(int address) {
         // TODO: Implement
         return null;
     }

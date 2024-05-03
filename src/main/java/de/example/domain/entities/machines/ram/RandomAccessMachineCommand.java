@@ -1,7 +1,6 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.core.exceptions.CommandExecutionException;
-import de.example.domain.entities.ExitStatus;
+import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.machines.Command;
 
 public class RandomAccessMachineCommand implements Command {
@@ -14,7 +13,7 @@ public class RandomAccessMachineCommand implements Command {
     }
 
     @Override
-    public ExitStatus execute() throws CommandExecutionException {
+    public ExitStatus execute() {
         // TODO: Implement
         return null;
     }

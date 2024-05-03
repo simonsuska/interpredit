@@ -1,9 +1,9 @@
-package de.example.core.exceptions;
+package de.example.domain.entities.exit.details;
 
-public class InputException extends InterpreditException {
+public class InvalidInput implements Detail {
     private final String input;
 
-    public InputException(String input) {
+    public InvalidInput(String input) {
         this.input = input;
     }
 

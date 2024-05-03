@@ -1,12 +1,13 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.core.exceptions.CommandExecutionException;
+import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.machines.Command;
 import de.example.domain.entities.machines.Decoder;
+import io.vavr.control.Either;
 
 public class RandomAccessMachineDecoder implements Decoder {
     @Override
-    public Command decode(String command) throws CommandExecutionException {
+    public Either<ExitStatus, Command> decode(String command) {
         // TODO: Implement
         return null;
     }

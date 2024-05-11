@@ -1,7 +1,7 @@
 package de.example.domain.repository;
 
 public interface Repository {
-    void open(String content);
+    String open(String filename);
     void save(String content);
     void delete();
 }

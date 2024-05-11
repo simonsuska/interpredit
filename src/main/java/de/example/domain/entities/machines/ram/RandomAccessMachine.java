@@ -1,17 +1,31 @@
 package de.example.domain.entities.machines.ram;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import de.example.core.Di;
+import de.example.domain.entities.machines.Decoder;
 import de.example.domain.entities.operations.Arithmetic;
 import de.example.domain.entities.operations.Condition;
 import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.Buffer;
 import de.example.domain.entities.machines.Machine;
 
+import java.util.Objects;
+
 public class RandomAccessMachine extends Machine {
     private int pc;
-    private Buffer<Integer> buffer;
     private int[] memory;
 
-    private RandomAccessMachineDecoder decoder;
+    private final Buffer<Integer> buffer;
+    private final Decoder decoder;
+
+    @Inject
+    public RandomAccessMachine(
+            @Named(Di.RAM_INT_BUFFER) Buffer<Integer> buffer,
+            @Named(Di.RAM_DECODER) Decoder decoder) {
+        this.buffer = Objects.requireNonNull(buffer);
+        this.decoder = Objects.requireNonNull(decoder);
+    }
 
     private void forward() {
         // TODO: Implement

@@ -1,15 +1,25 @@
 package de.example.data.repository;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import de.example.core.Di;
+import de.example.data.datasources.MutableDatasource;
 import de.example.domain.repository.Repository;
 
-import java.io.File;
+import java.util.Objects;
 
 public class RepositoryImpl implements Repository {
-    private File file;
+    private final MutableDatasource datasource;
+
+    @Inject
+    public RepositoryImpl(@Named(Di.MUTABLE_DATASOURCE) MutableDatasource datasource) {
+        this.datasource = Objects.requireNonNull(datasource);
+    }
 
     @Override
-    public void open(String content) {
+    public String open(String filename) {
         // TODO: Implement
+        return null;
     }
 
     @Override

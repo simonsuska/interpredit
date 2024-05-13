@@ -31,8 +31,9 @@ public class Model {
         // TODO: Implement
     }
 
-    public void openFile(String filename) {
+    public String openFile(String filename) {
         // TODO: Implement
+        return null;
     }
 
     public void run() {

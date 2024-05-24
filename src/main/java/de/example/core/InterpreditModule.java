@@ -7,6 +7,8 @@ import de.example.data.datasources.MutableDatasource;
 import de.example.data.repository.RepositoryImpl;
 import de.example.domain.entities.Buffer;
 import de.example.domain.entities.machines.Decoder;
+import de.example.domain.entities.machines.Machine;
+import de.example.domain.entities.machines.ram.RandomAccessMachine;
 import de.example.domain.entities.machines.ram.RandomAccessMachineDecoder;
 import de.example.domain.repository.Repository;
 import de.example.domain.usecases.*;
@@ -54,5 +56,9 @@ public class InterpreditModule extends AbstractModule {
         bind(Model.class)
                 .annotatedWith(Names.named(Di.MODEL))
                 .to(Model.class);
+
+        bind(Machine.class)
+                .annotatedWith(Names.named(Di.MACHINE))
+                .to(RandomAccessMachine.class);
     }
 }

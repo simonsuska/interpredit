@@ -23,12 +23,14 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void save(String content) {
+    public boolean save(String content) {
         // TODO: Implement
+        return false;
     }
 
     @Override
-    public void delete() {
+    public boolean delete() {
         // TODO: Implement
+        return false;
     }
 }

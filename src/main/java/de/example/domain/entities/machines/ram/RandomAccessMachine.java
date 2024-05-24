@@ -27,11 +27,21 @@ public class RandomAccessMachine extends Machine {
         this.decoder = Objects.requireNonNull(decoder);
     }
 
+    public RandomAccessMachine(int[] memory, Buffer<Integer> buffer, Decoder decoder) {
+        this.memory = memory;
+        this.buffer = buffer;
+        this.decoder = decoder;
+    }
+
     private void forward() {
         // TODO: Implement
     }
 
     private void branch(int address) {
+        // TODO: Implement
+    }
+
+    private void reset() {
         // TODO: Implement
     }
 
@@ -55,10 +65,6 @@ public class RandomAccessMachine extends Machine {
         return null;
     }
 
-    private void reset() {
-        // TODO: Implement
-    }
-
     @Override
     public ExitStatus run(String cmd) {
         // TODO: Implement
@@ -66,13 +72,13 @@ public class RandomAccessMachine extends Machine {
     }
 
     @Override
-    public String write() {
+    public String requestOutput() {
         // TODO: Implement
         return null;
     }
 
     @Override
-    public ExitStatus read(String input) {
+    public ExitStatus deliverInput(String input) {
         // TODO: Implement
         return null;
     }

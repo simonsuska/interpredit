@@ -30,5 +30,8 @@ class RandomAccessMachineDecoderTest {
 
         result = decoder.decode(" CMD 1  ");
         assertTrue(result.isRight());
+
+        result = decoder.decode(" CMD   1  ");
+        assertTrue(result.isRight());
     }
 }

@@ -20,6 +20,6 @@ public abstract class Machine {
     }
 
     public abstract ExitStatus run(String cmd);
-    public abstract String write();
-    public abstract ExitStatus read(String input);
+    public abstract String requestOutput();
+    public abstract ExitStatus deliverInput(String input);
 }

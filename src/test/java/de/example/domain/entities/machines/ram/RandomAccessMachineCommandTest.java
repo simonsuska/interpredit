@@ -2,15 +2,14 @@ package de.example.domain.entities.machines.ram;
 
 import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.exit.status.Status;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 class RandomAccessMachineCommandTest {
-    @Mock
     private RandomAccessMachine ram;
 
     private static final int SET_VALUE = 1;
@@ -18,13 +17,18 @@ class RandomAccessMachineCommandTest {
     private static final int OUT_VALUE = 3;
     private static final int HLT_VALUE = 4;
 
+    @BeforeEach
+    void setUp() {
+        ram = mock(RandomAccessMachine.class);
+    }
+
     @Test
     void executeWithStatusContinue() {
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("SET", SET_VALUE);
         ExitStatus exitStatus = command.execute(ram);
 
+        verify(ram, times(1)).set(SET_VALUE);
         assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-        Mockito.verify(ram, times(1)).set(SET_VALUE);
     }
 
     @Test
@@ -32,8 +36,8 @@ class RandomAccessMachineCommandTest {
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("INP", INP_VALUE);
         ExitStatus exitStatus = command.execute(ram);
 
+        verify(ram, times(1)).inp(INP_VALUE);
         assertEquals(exitStatus.getStatus(), Status.INPUT);
-        Mockito.verify(ram, times(1)).inp(INP_VALUE);
     }
 
     @Test
@@ -41,8 +45,8 @@ class RandomAccessMachineCommandTest {
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("OUT", OUT_VALUE);
         ExitStatus exitStatus = command.execute(ram);
 
+        verify(ram, times(1)).out(OUT_VALUE);
         assertEquals(exitStatus.getStatus(), Status.OUTPUT);
-        Mockito.verify(ram, times(1)).out(OUT_VALUE);
     }
 
     @Test
@@ -50,7 +54,7 @@ class RandomAccessMachineCommandTest {
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("HLT", HLT_VALUE);
         ExitStatus exitStatus = command.execute(ram);
 
+        verify(ram, times(1)).hlt(HLT_VALUE);
         assertEquals(exitStatus.getStatus(), Status.QUIT);
-        Mockito.verify(ram, times(1)).hlt(HLT_VALUE);
     }
 }

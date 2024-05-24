@@ -6,8 +6,9 @@ public class FileDatasource implements MutableDatasource {
     private File file;
 
     @Override
-    public void write(String content) {
+    public boolean write(String content) {
         // TODO: Implement
+        return false;
     }
 
     @Override
@@ -17,12 +18,14 @@ public class FileDatasource implements MutableDatasource {
     }
 
     @Override
-    public void set(String datasource) {
+    public boolean set(String datasource) {
         // TODO: Implement
+        return false;
     }
 
     @Override
-    public void unset() {
+    public boolean unset() {
         // TODO: Implement
+        return false;
     }
 }

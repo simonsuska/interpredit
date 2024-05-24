@@ -27,7 +27,8 @@ class RepositoryImplTest {
     }
 
     @Test
-    void open() {
+    void openSuccess() {
+        when(fileDatasource.set(FILENAME)).thenReturn(true);
         when(fileDatasource.read()).thenReturn(OPEN_FILE_CONTENTS);
 
         String fileContents = repository.open(FILENAME);
@@ -38,14 +39,45 @@ class RepositoryImplTest {
     }
 
     @Test
-    void save() {
-        repository.save(SAVE_FILE_CONTENTS);
-        verify(fileDatasource, times(1)).write(SAVE_FILE_CONTENTS);
+    void openFailure() {
+        when(fileDatasource.set(FILENAME)).thenReturn(false);
+        when(fileDatasource.read()).thenReturn(null);
+
+        String fileContents = repository.open(FILENAME);
+        assertNull(fileContents);
     }
 
     @Test
-    void delete() {
-        repository.delete();
+    void saveSuccess() {
+        when(fileDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(true);
+
+        boolean result = repository.save(SAVE_FILE_CONTENTS);
+        verify(fileDatasource, times(1)).write(SAVE_FILE_CONTENTS);
+        assertTrue(result);
+    }
+
+    @Test
+    void saveFailure() {
+        when(fileDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(false);
+
+        boolean result = repository.save(SAVE_FILE_CONTENTS);
+        assertFalse(result);
+    }
+
+    @Test
+    void deleteSuccess() {
+        when(fileDatasource.unset()).thenReturn(true);
+
+        boolean result = repository.delete();
         verify(fileDatasource, times(1)).unset();
+        assertTrue(result);
+    }
+
+    @Test
+    void deleteFailure() {
+        when(fileDatasource.unset()).thenReturn(false);
+
+        boolean result = repository.delete();
+        assertFalse(result);
     }
 }

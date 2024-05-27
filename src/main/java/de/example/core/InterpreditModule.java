@@ -60,5 +60,13 @@ public class InterpreditModule extends AbstractModule {
         bind(Machine.class)
                 .annotatedWith(Names.named(Di.MACHINE))
                 .to(RandomAccessMachine.class);
+
+        bind(OutputUsecase.class)
+                .annotatedWith(Names.named(Di.OUTPUT_USECASE))
+                .to(OutputUsecase.class);
+
+        bind(InputUsecase.class)
+                .annotatedWith(Names.named(Di.INPUT_USECASE))
+                .to(InputUsecase.class);
     }
 }

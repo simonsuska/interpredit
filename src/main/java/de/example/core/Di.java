@@ -12,4 +12,6 @@ public class Di {
     public static final String STOP_USECASE = "8";
     public static final String MODEL = "9";
     public static final String MACHINE = "10";
+    public static final String OUTPUT_USECASE = "11";
+    public static final String INPUT_USECASE = "12";
 }

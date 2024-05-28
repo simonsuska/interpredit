@@ -23,7 +23,7 @@ class SaveUsecaseTest {
 
     @BeforeEach
     void setUp() {
-        repository = mock(RepositoryImpl.class);
+        repository = mock(Repository.class);
         saveUsecase = new SaveUsecase(repository);
     }
 

@@ -3,6 +3,14 @@ package de.example.domain.entities;
 public class Buffer<T> {
     private T value;
 
+    public Buffer() {
+        this.value = null;
+    }
+
+    public Buffer(T value) {
+        this.value = value;
+    }
+
     public T read() {
         // TODO: Implement
         return null;

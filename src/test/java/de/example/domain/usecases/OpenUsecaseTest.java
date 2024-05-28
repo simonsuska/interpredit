@@ -22,7 +22,7 @@ class OpenUsecaseTest {
 
     @BeforeEach
     void setUp() {
-        repository = mock(RepositoryImpl.class);
+        repository = mock(Repository.class);
         openUsecase = new OpenUsecase(repository);
     }
 

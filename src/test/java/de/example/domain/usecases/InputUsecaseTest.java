@@ -4,7 +4,6 @@ import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.exit.builder.ExitStatusBuilder;
 import de.example.domain.entities.exit.status.Status;
 import de.example.domain.entities.machines.Machine;
-import de.example.domain.entities.machines.ram.RandomAccessMachine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,7 @@ class InputUsecaseTest {
 
     @BeforeEach
     void setUp() {
-        machine = mock(RandomAccessMachine.class);
+        machine = mock(Machine.class);
         inputUsecase = new InputUsecase(machine);
     }
 

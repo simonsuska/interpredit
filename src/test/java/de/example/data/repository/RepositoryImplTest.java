@@ -1,11 +1,10 @@
 package de.example.data.repository;
 
 import de.example.data.datasources.FileDatasource;
+import de.example.data.datasources.MutableDatasource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RepositoryImplTest {
-    private FileDatasource fileDatasource;
+    private MutableDatasource mutableDatasource;
     private RepositoryImpl repository;
 
     private static final String OPEN_FILE_CONTENTS = "Open file contents";
@@ -22,26 +21,26 @@ class RepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        fileDatasource = mock(FileDatasource.class);
-        repository = new RepositoryImpl(fileDatasource);
+        mutableDatasource = mock(MutableDatasource.class);
+        repository = new RepositoryImpl(mutableDatasource);
     }
 
     @Test
     void openSuccess() {
-        when(fileDatasource.set(FILENAME)).thenReturn(true);
-        when(fileDatasource.read()).thenReturn(OPEN_FILE_CONTENTS);
+        when(mutableDatasource.set(FILENAME)).thenReturn(true);
+        when(mutableDatasource.read()).thenReturn(OPEN_FILE_CONTENTS);
 
         String fileContents = repository.open(FILENAME);
 
-        verify(fileDatasource, times(1)).set(FILENAME);
-        verify(fileDatasource, times(1)).read();
+        verify(mutableDatasource, times(1)).set(FILENAME);
+        verify(mutableDatasource, times(1)).read();
         assertEquals(fileContents, OPEN_FILE_CONTENTS);
     }
 
     @Test
     void openFailure() {
-        when(fileDatasource.set(FILENAME)).thenReturn(false);
-        when(fileDatasource.read()).thenReturn(null);
+        when(mutableDatasource.set(FILENAME)).thenReturn(false);
+        when(mutableDatasource.read()).thenReturn(null);
 
         String fileContents = repository.open(FILENAME);
         assertNull(fileContents);
@@ -49,16 +48,16 @@ class RepositoryImplTest {
 
     @Test
     void saveSuccess() {
-        when(fileDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(true);
+        when(mutableDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(true);
 
         boolean result = repository.save(SAVE_FILE_CONTENTS);
-        verify(fileDatasource, times(1)).write(SAVE_FILE_CONTENTS);
+        verify(mutableDatasource, times(1)).write(SAVE_FILE_CONTENTS);
         assertTrue(result);
     }
 
     @Test
     void saveFailure() {
-        when(fileDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(false);
+        when(mutableDatasource.write(SAVE_FILE_CONTENTS)).thenReturn(false);
 
         boolean result = repository.save(SAVE_FILE_CONTENTS);
         assertFalse(result);
@@ -66,16 +65,16 @@ class RepositoryImplTest {
 
     @Test
     void deleteSuccess() {
-        when(fileDatasource.unset()).thenReturn(true);
+        when(mutableDatasource.unset()).thenReturn(true);
 
         boolean result = repository.delete();
-        verify(fileDatasource, times(1)).unset();
+        verify(mutableDatasource, times(1)).unset();
         assertTrue(result);
     }
 
     @Test
     void deleteFailure() {
-        when(fileDatasource.unset()).thenReturn(false);
+        when(mutableDatasource.unset()).thenReturn(false);
 
         boolean result = repository.delete();
         assertFalse(result);

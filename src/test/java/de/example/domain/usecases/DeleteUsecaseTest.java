@@ -19,7 +19,7 @@ class DeleteUsecaseTest {
 
     @BeforeEach
     void setUp() {
-        repository = mock(RepositoryImpl.class);
+        repository = mock(Repository.class);
         deleteUsecase = new DeleteUsecase(repository);
     }
 

@@ -1,6 +1,7 @@
 package de.example.core;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import de.example.data.datasources.FileDatasource;
 import de.example.data.datasources.MutableDatasource;
@@ -19,7 +20,8 @@ public class InterpreditModule extends AbstractModule {
     protected void configure() {
         bind(MutableDatasource.class)
                 .annotatedWith(Names.named(Di.MUTABLE_DATASOURCE))
-                .to(FileDatasource.class);
+                .to(FileDatasource.class)
+                .in(Singleton.class);
 
         bind(Buffer.class)
                 .annotatedWith(Names.named(Di.RAM_INT_BUFFER))
@@ -31,7 +33,8 @@ public class InterpreditModule extends AbstractModule {
 
         bind(Repository.class)
                 .annotatedWith(Names.named(Di.REPOSITORY))
-                .to(RepositoryImpl.class);
+                .to(RepositoryImpl.class)
+                .in(Singleton.class);
 
         bind(DeleteUsecase.class)
                 .annotatedWith(Names.named(Di.DELETE_USECASE))
@@ -59,7 +62,8 @@ public class InterpreditModule extends AbstractModule {
 
         bind(Machine.class)
                 .annotatedWith(Names.named(Di.MACHINE))
-                .to(RandomAccessMachine.class);
+                .to(RandomAccessMachine.class)
+                .in(Singleton.class);
 
         bind(OutputUsecase.class)
                 .annotatedWith(Names.named(Di.OUTPUT_USECASE))

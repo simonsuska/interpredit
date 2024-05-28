@@ -4,9 +4,12 @@ import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.entities.machines.Command;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class RandomAccessMachineDecoderTest {
     @Test
     void decode() {

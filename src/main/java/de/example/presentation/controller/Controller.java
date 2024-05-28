@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.Di;
 import de.example.presentation.Model;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -25,6 +27,12 @@ public class Controller {
 
     @FXML private void initialize() {
         // TODO: Implement
+        Binding<String> outputTextAreaBinding = Bindings.createStringBinding(
+                () -> this.outputTextArea.getText() + this.model.outputTextAreaTextProperty().get(),
+                this.model.outputTextAreaTextProperty()
+        );
+        this.outputTextArea.textProperty().bind(outputTextAreaBinding);
+        this.fileLabel.textProperty().bind(this.model.openFilenameProperty());
     }
 
     @FXML private void close() {

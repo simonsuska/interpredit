@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.Di;
 import de.example.domain.usecases.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
 
@@ -15,6 +17,9 @@ public class Model {
     private final StopUsecase stopUsecase;
     private final OutputUsecase outputUsecase;
     private final InputUsecase inputUsecase;
+
+    private StringProperty outputTextAreaText;
+    private StringProperty openFilename;
 
     @Inject
     public Model(@Named(Di.DELETE_USECASE) DeleteUsecase deleteUsecase,
@@ -31,15 +36,25 @@ public class Model {
         this.stopUsecase = Objects.requireNonNull(stopUsecase);
         this.outputUsecase = Objects.requireNonNull(outputUsecase);
         this.inputUsecase = Objects.requireNonNull(inputUsecase);
+
+        this.outputTextAreaText = new SimpleStringProperty();
+        this.openFilename = new SimpleStringProperty();
+    }
+
+    public StringProperty outputTextAreaTextProperty() {
+        return outputTextAreaText;
+    }
+
+    public StringProperty openFilenameProperty() {
+        return openFilename;
     }
 
     public void delete() {
         // TODO: Implement
     }
 
-    public String openFile(String filename) {
+    public void openFile(String filename) {
         // TODO: Implement
-        return null;
     }
 
     public void run() {
@@ -54,9 +69,8 @@ public class Model {
         // TODO: Implement
     }
 
-    public String requestOutput() {
+    public void requestOutput() {
         // TODO: Implement
-        return null;
     }
 
     public void deliverInput(String input) {

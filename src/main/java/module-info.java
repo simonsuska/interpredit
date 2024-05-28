@@ -6,6 +6,8 @@ open module Interpredit {
 
     //opens de.example.presentation to javafx.fxml;
     exports de.example.presentation;
-    exports de.example.presentation.controller;
+    exports de.example.domain.usecases;
+    exports de.example.domain.entities.exit;
+    exports de.example.domain.entities.machines;
     //opens de.example.presentation.controller to javafx.fxml;
 }

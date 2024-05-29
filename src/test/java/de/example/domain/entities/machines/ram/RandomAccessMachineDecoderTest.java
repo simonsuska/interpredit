@@ -1,6 +1,6 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.machines.Command;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;

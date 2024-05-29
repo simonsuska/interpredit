@@ -1,7 +1,7 @@
 package de.example.domain.entities.machines.ram;
 
 import de.example.domain.entities.Buffer;
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.exit.status.Status;
 import de.example.domain.entities.machines.Decoder;
 import org.junit.jupiter.api.BeforeEach;

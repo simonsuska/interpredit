@@ -1,6 +1,6 @@
 package de.example.domain.entities.machines;
 
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.FileExtension;
 
 public abstract class Machine {

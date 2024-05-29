@@ -1,10 +1,8 @@
 package de.example.domain.usecases;
 
-import de.example.data.repository.RepositoryImpl;
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.exit.status.Status;
 import de.example.domain.repository.Repository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

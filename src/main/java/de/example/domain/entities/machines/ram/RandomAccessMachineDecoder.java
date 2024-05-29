@@ -1,6 +1,6 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.machines.Command;
 import de.example.domain.entities.machines.Decoder;
 import io.vavr.control.Either;

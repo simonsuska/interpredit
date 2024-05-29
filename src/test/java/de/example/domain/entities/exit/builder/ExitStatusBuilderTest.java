@@ -1,29 +1,26 @@
 package de.example.domain.entities.exit.builder;
 
-import de.example.domain.entities.exit.ExitStatus;
-import de.example.domain.entities.exit.details.Interrupted;
+import de.example.domain.entities.exit.details.Detail;
 import de.example.domain.entities.exit.status.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ExitStatusBuilderTest {
-    private Interrupted interrupted;
-
-    private static final String INTERRUPTED_DESCRIPTION = "Interrupted description";
+    private Detail detail;
+    private static final String DETAIL_DESCRIPTION = "-AW=xl:$nI";
 
     @BeforeEach
     void setUp() {
-        interrupted = mock(Interrupted.class);
+        detail = mock(Detail.class);
     }
 
+    /** This test evaluates whether building a default exit status works properly. */
     @Test
     void build() {
         ExitStatus exitStatus = ExitStatusBuilder.newBuilder().build();
@@ -32,6 +29,10 @@ class ExitStatusBuilderTest {
         assertEquals(exitStatus.getDescription(), "");
     }
 
+    /**
+     * This test evaluates whether building an exit status
+     * by only specifying the status works properly.
+     */
     @Test
     void buildWithStatus() {
         ExitStatus exitStatus = ExitStatusBuilder.newBuilder()
@@ -42,15 +43,19 @@ class ExitStatusBuilderTest {
         assertEquals(exitStatus.getDescription(), "");
     }
 
+    /**
+     * This test evaluates whether building an exit status
+     * by only specifying the detail works properly.
+     */
     @Test
     void buildWithDescription() {
-        when(interrupted.getDescription()).thenReturn(INTERRUPTED_DESCRIPTION);
+        when(detail.getDescription()).thenReturn(DETAIL_DESCRIPTION);
 
         ExitStatus exitStatus = ExitStatusBuilder.newBuilder()
-                .setDetail(new Interrupted())
+                .setDetail(detail)
                 .build();
 
         assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-        assertEquals(exitStatus.getDescription(), INTERRUPTED_DESCRIPTION);
+        assertEquals(exitStatus.getDescription(), DETAIL_DESCRIPTION);
     }
 }

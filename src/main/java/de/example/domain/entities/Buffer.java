@@ -1,27 +1,50 @@
 package de.example.domain.entities;
 
+/**
+ * This type stores a single generic data object
+ * and grants read and write access to it.
+ * @param <T> The type of the data object to store
+ */
 public class Buffer<T> {
     private T value;
 
+    /** This constructor creates an empty buffer. */
     public Buffer() {
         this.value = null;
     }
 
-    public Buffer(T value) {
-        this.value = value;
+    /**
+     * This constructor creates a buffer and stores the
+     * given data object in it.
+     * @param data The data object to store
+     */
+    public Buffer(T data) {
+        this.value = data;
     }
 
+    /**
+     * This method returns the stored data object or
+     * `null`, if the buffer is empty.
+     * @return The stored data object or `null`, if
+     *         the buffer is empty
+     */
     public T read() {
-        // TODO: Implement
-        return null;
+        return this.value;
     }
 
+    /**
+     * This method stores the given data object in the buffer.
+     * @param data The data object to store
+     */
     public void write(T data) {
-        // TODO: Implement
+        this.value = data;
     }
 
+    /**
+     * This method checks whether the buffer is empty or not.
+     * @return `true` if the buffer is empty, otherwise `false`
+     */
     public boolean isEmpty() {
-        // TODO: Implement
-        return false;
+        return value == null;
     }
 }

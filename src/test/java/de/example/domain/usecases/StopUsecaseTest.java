@@ -1,6 +1,6 @@
 package de.example.domain.usecases;
 
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.exit.status.Status;
 import de.example.domain.entities.machines.Machine;
 import org.junit.jupiter.api.Test;

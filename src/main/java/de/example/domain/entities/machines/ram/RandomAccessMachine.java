@@ -6,7 +6,7 @@ import de.example.core.Di;
 import de.example.domain.entities.machines.Decoder;
 import de.example.domain.entities.operations.Arithmetic;
 import de.example.domain.entities.operations.Condition;
-import de.example.domain.entities.exit.ExitStatus;
+import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.Buffer;
 import de.example.domain.entities.machines.Machine;
 

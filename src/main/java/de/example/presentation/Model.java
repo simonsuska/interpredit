@@ -3,16 +3,11 @@ package de.example.presentation;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.Di;
-import de.example.domain.entities.exit.ExitStatus;
 import de.example.domain.usecases.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class Model {
     private final DeleteUsecase deleteUsecase;

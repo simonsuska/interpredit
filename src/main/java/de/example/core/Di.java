@@ -14,4 +14,5 @@ public class Di {
     public static final String MACHINE = "10";
     public static final String OUTPUT_USECASE = "11";
     public static final String INPUT_USECASE = "12";
+    public static final String CLOSE_USECASE = "13";
 }

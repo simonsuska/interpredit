@@ -13,6 +13,7 @@ import static org.mockito.Mockito.*;
 class ModelTest {
     @Mock DeleteUsecase deleteUsecase;
     @Mock OpenUsecase openUsecase;
+    @Mock CloseUsecase closeUsecase;
     @Mock RunUsecase runUsecase;
     @Mock SaveUsecase saveUsecase;
     @Mock StopUsecase stopUsecase;
@@ -28,8 +29,8 @@ class ModelTest {
     private static final String INPUT = "Input";
 
     @Test
-    void delete() {
-        model.delete();
+    void deleteFile() {
+        model.deleteFile();
         verify(deleteUsecase, times(1)).get();
     }
 
@@ -40,6 +41,12 @@ class ModelTest {
     }
 
     @Test
+    void closeFile() {
+        model.closeFile();
+        verify(closeUsecase, times(1)).get();
+    }
+
+    @Test
     void run() {
         model.run(RUN_PROGRAM);
         verify(runUsecase, times(1)).setProgram(RUN_PROGRAM);
@@ -47,8 +54,8 @@ class ModelTest {
     }
 
     @Test
-    void save() {
-        model.save(SAVE_FILENAME);
+    void saveFile() {
+        model.saveFile(SAVE_FILENAME);
         verify(saveUsecase, times(1)).apply(SAVE_FILENAME);
     }
 

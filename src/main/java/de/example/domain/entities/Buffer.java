@@ -3,7 +3,7 @@ package de.example.domain.entities;
 /**
  * This type stores a single generic data object
  * and grants read and write access to it.
- * @param <T> The type of the data object to store
+ * @param <T> The type of the data object to be stored
  */
 public class Buffer<T> {
     private T value;
@@ -16,7 +16,7 @@ public class Buffer<T> {
     /**
      * This constructor creates a buffer and stores the
      * given data object in it.
-     * @param data The data object to store
+     * @param data The data object to be stored
      */
     public Buffer(T data) {
         this.value = data;
@@ -34,7 +34,7 @@ public class Buffer<T> {
 
     /**
      * This method stores the given data object in the buffer.
-     * @param data The data object to store
+     * @param data The data object to be stored
      */
     public void write(T data) {
         this.value = data;

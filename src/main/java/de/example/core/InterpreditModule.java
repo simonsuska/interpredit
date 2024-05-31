@@ -2,6 +2,7 @@ package de.example.core;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import de.example.data.datasources.FileDatasource;
 import de.example.data.datasources.MutableDatasource;
@@ -23,9 +24,9 @@ public class InterpreditModule extends AbstractModule {
                 .to(FileDatasource.class)
                 .in(Singleton.class);
 
-        bind(Buffer.class)
+        bind(new TypeLiteral<Buffer<Integer>>(){})
                 .annotatedWith(Names.named(Di.RAM_INT_BUFFER))
-                .to(Buffer.class);
+                .to(new TypeLiteral<>(){});
 
         bind(Decoder.class)
                 .annotatedWith(Names.named(Di.RAM_DECODER))
@@ -72,5 +73,9 @@ public class InterpreditModule extends AbstractModule {
         bind(InputUsecase.class)
                 .annotatedWith(Names.named(Di.INPUT_USECASE))
                 .to(InputUsecase.class);
+
+        bind(CloseUsecase.class)
+                .annotatedWith(Names.named(Di.CLOSE_USECASE))
+                .to(CloseUsecase.class);
     }
 }

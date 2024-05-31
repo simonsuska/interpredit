@@ -7,6 +7,7 @@ import de.example.domain.entities.exit.status.Status;
  * This type represents an exit status containing information
  * about the status itself and additional details.
  *
+ * <br><br><b>Discussion</b><br>
  * In the context of Interpredit, it is used by all random access machine
  * components as well as several use cases to provide information on how
  * to proceed. The exit status is passed through in the most cases and
@@ -24,7 +25,7 @@ public class ExitStatus {
 
     /**
      * This method overrides the current status with the given one.
-     * @param status The new status to set
+     * @param status The new status to be set
      */
     protected void setStatus(Status status) {
         if (status == null) this.status = Status.CONTINUE;
@@ -33,7 +34,7 @@ public class ExitStatus {
 
     /**
      * This method overrides the current detail with the given one.
-     * @param detail The new detail to set
+     * @param detail The new detail to be set
      */
     protected void setDetail(Detail detail) {
         this.detail = detail;

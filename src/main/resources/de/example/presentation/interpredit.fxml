@@ -23,9 +23,10 @@
       </Menu>
       <Menu mnemonicParsing="false" text="File">
          <MenuItem mnemonicParsing="false" text="Open..." onAction="#openFile"/>
+         <MenuItem mnemonicParsing="false" text="Close" onAction="#closeFile"/>
          <SeparatorMenuItem mnemonicParsing="false" />
-         <MenuItem mnemonicParsing="false" text="Save" onAction="#save"/>
-         <MenuItem mnemonicParsing="false" text="Delete" onAction="#delete"/>
+         <MenuItem mnemonicParsing="false" text="Save" onAction="#saveFile"/>
+         <MenuItem mnemonicParsing="false" text="Delete" onAction="#deleteFile"/>
          <SeparatorMenuItem mnemonicParsing="false" />
          <MenuItem mnemonicParsing="false" text="Run" fx:id="runFileMenuItem" onAction="#run"/>
          <MenuItem disable="true" mnemonicParsing="false" text="Stop" fx:id="stopExecutionMenuItem" onAction="#stop"/>

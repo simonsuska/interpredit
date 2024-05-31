@@ -12,6 +12,7 @@ import java.util.Objects;
 public class Model {
     private final DeleteUsecase deleteUsecase;
     private final OpenUsecase openUsecase;
+    private final CloseUsecase closeUsecase;
     private final RunUsecase runUsecase;
     private final SaveUsecase saveUsecase;
     private final StopUsecase stopUsecase;
@@ -24,6 +25,7 @@ public class Model {
     @Inject
     public Model(@Named(Di.DELETE_USECASE) DeleteUsecase deleteUsecase,
                  @Named(Di.OPEN_USECASE) OpenUsecase openUsecase,
+                 @Named(Di.CLOSE_USECASE) CloseUsecase closeUsecase,
                  @Named(Di.RUN_USECASE) RunUsecase runUsecase,
                  @Named(Di.SAVE_USECASE) SaveUsecase saveUsecase,
                  @Named(Di.STOP_USECASE) StopUsecase stopUsecase,
@@ -31,13 +33,14 @@ public class Model {
                  @Named(Di.INPUT_USECASE) InputUsecase inputUsecase) {
         this.deleteUsecase = Objects.requireNonNull(deleteUsecase);
         this.openUsecase = Objects.requireNonNull(openUsecase);
+        this.closeUsecase = Objects.requireNonNull(closeUsecase);
         this.runUsecase = Objects.requireNonNull(runUsecase);
         this.saveUsecase = Objects.requireNonNull(saveUsecase);
         this.stopUsecase = Objects.requireNonNull(stopUsecase);
         this.outputUsecase = Objects.requireNonNull(outputUsecase);
         this.inputUsecase = Objects.requireNonNull(inputUsecase);
 
-        this.outputTextAreaText = new SimpleStringProperty();
+        this.outputTextAreaText = new SimpleStringProperty("");
         this.openFilename = new SimpleStringProperty();
     }
 
@@ -49,7 +52,7 @@ public class Model {
         return openFilename;
     }
 
-    public void delete() {
+    public void deleteFile() {
         // TODO: Implement
     }
 
@@ -57,11 +60,15 @@ public class Model {
         // TODO: Implement
     }
 
+    public void closeFile() {
+        // TODO: Implement
+    }
+
     public void run(String program) {
         // TODO: Implement
     }
 
-    public void save(String content) {
+    public void saveFile(String content) {
         // TODO: Implement
     }
 

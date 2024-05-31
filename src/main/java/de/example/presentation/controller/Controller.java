@@ -39,7 +39,7 @@ public class Controller {
         // TODO: Implement
     }
 
-    @FXML private void delete() {
+    @FXML private void deleteFile() {
         // TODO: Implement
     }
 
@@ -47,11 +47,15 @@ public class Controller {
         // TODO: Implement
     }
 
+    @FXML private void closeFile() {
+        // TODO: Implement
+    }
+
     @FXML private void run() {
         // TODO: Implement
     }
 
-    @FXML private void save() {
+    @FXML private void saveFile() {
         // TODO: Implement
     }
 

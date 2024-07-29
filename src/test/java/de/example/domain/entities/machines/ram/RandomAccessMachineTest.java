@@ -26,7 +26,7 @@ class RandomAccessMachineTest {
     }
 
     @Test
-    void run() {
+    void run() throws InterruptedException {
         Status status;
 
         status = ram.run(null);
@@ -58,7 +58,6 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.INPUT);
 
         when(buffer.isEmpty()).thenReturn(false);
-        when(buffer.read()).thenReturn(174);
         status = ram.run("INP 1");
         assertEquals(status, Status.OK);
 
@@ -76,23 +75,13 @@ class RandomAccessMachineTest {
     }
 
     @Test
-    void requestOutputWithFilledBuffer() {
+    void requestOutput() throws InterruptedException {
         when(buffer.read()).thenReturn(174);
 
         String result = ram.requestOutput();
 
         verify(buffer, times(1)).read();
         assertEquals(result, "174");
-    }
-
-    @Test
-    void requestOutputWithEmptyBuffer() {
-        when(buffer.read()).thenReturn(null);
-
-        String result = ram.requestOutput();
-
-        verify(buffer, times(1)).read();
-        assertEquals(result, "");
     }
 
     @Test
@@ -334,7 +323,6 @@ class RandomAccessMachineTest {
     void inpWithFilledBuffer() {
         Status status;
         when(buffer.isEmpty()).thenReturn(false);
-        when(buffer.read()).thenReturn(174);
 
         status = ram.inp(-1);
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);

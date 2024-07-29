@@ -17,4 +17,5 @@ public class Di {
     public static final String CLOSE_USECASE = "13";
     public static final String RUN_EXCHANGER = "14";
     public static final String PRINTER_THREAD = "15";
+    public static final String RUN_CYCLIC_BARRIER = "16";
 }

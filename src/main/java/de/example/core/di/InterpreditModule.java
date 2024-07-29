@@ -18,6 +18,7 @@ import de.example.domain.usecases.*;
 import de.example.presentation.Model;
 import de.example.presentation.PrinterThread;
 
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Exchanger;
 
 public class InterpreditModule extends AbstractModule {
@@ -91,5 +92,9 @@ public class InterpreditModule extends AbstractModule {
         bind(PrinterThread.class)
                 .annotatedWith(Names.named(Di.PRINTER_THREAD))
                 .to(PrinterThread.class);
+
+        bind(CyclicBarrier.class)
+                .annotatedWith(Names.named(Di.RUN_CYCLIC_BARRIER))
+                .toInstance(new CyclicBarrier(2));
     }
 }

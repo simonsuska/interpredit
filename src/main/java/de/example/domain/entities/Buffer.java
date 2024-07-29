@@ -1,5 +1,6 @@
 package de.example.domain.entities;
 
+// TODO: Adjust doc
 /**
  * This type stores a single generic data object
  * and grants read and write access to it.
@@ -22,31 +23,38 @@ public class Buffer<T> {
         this.value = data;
     }
 
+    // TODO: Adjust doc
     /**
      * This method returns the stored data object or `null`, if
      * the buffer is empty and subsequently clears the buffer.
      * @return The stored data object or `null`, if
      *         the buffer is empty
      */
-    public T read() {
+    public synchronized T read() throws InterruptedException {
+        while (this.value == null)
+            this.wait();
+
         T value = this.value;
         this.value = null;
         return value;
     }
 
+    // TODO: Adjust doc
     /**
      * This method stores the given data object in the buffer.
      * @param data The data object to be stored
      */
-    public void write(T data) {
+    public synchronized void write(T data) {
         this.value = data;
+        this.notify();
     }
 
+    // TODO: Adjust doc
     /**
      * This method checks whether the buffer is empty or not.
      * @return `true` if the buffer is empty, otherwise `false`
      */
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return value == null;
     }
 }

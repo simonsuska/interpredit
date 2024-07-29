@@ -25,8 +25,12 @@ class BufferTest {
     @Test
     void write() {
         Buffer<Integer> buffer = new Buffer<>();
+
         buffer.write(203);
         assertEquals(buffer.read(), 203);
+
+        buffer.write(null);
+        assertNull(buffer.read());
     }
 
     /** This test evaluates whether checking an empty buffer works properly. */

@@ -1,7 +1,5 @@
 package de.example.domain.usecases;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.status.Status;
 import de.example.domain.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,17 +21,17 @@ class CloseUsecaseTest {
     void getSuccess() {
         when(repository.close()).thenReturn(true);
 
-        ExitStatus exitstatus = closeUsecase.get();
+        boolean result = closeUsecase.get();
         verify(repository, times(1)).close();
-        assertEquals(exitstatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
     }
 
     @Test
     void getFailure() {
         when(repository.close()).thenReturn(false);
 
-        ExitStatus exitstatus = closeUsecase.get();
+        boolean result = closeUsecase.get();
         verify(repository, times(1)).close();
-        assertEquals(exitstatus.getStatus(), Status.QUIT);
+        assertFalse(result);
     }
 }

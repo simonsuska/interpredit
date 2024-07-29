@@ -1,7 +1,5 @@
 package de.example.domain.usecases;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.status.Status;
 import de.example.domain.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,17 +27,17 @@ class SaveUsecaseTest {
     void applySuccess() {
         when(repository.save(FILE_CONTENTS)).thenReturn(true);
 
-        ExitStatus exitStatus = saveUsecase.apply(FILE_CONTENTS);
+        boolean result = saveUsecase.apply(FILE_CONTENTS);
         verify(repository, times(1)).save(FILE_CONTENTS);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
     }
 
     @Test
     void applyFailure() {
         when(repository.save(FILE_CONTENTS)).thenReturn(false);
 
-        ExitStatus exitStatus = saveUsecase.apply(FILE_CONTENTS);
+        boolean result = saveUsecase.apply(FILE_CONTENTS);
         verify(repository, times(1)).save(FILE_CONTENTS);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertFalse(result);
     }
 }

@@ -1,6 +1,6 @@
 package de.example.domain.entities.machines;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
+import de.example.domain.entities.Status;
 
 public abstract class Machine {
     private boolean interrupted = false;
@@ -13,7 +13,10 @@ public abstract class Machine {
         return this.interrupted;
     }
 
-    public abstract ExitStatus run(String cmd);
+    public abstract int getPc();
+    public abstract Status run(String cmd);
+
+    public abstract void reset();
     public abstract String requestOutput();
-    public abstract ExitStatus deliverInput(String input);
+    public abstract boolean deliverInput(String input);
 }

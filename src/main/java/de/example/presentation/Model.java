@@ -2,12 +2,14 @@ package de.example.presentation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import de.example.core.Di;
+import de.example.core.di.Di;
 import de.example.domain.usecases.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Model {
     private final DeleteUsecase deleteUsecase;
@@ -19,8 +21,9 @@ public class Model {
     private final OutputUsecase outputUsecase;
     private final InputUsecase inputUsecase;
 
-    private StringProperty outputTextAreaText;
-    private StringProperty openFilename;
+    private final StringProperty editorTextAreaText;
+    private final StringProperty outputTextAreaText;
+    private final StringProperty fileLabelText;
 
     @Inject
     public Model(@Named(Di.DELETE_USECASE) DeleteUsecase deleteUsecase,
@@ -40,47 +43,103 @@ public class Model {
         this.outputUsecase = Objects.requireNonNull(outputUsecase);
         this.inputUsecase = Objects.requireNonNull(inputUsecase);
 
+        this.editorTextAreaText = new SimpleStringProperty("");
         this.outputTextAreaText = new SimpleStringProperty("");
-        this.openFilename = new SimpleStringProperty();
+        this.fileLabelText = new SimpleStringProperty();
+    }
+
+    public StringProperty editorTextAreaTextProperty() {
+        return editorTextAreaText;
     }
 
     public StringProperty outputTextAreaTextProperty() {
         return outputTextAreaText;
     }
 
-    public StringProperty openFilenameProperty() {
-        return openFilename;
+    public StringProperty fileLabelTextProperty() {
+        return fileLabelText;
+    }
+
+    public void appendOutput(String output) {
+        outputTextAreaText.set(outputTextAreaText.get() + output + "\n");
     }
 
     public void deleteFile() {
-        // TODO: Implement
+        boolean result = this.deleteUsecase.get();
+
+        if (result) {
+            this.editorTextAreaText.set("");
+            appendOutput(""); // TODO: Implement output
+            this.fileLabelText.set("");
+        } else {
+            appendOutput(""); // TODO: Implement output
+        }
     }
 
     public void openFile(String filename) {
-        // TODO: Implement
+        String content = this.openUsecase.apply(filename);
+
+        if (content != null) {
+            this.editorTextAreaText.set(content);
+            appendOutput(""); // TODO: Implement output
+            this.fileLabelText.set(filename);
+        } else {
+            appendOutput(""); // TODO: Implement output
+        }
     }
 
     public void closeFile() {
-        // TODO: Implement
+        boolean result = this.closeUsecase.get();
+
+        if (result) {
+            this.editorTextAreaText.set("");
+            appendOutput(""); // TODO: Implement output
+            this.fileLabelText.set("");
+        } else {
+            appendOutput(""); // TODO: Implement output
+        }
     }
 
     public void run(String program) {
-        // TODO: Implement
+        Executors.newSingleThreadExecutor().submit(Interpredit.getPrinterThread());
+        this.runUsecase.setProgram(program);
+
+        ExecutorService thread = Executors.newSingleThreadExecutor();
+        thread.execute(runUsecase);
     }
 
     public void saveFile(String content) {
-        // TODO: Implement
+        boolean result = this.saveUsecase.apply(content);
+
+        if (result) {
+            this.editorTextAreaText.set(content);
+            appendOutput(""); // TODO: Implement output
+        } else {
+            appendOutput(""); // TODO: Implement output
+        }
     }
 
     public void stop() {
-        // TODO: Implement
+        boolean result = this.stopUsecase.get();
+
+        if (result)
+            appendOutput(""); // TODO: Implement output
+        else
+            appendOutput(""); // TODO: Implement output
     }
 
-    public void requestOutput() {
-        // TODO: Implement
+    public String requestOutput() {
+        return this.outputUsecase.get();
     }
 
     public void deliverInput(String input) {
-        // TODO: Implement
+        boolean result = this.inputUsecase.apply(input);
+
+        if (result)
+            appendOutput(""); // TODO: Implement output
+        else {
+            this.stop();
+            appendOutput(""); // TODO: Implement output
+        }
     }
 }

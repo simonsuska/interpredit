@@ -3,6 +3,7 @@ package de.example.data.datasources;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,12 +62,14 @@ public class FileDatasource implements MutableDatasource {
      */
     @Override
     public boolean write(String content) {
-        try (BufferedWriter bw = Files.newBufferedWriter(filepath)) {
-            bw.write(content);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+        if (this.filepath != null)
+            try (BufferedWriter bw = Files.newBufferedWriter(this.filepath)) {
+                bw.write(content);
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        return false;
     }
 
     /**
@@ -130,13 +133,18 @@ public class FileDatasource implements MutableDatasource {
      */
     @Override
     public boolean delete() {
-        if (this.backup()) // Backup the file content
-            if (this.filepath.toFile().delete()) // Try to delete the file
-                if (this.unset()) // Close the file in the editor
-                    return this.purge(); // Delete the backup
-                else {
-                    if (this.restore()) // Restore the file content if closing the file fails
-                        return this.purge(); // Delete the backup after restoring the file content
+        if (this.filepath != null || this.backupFilepath != null)
+            if (this.backup()) // Backup the file content
+                if (this.filepath.toFile().delete()) { // Try to delete the file
+                    this.filepath = null; // Close the file in the editor
+
+                    if (this.purge()) { // Delete the backup
+                        this.backupFilepath = null; // Delete the backup filepath
+                        return true;
+                    } else {
+                        if (this.restore()) // Restore the file content if closing the file fails
+                            return this.purge(); // Delete the backup after restoring the file content
+                    }
                 }
 
         return false;

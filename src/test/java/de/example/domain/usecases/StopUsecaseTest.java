@@ -1,7 +1,5 @@
 package de.example.domain.usecases;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.status.Status;
 import de.example.domain.entities.machines.Machine;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +20,8 @@ class StopUsecaseTest {
 
     @Test
     void get() {
-        ExitStatus exitStatus = stopUsecase.get();
+        boolean result = stopUsecase.get();
         verify(machine, times(1)).interrupt();
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertTrue(result);
     }
 }

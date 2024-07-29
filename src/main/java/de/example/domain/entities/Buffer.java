@@ -23,13 +23,15 @@ public class Buffer<T> {
     }
 
     /**
-     * This method returns the stored data object or
-     * `null`, if the buffer is empty.
+     * This method returns the stored data object or `null`, if
+     * the buffer is empty and subsequently clears the buffer.
      * @return The stored data object or `null`, if
      *         the buffer is empty
      */
     public T read() {
-        return this.value;
+        T value = this.value;
+        this.value = null;
+        return value;
     }
 
     /**

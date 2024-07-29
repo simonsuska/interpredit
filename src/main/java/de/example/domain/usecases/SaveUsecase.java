@@ -2,15 +2,14 @@ package de.example.domain.usecases;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import de.example.core.Di;
-import de.example.domain.entities.exit.builder.ExitStatus;
+import de.example.core.di.Di;
 import de.example.domain.repository.Repository;
 
 import java.util.Objects;
 import java.util.function.Function;
 
-public class SaveUsecase implements Function<String, ExitStatus> {
-    private Repository repository;
+public class SaveUsecase implements Function<String, Boolean> {
+    private final Repository repository;
 
     @Inject
     public SaveUsecase(@Named(Di.REPOSITORY) Repository repository) {
@@ -18,8 +17,7 @@ public class SaveUsecase implements Function<String, ExitStatus> {
     }
 
     @Override
-    public ExitStatus apply(String content) {
-        // TODO: Implement
-        return null;
+    public Boolean apply(String content) {
+        return this.repository.save(content);
     }
 }

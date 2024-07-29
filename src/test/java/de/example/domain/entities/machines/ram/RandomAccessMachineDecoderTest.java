@@ -1,8 +1,6 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
 import de.example.domain.entities.machines.Command;
-import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,27 +12,30 @@ class RandomAccessMachineDecoderTest {
     @Test
     void decode() {
         RandomAccessMachineDecoder decoder = new RandomAccessMachineDecoder();
-        Either<ExitStatus, Command> result;
+        Command result;
 
         result = decoder.decode(null);
-        assertTrue(result.isLeft());
+        assertNull(result);
 
         result = decoder.decode("");
-        assertTrue(result.isLeft());
+        assertNull(result);
 
         result = decoder.decode("CMD");
-        assertTrue(result.isLeft());
+        assertNull(result);
 
         result = decoder.decode("CMD A");
-        assertTrue(result.isLeft());
+        assertNull(result);
 
         result = decoder.decode("CMD 1");
-        assertTrue(result.isRight());
+        assertNotNull(result);
+
+        result = decoder.decode("CMD -1");
+        assertNotNull(result);
 
         result = decoder.decode(" CMD 1  ");
-        assertTrue(result.isRight());
+        assertNotNull(result);
 
         result = decoder.decode(" CMD   1  ");
-        assertTrue(result.isRight());
+        assertNotNull(result);
     }
 }

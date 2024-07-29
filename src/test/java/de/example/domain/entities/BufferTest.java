@@ -2,12 +2,15 @@ package de.example.domain.entities;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+// TODO: Adjust doc
 class BufferTest {
     /** This test evaluates whether reading an empty buffer works properly. */
     @Test
-    void readEmpty() {
+    void readFilled() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>(174);
         Integer result = buffer.read();
         assertEquals(result, 174);
@@ -15,22 +18,29 @@ class BufferTest {
 
     /** This test evaluates whether reading a filled buffer works properly. */
     @Test
-    void readFilled() {
+    void readEmpty() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>();
-        Integer result = buffer.read();
-        assertNull(result);
+
+        new Thread(() -> {
+            try {
+                Integer result = buffer.read();
+                assertEquals(result, 203);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        TimeUnit.MILLISECONDS.sleep(100);
+        buffer.write(203);
     }
 
-    /** This test evaluates whether writing a new data object works properly. */
     @Test
-    void write() {
+    void write() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>();
+        buffer.write(174);
 
-        buffer.write(203);
-        assertEquals(buffer.read(), 203);
-
-        buffer.write(null);
-        assertNull(buffer.read());
+        Integer result = buffer.read();
+        assertEquals(result, 174);
     }
 
     /** This test evaluates whether checking an empty buffer works properly. */

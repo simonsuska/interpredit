@@ -7,17 +7,22 @@ import de.example.domain.entities.Status;
 import javafx.application.Platform;
 
 import java.util.Objects;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Exchanger;
 
 public class PrinterThread implements Runnable {
     private final Model model;
     private final Exchanger<Status> exchanger;
+    private final CyclicBarrier cyclicBarrier;
 
     @Inject
     public PrinterThread(@Named(Di.MODEL) Model model,
-                         @Named(Di.RUN_EXCHANGER) Exchanger<Status> exchanger) {
+                         @Named(Di.RUN_EXCHANGER) Exchanger<Status> exchanger,
+                         @Named(Di.RUN_CYCLIC_BARRIER)CyclicBarrier cyclicBarrier) {
         this.model = Objects.requireNonNull(model);
         this.exchanger = Objects.requireNonNull(exchanger);
+        this.cyclicBarrier = Objects.requireNonNull(cyclicBarrier);
     }
 
     @Override
@@ -43,10 +48,12 @@ public class PrinterThread implements Runnable {
                     default -> null;
                 };
 
-                if (runnable != null) {
+                if (runnable != null)
                     Platform.runLater(runnable);
-                }
-            } catch (InterruptedException e) {
+
+                cyclicBarrier.await();
+                cyclicBarrier.reset();
+            } catch (InterruptedException | BrokenBarrierException e) {
                 e.printStackTrace();
             }
         }

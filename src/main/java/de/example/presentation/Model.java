@@ -101,11 +101,9 @@ public class Model {
     }
 
     public void run(String program) {
-        Executors.newSingleThreadExecutor().submit(Interpredit.getPrinterThread());
         this.runUsecase.setProgram(program);
-
-        ExecutorService thread = Executors.newSingleThreadExecutor();
-        thread.execute(runUsecase);
+        new Thread(Interpredit.getPrinterThread(), "PrinterThread").start();
+        new Thread(runUsecase, "RunnerThread").start();
     }
 
     public void saveFile(String content) {

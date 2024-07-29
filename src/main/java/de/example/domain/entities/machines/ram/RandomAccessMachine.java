@@ -12,7 +12,6 @@ import de.example.domain.entities.machines.Machine;
 
 import java.util.Objects;
 
-// TODO: Add thread-safety
 public class RandomAccessMachine extends Machine {
     private int pc;
     private int[] memory;
@@ -100,20 +99,27 @@ public class RandomAccessMachine extends Machine {
     }
 
     @Override
-    public synchronized String requestOutput() {
-        Integer value = this.buffer.read();
-        return value == null ? "" : String.valueOf(value);
+    public String requestOutput() {
+        // Called only from PrinterThread
+        Integer value = 0;
+
+        try {
+            value = this.buffer.read();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(value);
     }
 
     @Override
-    public synchronized boolean deliverInput(String input) {
+    public boolean deliverInput(String input) {
+        // Called only from Main Thread
         try {
             int inputValue = Integer.parseInt(input == null
                     ? input
                     : input.trim());
             this.buffer.write(inputValue);
-
-            notify();
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -171,7 +177,8 @@ public class RandomAccessMachine extends Machine {
         return Status.MEMORY_ADDRESS_ERROR;
     }
 
-    public synchronized Status inp(int address) {
+    public Status inp(int address) {
+        // Called only from RunnerThread
         if (this.isAddressWithinBounds(address)) {
             if (buffer.isEmpty()) {
                 if (!notifiedAboutInput) {
@@ -181,13 +188,12 @@ public class RandomAccessMachine extends Machine {
                 notifiedAboutInput = false;
 
                 try {
-                    wait();
+                    this.memory[address] = this.buffer.read();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            this.memory[address] = this.buffer.read();
             this.forward();
             return Status.OK;
         }
@@ -196,6 +202,7 @@ public class RandomAccessMachine extends Machine {
     }
 
     public Status out(int address) {
+        // Called only from RunnerThread
         if (this.isAddressWithinBounds(address)) {
             this.buffer.write(this.memory[address]);
             this.forward();

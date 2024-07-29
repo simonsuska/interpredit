@@ -1,4 +1,4 @@
-package de.example.core;
+package de.example.core.di;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -8,6 +8,7 @@ import de.example.data.datasources.FileDatasource;
 import de.example.data.datasources.MutableDatasource;
 import de.example.data.repository.RepositoryImpl;
 import de.example.domain.entities.Buffer;
+import de.example.domain.entities.Status;
 import de.example.domain.entities.machines.Decoder;
 import de.example.domain.entities.machines.Machine;
 import de.example.domain.entities.machines.ram.RandomAccessMachine;
@@ -15,6 +16,9 @@ import de.example.domain.entities.machines.ram.RandomAccessMachineDecoder;
 import de.example.domain.repository.Repository;
 import de.example.domain.usecases.*;
 import de.example.presentation.Model;
+import de.example.presentation.PrinterThread;
+
+import java.util.concurrent.Exchanger;
 
 public class InterpreditModule extends AbstractModule {
     @Override
@@ -59,7 +63,8 @@ public class InterpreditModule extends AbstractModule {
 
         bind(Model.class)
                 .annotatedWith(Names.named(Di.MODEL))
-                .to(Model.class);
+                .to(Model.class)
+                .in(Singleton.class);
 
         bind(Machine.class)
                 .annotatedWith(Names.named(Di.MACHINE))
@@ -77,5 +82,14 @@ public class InterpreditModule extends AbstractModule {
         bind(CloseUsecase.class)
                 .annotatedWith(Names.named(Di.CLOSE_USECASE))
                 .to(CloseUsecase.class);
+
+        bind(new TypeLiteral<Exchanger<Status>>(){})
+                .annotatedWith(Names.named(Di.RUN_EXCHANGER))
+                .to(new TypeLiteral<>(){})
+                .in(Singleton.class);
+
+        bind(PrinterThread.class)
+                .annotatedWith(Names.named(Di.PRINTER_THREAD))
+                .to(PrinterThread.class);
     }
 }

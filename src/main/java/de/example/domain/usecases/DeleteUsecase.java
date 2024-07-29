@@ -2,15 +2,14 @@ package de.example.domain.usecases;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import de.example.core.Di;
-import de.example.domain.entities.exit.builder.ExitStatus;
+import de.example.core.di.Di;
 import de.example.domain.repository.Repository;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class DeleteUsecase implements Supplier<ExitStatus> {
-    private Repository repository;
+public class DeleteUsecase implements Supplier<Boolean> {
+    private final Repository repository;
 
     @Inject
     public DeleteUsecase(@Named(Di.REPOSITORY) Repository repository) {
@@ -18,8 +17,7 @@ public class DeleteUsecase implements Supplier<ExitStatus> {
     }
 
     @Override
-    public ExitStatus get() {
-        // TODO: Implement
-        return null;
+    public Boolean get() {
+        return this.repository.delete();
     }
 }

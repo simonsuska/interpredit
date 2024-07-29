@@ -1,13 +1,12 @@
 package de.example.domain.entities.machines.ram;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.status.Status;
+import de.example.domain.entities.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,37 +25,45 @@ class RandomAccessMachineCommandTest {
 
     @Test
     void executeWithStatusContinue() {
+        when(ram.set(SET_VALUE)).thenReturn(Status.OK);
+
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("SET", SET_VALUE);
-        ExitStatus exitStatus = command.execute(ram);
+        Status status = command.execute(ram);
 
         verify(ram, times(1)).set(SET_VALUE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void executeWithStatusInput() {
+        when(ram.inp(INP_VALUE)).thenReturn(Status.INPUT);
+
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("INP", INP_VALUE);
-        ExitStatus exitStatus = command.execute(ram);
+        Status status = command.execute(ram);
 
         verify(ram, times(1)).inp(INP_VALUE);
-        assertEquals(exitStatus.getStatus(), Status.INPUT);
+        assertEquals(status, Status.INPUT);
     }
 
     @Test
     void executeWithStatusOutput() {
+        when(ram.out(OUT_VALUE)).thenReturn(Status.OUTPUT);
+
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("OUT", OUT_VALUE);
-        ExitStatus exitStatus = command.execute(ram);
+        Status status = command.execute(ram);
 
         verify(ram, times(1)).out(OUT_VALUE);
-        assertEquals(exitStatus.getStatus(), Status.OUTPUT);
+        assertEquals(status, Status.OUTPUT);
     }
 
     @Test
-    void executeWithStatusQuit() {
+    void executeWithStatusFinish() {
+        when(ram.hlt(HLT_VALUE)).thenReturn(Status.FINISH);
+
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("HLT", HLT_VALUE);
-        ExitStatus exitStatus = command.execute(ram);
+        Status status = command.execute(ram);
 
         verify(ram, times(1)).hlt(HLT_VALUE);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertEquals(status, Status.FINISH);
     }
 }

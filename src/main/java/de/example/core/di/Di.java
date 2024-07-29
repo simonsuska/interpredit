@@ -1,4 +1,4 @@
-package de.example.core;
+package de.example.core.di;
 
 public class Di {
     public static final String MUTABLE_DATASOURCE = "0";
@@ -15,4 +15,6 @@ public class Di {
     public static final String OUTPUT_USECASE = "11";
     public static final String INPUT_USECASE = "12";
     public static final String CLOSE_USECASE = "13";
+    public static final String RUN_EXCHANGER = "14";
+    public static final String PRINTER_THREAD = "15";
 }

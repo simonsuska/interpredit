@@ -2,7 +2,7 @@ package de.example.data.repository;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import de.example.core.Di;
+import de.example.core.di.Di;
 import de.example.data.datasources.MutableDatasource;
 import de.example.domain.repository.Repository;
 

@@ -1,8 +1,5 @@
 package de.example.domain.usecases;
 
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.builder.ExitStatusBuilder;
-import de.example.domain.entities.exit.status.Status;
 import de.example.domain.entities.machines.Machine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,23 +24,21 @@ class InputUsecaseTest {
 
     @Test
     void acceptSuccess() {
-        ExitStatus e = ExitStatusBuilder.newBuilder().setStatus(Status.CONTINUE).build();
-        when(machine.deliverInput(INPUT)).thenReturn(e);
+        when(machine.deliverInput(INPUT)).thenReturn(true);
 
-        ExitStatus exitStatus = inputUsecase.apply(INPUT);
+        boolean result = inputUsecase.apply(INPUT);
 
         verify(machine, times(1)).deliverInput(INPUT);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
     }
 
     @Test
     void acceptFailure() {
-        ExitStatus e = ExitStatusBuilder.newBuilder().setStatus(Status.QUIT).build();
-        when(machine.deliverInput(INPUT)).thenReturn(e);
+        when(machine.deliverInput(INPUT)).thenReturn(false);
 
-        ExitStatus exitStatus = inputUsecase.apply(INPUT);
+        boolean result = inputUsecase.apply(INPUT);
 
         verify(machine, times(1)).deliverInput(INPUT);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertFalse(result);
     }
 }

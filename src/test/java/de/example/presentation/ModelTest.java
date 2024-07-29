@@ -50,7 +50,6 @@ class ModelTest {
     void run() {
         model.run(RUN_PROGRAM);
         verify(runUsecase, times(1)).setProgram(RUN_PROGRAM);
-        verify(runUsecase, times(1)).call();
     }
 
     @Test

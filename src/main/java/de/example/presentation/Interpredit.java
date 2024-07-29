@@ -1,21 +1,24 @@
 package de.example.presentation;
 
 import com.google.inject.Guice;
-import de.example.core.InterpreditModule;
-import de.example.data.datasources.FileDatasource;
+import com.google.inject.Injector;
+import de.example.core.di.InterpreditModule;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Interpredit extends Application {
+    private static ResourceBundle bundle;
+    private static final Injector injector = Guice.createInjector(new InterpreditModule());
+
     @Override
     public void start(Stage stage) throws IOException, NoSuchMethodException {
-        var injector = Guice.createInjector(new InterpreditModule());
         var fxmlLoader = new FXMLLoader(Interpredit.class.getResource("interpredit.fxml"));
         fxmlLoader.setControllerFactory(injector::getInstance);
 
@@ -25,7 +28,18 @@ public class Interpredit extends Application {
         stage.show();
     }
 
+    public static String s(String key, Object... arguments) {
+        String rawString = bundle.getString(key);
+        return MessageFormat.format(rawString, arguments);
+    }
+
+    public static PrinterThread getPrinterThread() {
+        return injector.getInstance(PrinterThread.class);
+    }
+
     public static void main(String[] args) {
+        Locale locale = Locale.getDefault();
+        bundle = ResourceBundle.getBundle("strings", locale);
         launch();
     }
 }

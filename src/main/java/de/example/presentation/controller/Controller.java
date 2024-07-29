@@ -2,8 +2,9 @@ package de.example.presentation.controller;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import de.example.core.Di;
+import de.example.core.di.Di;
 import de.example.presentation.Model;
+import javafx.application.Platform;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -11,6 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class Controller {
     @FXML private MenuItem runFileMenuItem;
@@ -26,40 +31,62 @@ public class Controller {
     private Model model;
 
     @FXML private void initialize() {
-        // TODO: Implement
-        Binding<String> outputTextAreaBinding = Bindings.createStringBinding(
-                () -> this.outputTextArea.getText() + this.model.outputTextAreaTextProperty().get(),
-                this.model.outputTextAreaTextProperty()
+        this.editorTextArea.textProperty().bindBidirectional(this.model.editorTextAreaTextProperty());
+        this.outputTextArea.textProperty().bindBidirectional(this.model.outputTextAreaTextProperty());
+        this.fileLabel.textProperty().bind(this.model.fileLabelTextProperty());
+
+        this.inputTextField.setOnKeyPressed(
+                (keyEvent -> {
+                    if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+                        this.model.deliverInput(this.inputTextField.getText());
+                        this.fileLabel.requestFocus();
+                        this.inputTextField.setText("");
+                    }
+                })
         );
-        this.outputTextArea.textProperty().bind(outputTextAreaBinding);
-        this.fileLabel.textProperty().bind(this.model.openFilenameProperty());
     }
 
     @FXML private void close() {
-        // TODO: Implement
+        Platform.exit();
     }
 
     @FXML private void deleteFile() {
-        // TODO: Implement
+        this.model.deleteFile();
     }
 
     @FXML private void openFile() {
-        // TODO: Implement
+        File file = new FileChooser().showOpenDialog(this.editorTextArea.getScene().getWindow());
+
+        if (file != null) {
+            this.model.openFile(file.getAbsolutePath());
+        }
     }
 
     @FXML private void closeFile() {
-        // TODO: Implement
+        this.model.closeFile();
     }
 
     @FXML private void run() {
-        // TODO: Implement
+        this.outputTextArea.setText("");
+        this.runFileMenuItem.setDisable(true);
+        this.stopExecutionMenuItem.setDisable(false);
+
+        String program = this.editorTextArea.getText();
+        this.model.run(program);
+
+        // TODO: Put in separate thread
+        this.runFileMenuItem.setDisable(false);
+        this.stopExecutionMenuItem.setDisable(true);
     }
 
     @FXML private void saveFile() {
-        // TODO: Implement
+        String content = this.editorTextArea.getText();
+        this.model.saveFile(content);
     }
 
     @FXML private void stop() {
-        // TODO: Implement
+        this.model.stop();
+        this.runFileMenuItem.setDisable(false);
+        this.stopExecutionMenuItem.setDisable(true);
     }
 }

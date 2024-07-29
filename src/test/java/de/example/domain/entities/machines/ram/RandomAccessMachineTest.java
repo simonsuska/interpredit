@@ -1,8 +1,7 @@
 package de.example.domain.entities.machines.ram;
 
 import de.example.domain.entities.Buffer;
-import de.example.domain.entities.exit.builder.ExitStatus;
-import de.example.domain.entities.exit.status.Status;
+import de.example.domain.entities.Status;
 import de.example.domain.entities.machines.Decoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,47 +22,57 @@ class RandomAccessMachineTest {
     void setUp() {
         buffer = mock(Buffer.class);
         Decoder decoder = new RandomAccessMachineDecoder();
-        ram = new RandomAccessMachine(new int[MEMORY_SIZE], buffer , decoder);
+        ram = new RandomAccessMachine(new int[MEMORY_SIZE+1], buffer , decoder);
     }
 
     @Test
     void run() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.run(null);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.run(null);
+        assertEquals(status, Status.DECODE_ERROR);
 
-        exitStatus = ram.run("");
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.run("");
+        assertEquals(status, Status.DECODE_ERROR);
 
-        exitStatus = ram.run("SET");
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.run("SET");
+        assertEquals(status, Status.DECODE_ERROR);
 
-        exitStatus = ram.run("SET A");
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.run("SET A");
+        assertEquals(status, Status.DECODE_ERROR);
 
-        exitStatus = ram.run("SET 5");
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.run("SET 5");
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.run("OUT 1");
-        assertEquals(exitStatus.getStatus(), Status.OUTPUT);
+        status = ram.run(" SET 5  ");
+        assertEquals(status, Status.OK);
+
+        status = ram.run(" SET  5  ");
+        assertEquals(status, Status.OK);
+
+        status = ram.run("OUT 1");
+        assertEquals(status, Status.OUTPUT);
 
         when(buffer.isEmpty()).thenReturn(true);
-        exitStatus = ram.run("INP 1");
-        assertEquals(exitStatus.getStatus(), Status.INPUT);
+        status = ram.run("INP 1");
+        assertEquals(status, Status.INPUT);
 
         when(buffer.isEmpty()).thenReturn(false);
-        exitStatus = ram.run("INP 1");
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        when(buffer.read()).thenReturn(174);
+        status = ram.run("INP 1");
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.run("HLT 99");
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.run("HLT 99");
+        assertEquals(status, Status.FINISH);
 
-        exitStatus = ram.run(" SET 5  ");
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.run("SET -1");
+        assertEquals(status, Status.SET_ERROR);
 
-        exitStatus = ram.run(" SET  5  ");
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.run("ADD " + MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+
+        status = ram.run("CMD 1");
+        assertEquals(status, Status.COMMAND_ERROR);
     }
 
     @Test
@@ -88,440 +97,394 @@ class RandomAccessMachineTest {
 
     @Test
     void deliverInput() {
-        ExitStatus exitStatus;
+        boolean result;
 
-        exitStatus = ram.deliverInput(null);
+        result = ram.deliverInput(null);
         verify(buffer, never()).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertFalse(result);
 
-        exitStatus = ram.deliverInput("");
+        result = ram.deliverInput("");
         verify(buffer, never()).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertFalse(result);
 
-        exitStatus = ram.deliverInput("A");
+        result = ram.deliverInput("A");
         verify(buffer, never()).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertFalse(result);
 
-        exitStatus = ram.deliverInput("1");
+        result = ram.deliverInput("1");
         verify(buffer, times(1)).write(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
 
-        exitStatus = ram.deliverInput(" 2  ");
+        result = ram.deliverInput(" 2  ");
         verify(buffer, times(1)).write(2);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
 
-        exitStatus = ram.deliverInput("17");
+        result = ram.deliverInput("17");
         verify(buffer, times(1)).write(17);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        assertTrue(result);
     }
 
     @Test
     void set() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.set(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.set(-1);
+        assertEquals(status, Status.SET_ERROR);
 
-        exitStatus = ram.set(0);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.set(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.set(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.set(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void add() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.add(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.add(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.add(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.add(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.add(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.add(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.add(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.add(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.add(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.add(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.add(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.add(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void sub() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.sub(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sub(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.sub(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sub(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.sub(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sub(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sub(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sub(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sub(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sub(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sub(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sub(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void mul() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.mul(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.mul(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.mul(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.mul(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.mul(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.mul(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.mul(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.mul(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.mul(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.mul(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.mul(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.mul(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void div() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.div(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.div(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.div(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.div(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.div(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.div(1);
+        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
 
-        exitStatus = ram.div(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.div(MEMORY_SIZE-1);
+        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
 
-        exitStatus = ram.div(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.div(MEMORY_SIZE);
+        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
 
-        exitStatus = ram.div(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.div(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void lda() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.lda(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.lda(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.lda(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.lda(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.lda(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.lda(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.lda(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.lda(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.lda(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.lda(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.lda(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.lda(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void ldk() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.ldk(-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.ldk(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.ldk(0);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.ldk(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.ldk(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.ldk(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void sta() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.sta(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sta(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.sta(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sta(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.sta(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sta(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sta(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sta(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sta(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.sta(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.sta(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.sta(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void inpWithEmptyBuffer() {
-        ExitStatus exitStatus;
+        Status status;
         when(buffer.isEmpty()).thenReturn(true);
 
-        exitStatus = ram.inp(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.inp(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.inp(1);
-        assertEquals(exitStatus.getStatus(), Status.INPUT);
+        status = ram.inp(1);
+        assertEquals(status, Status.INPUT);
 
-        exitStatus = ram.inp(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.INPUT);
+        status = ram.inp(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+    }
 
-        exitStatus = ram.inp(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.INPUT);
+    // because when called twice, it will wait until an input occurs
+    // -> the test will be freezed
+    @Test
+    void inpWithEmptyBuffer1() {
+        Status status;
+        when(buffer.isEmpty()).thenReturn(true);
 
-        exitStatus = ram.inp(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(MEMORY_SIZE-1);
+        assertEquals(status, Status.INPUT);
+    }
+
+    // because when called twice, it will wait until an input occurs
+    // -> the test will be freezed
+    @Test
+    void inpWithEmptyBuffer2() {
+        Status status;
+        when(buffer.isEmpty()).thenReturn(true);
+
+        status = ram.inp(MEMORY_SIZE);
+        assertEquals(status, Status.INPUT);
     }
 
     @Test
     void inpWithFilledBuffer() {
-        ExitStatus exitStatus;
+        Status status;
         when(buffer.isEmpty()).thenReturn(false);
+        when(buffer.read()).thenReturn(174);
 
-        exitStatus = ram.inp(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(-1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.inp(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(0);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.inp(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.inp(1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.inp(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.inp(MEMORY_SIZE-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.inp(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
+        status = ram.inp(MEMORY_SIZE);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.inp(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.inp(MEMORY_SIZE+1);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void out() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.out(-1);
+        status = ram.out(-1);
         verify(buffer, never()).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.out(0);
+        status = ram.out(0);
         verify(buffer, never()).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
-        exitStatus = ram.out(1);
+        status = ram.out(1);
         verify(buffer, times(1)).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.OUTPUT);
+        assertEquals(status, Status.OUTPUT);
 
-        exitStatus = ram.out(MEMORY_SIZE-1);
+        status = ram.out(MEMORY_SIZE-1);
         verify(buffer, times(2)).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.OUTPUT);
+        assertEquals(status, Status.OUTPUT);
 
-        exitStatus = ram.out(MEMORY_SIZE);
+        status = ram.out(MEMORY_SIZE);
         verify(buffer, times(3)).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.OUTPUT);
+        assertEquals(status, Status.OUTPUT);
 
-        exitStatus = ram.out(MEMORY_SIZE+1);
+        status = ram.out(MEMORY_SIZE+1);
         verify(buffer, times(3)).write(anyInt());
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
     @Test
     void jmp() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jmp(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jmp(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jmp(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jmp(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jmp(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jmp(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jmp(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jmp(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jmp(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jez() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jez(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jez(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jez(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jez(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jez(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jez(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jez(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jez(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jez(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jne() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jne(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jne(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jne(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jne(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jne(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jne(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jne(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jne(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jne(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jlz() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jlz(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jlz(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jlz(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jlz(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jlz(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jlz(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jlz(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jlz(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jlz(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jle() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jle(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jle(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jle(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jle(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jle(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jle(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jle(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jle(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jle(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jgz() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jgz(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jgz(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jgz(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jgz(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jgz(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jgz(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jgz(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jgz(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jgz(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void jge() {
-        ExitStatus exitStatus;
+        Status status;
 
-        exitStatus = ram.jge(-1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jge(-1);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jge(0);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jge(0);
+        assertEquals(status, Status.OK);
 
-        exitStatus = ram.jge(1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jge(MEMORY_SIZE-1);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jge(MEMORY_SIZE);
-        assertEquals(exitStatus.getStatus(), Status.CONTINUE);
-
-        exitStatus = ram.jge(MEMORY_SIZE+1);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        status = ram.jge(1);
+        assertEquals(status, Status.OK);
     }
 
     @Test
     void hlt() {
-        ExitStatus exitStatus = ram.hlt(99);
-        assertEquals(exitStatus.getStatus(), Status.QUIT);
+        Status status = ram.hlt(99);
+        assertEquals(status, Status.FINISH);
     }
 }

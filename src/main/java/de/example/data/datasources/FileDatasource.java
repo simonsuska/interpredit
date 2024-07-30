@@ -116,13 +116,17 @@ public class FileDatasource implements MutableDatasource {
      * This method deletes the underlying path which will result
      * in an empty file datasource. The file itself will remain
      * in the file system.
-     * @return `true`
+     * @return `true` if a path previously existed, otherwise `false`
      */
     @Override
     public boolean unset() {
-        this.filepath = null;
-        this.backupFilepath = null;
-        return true;
+        if (filepath != null) {
+            this.filepath = null;
+            this.backupFilepath = null;
+            return true;
+        }
+
+        return false;
     }
 
     /**

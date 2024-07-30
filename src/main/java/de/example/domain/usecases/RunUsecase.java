@@ -65,5 +65,6 @@ public class RunUsecase implements Runnable {
         }
 
         machine.reset();
+        System.out.println("Runner thread DONE");
     }
 }

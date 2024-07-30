@@ -16,7 +16,10 @@ public abstract class Machine {
     public abstract int getPc();
     public abstract Status run(String cmd);
 
-    public abstract void reset();
+    public void reset() {
+        interrupted = false;
+    }
+
     public abstract String requestOutput();
     public abstract boolean deliverInput(String input);
 }

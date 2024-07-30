@@ -8,8 +8,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Model {
     private final DeleteUsecase deleteUsecase;
@@ -69,10 +67,10 @@ public class Model {
 
         if (result) {
             this.editorTextAreaText.set("");
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Deleted successfully"); // TODO: Implement output
             this.fileLabelText.set("");
         } else {
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Deleted unsuccessfully"); // TODO: Implement output
         }
     }
 
@@ -81,10 +79,10 @@ public class Model {
 
         if (content != null) {
             this.editorTextAreaText.set(content);
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Opened successfully"); // TODO: Implement output
             this.fileLabelText.set(filename);
         } else {
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Opened unsuccessfully"); // TODO: Implement output
         }
     }
 
@@ -93,10 +91,10 @@ public class Model {
 
         if (result) {
             this.editorTextAreaText.set("");
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Closed successfully"); // TODO: Implement output
             this.fileLabelText.set("");
         } else {
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Closed unsuccessfully"); // TODO: Implement output
         }
     }
 
@@ -111,9 +109,9 @@ public class Model {
 
         if (result) {
             this.editorTextAreaText.set(content);
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Saved successfully"); // TODO: Implement output
         } else {
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Saved unsuccessfully"); // TODO: Implement output
         }
     }
 
@@ -121,9 +119,9 @@ public class Model {
         boolean result = this.stopUsecase.get();
 
         if (result)
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Stopped successfully"); // TODO: Implement output
         else
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Stopped unsuccessfully"); // TODO: Implement output
     }
 
     public String requestOutput() {
@@ -134,10 +132,10 @@ public class Model {
         boolean result = this.inputUsecase.apply(input);
 
         if (result)
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Received input: " + input); // TODO: Implement output
         else {
             this.stop();
-            appendOutput(""); // TODO: Implement output
+            appendOutput("Received invalid input: " + input); // TODO: Implement output
         }
     }
 }

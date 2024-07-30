@@ -93,6 +93,8 @@ public class RandomAccessMachine extends Machine {
 
     @Override
     public void reset() {
+        super.reset();
+
         this.pc = 0;
         this.memory = null;
         this.buffer.write(null);
@@ -188,6 +190,7 @@ public class RandomAccessMachine extends Machine {
                 notifiedAboutInput = false;
 
                 try {
+                    System.out.println("Runner Thread waiting on read");
                     this.memory[address] = this.buffer.read();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

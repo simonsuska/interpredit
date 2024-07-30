@@ -30,7 +30,9 @@ public class PrinterThread implements Runnable {
         Runnable runnable;
         Status status = Status.OK;
 
-        while (status != Status.FINISH) {
+        while (status == Status.OK ||
+               status == Status.OUTPUT ||
+               status == Status.INPUT) {
             try {
                 status = exchanger.exchange(Status.OK);
 
@@ -44,6 +46,7 @@ public class PrinterThread implements Runnable {
                     case MEMORY_ADDRESS_ERROR -> () -> this.model.appendOutput("Memory Address Error"); // TODO: Implement output
                     case COMMAND_ERROR -> () -> this.model.appendOutput("Command Error"); // TODO: Implement output
                     case DECODE_ERROR -> () -> this.model.appendOutput("Decode Error"); // TODO: Implement output
+                    case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput("Division by Zero Error"); // TODO: Implement output
                     case FINISH -> () -> this.model.appendOutput("Quit"); // TODO: Implement output
                     default -> null;
                 };
@@ -57,5 +60,7 @@ public class PrinterThread implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("Printer thread DONE");
     }
 }

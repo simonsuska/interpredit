@@ -8,10 +8,12 @@ package de.example.domain.entities;
  */
 public class Buffer<T> {
     private T value;
+    private boolean closed;
 
     /** This constructor creates an empty buffer. */
     public Buffer() {
         this.value = null;
+        this.closed = false;
     }
 
     /**
@@ -31,12 +33,16 @@ public class Buffer<T> {
      *         the buffer is empty
      */
     public synchronized T read() throws InterruptedException {
-        while (this.value == null)
+        while (this.value == null && !this.closed)
             this.wait();
 
-        T value = this.value;
-        this.value = null;
-        return value;
+        if (!this.closed) {
+            T value = this.value;
+            this.value = null;
+            return value;
+        }
+
+        return null;
     }
 
     // TODO: Adjust doc
@@ -49,6 +55,12 @@ public class Buffer<T> {
         this.notify();
     }
 
+    // TODO: Add doc
+    public synchronized void close() {
+        this.closed = true;
+        this.notify();
+    }
+
     // TODO: Adjust doc
     /**
      * This method checks whether the buffer is empty or not.
@@ -56,5 +68,11 @@ public class Buffer<T> {
      */
     public synchronized boolean isEmpty() {
         return value == null;
+    }
+
+    // TODO: Add doc
+    public synchronized void reset() {
+        this.value = null;
+        this.closed = false;
     }
 }

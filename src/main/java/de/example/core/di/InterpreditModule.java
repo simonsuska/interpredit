@@ -29,8 +29,8 @@ public class InterpreditModule extends AbstractModule {
                 .to(FileDatasource.class)
                 .in(Singleton.class);
 
-        bind(new TypeLiteral<Buffer<Integer>>(){})
-                .annotatedWith(Names.named(Di.RAM_INT_BUFFER))
+        bind(new TypeLiteral<Buffer<String>>(){})
+                .annotatedWith(Names.named(Di.RAM_STRING_BUFFER))
                 .to(new TypeLiteral<>(){});
 
         bind(Decoder.class)
@@ -95,6 +95,10 @@ public class InterpreditModule extends AbstractModule {
 
         bind(CyclicBarrier.class)
                 .annotatedWith(Names.named(Di.RUN_CYCLIC_BARRIER))
+                .toInstance(new CyclicBarrier(2));
+
+        bind(CyclicBarrier.class)
+                .annotatedWith(Names.named(Di.QUIT_CYCLIC_BARRIER))
                 .toInstance(new CyclicBarrier(2));
     }
 }

@@ -16,23 +16,29 @@ public class RandomAccessMachine extends Machine {
     private int pc;
     private int[] memory;
 
-    private final Buffer<Integer> buffer;
+    private final Buffer<String> buffer;
     private final Decoder decoder;
 
     private boolean notifiedAboutInput = false;
 
     @Inject
     public RandomAccessMachine(
-            @Named(Di.RAM_INT_BUFFER) Buffer<Integer> buffer,
+            @Named(Di.RAM_STRING_BUFFER) Buffer<String> buffer,
             @Named(Di.RAM_DECODER) Decoder decoder) {
         this.buffer = Objects.requireNonNull(buffer);
         this.decoder = Objects.requireNonNull(decoder);
     }
 
-    public RandomAccessMachine(int[] memory, Buffer<Integer> buffer, Decoder decoder) {
+    public RandomAccessMachine(int[] memory, Buffer<String> buffer, Decoder decoder) {
         this.memory = memory;
         this.buffer = buffer;
         this.decoder = decoder;
+    }
+
+    @Override
+    public void interrupt() {
+        super.interrupt();
+        this.buffer.close();
     }
 
     private void forward() {
@@ -97,13 +103,13 @@ public class RandomAccessMachine extends Machine {
 
         this.pc = 0;
         this.memory = null;
-        this.buffer.write(null);
+        this.buffer.reset();
     }
 
     @Override
     public String requestOutput() {
         // Called only from PrinterThread
-        Integer value = 0;
+        String value = "";
 
         try {
             value = this.buffer.read();
@@ -111,21 +117,19 @@ public class RandomAccessMachine extends Machine {
             e.printStackTrace();
         }
 
-        return String.valueOf(value);
+        return value;
     }
 
     @Override
     public boolean deliverInput(String input) {
         // Called only from Main Thread
-        try {
-            int inputValue = Integer.parseInt(input == null
-                    ? input
-                    : input.trim());
-            this.buffer.write(inputValue);
+        if (input != null) {
+            this.buffer.write(input);
             return true;
-        } catch (NumberFormatException e) {
-            return false;
         }
+
+        this.buffer.close(); // notify waiting RunnerThread on buffer.read even if input is null
+        return false;
     }
 
     public Status set(int value) {
@@ -135,6 +139,11 @@ public class RandomAccessMachine extends Machine {
         this.memory = new int[value+1];
         this.forward();
         return Status.OK;
+    }
+
+    public Status hop(int value) {
+        this.forward();
+        return Status.HOP;
     }
 
     public Status add(int address) {
@@ -190,10 +199,16 @@ public class RandomAccessMachine extends Machine {
                 notifiedAboutInput = false;
 
                 try {
-                    System.out.println("Runner Thread waiting on read");
-                    this.memory[address] = this.buffer.read();
-                } catch (InterruptedException e) {
+                    String input = this.buffer.read();
+
+                    if (input == null)
+                        return Status.INPUT_ERROR;
+
+                    int intInput = Integer.parseInt(input.trim());
+                    this.memory[address] = intInput;
+                } catch (InterruptedException | NumberFormatException e) {
                     e.printStackTrace();
+                    return Status.INPUT_ERROR;
                 }
             }
 
@@ -207,7 +222,7 @@ public class RandomAccessMachine extends Machine {
     public Status out(int address) {
         // Called only from RunnerThread
         if (this.isAddressWithinBounds(address)) {
-            this.buffer.write(this.memory[address]);
+            this.buffer.write(String.valueOf(this.memory[address]));
             this.forward();
             return Status.OUTPUT;
         }

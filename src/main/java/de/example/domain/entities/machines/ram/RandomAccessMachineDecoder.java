@@ -1,5 +1,6 @@
 package de.example.domain.entities.machines.ram;
 
+import de.example.domain.entities.Status;
 import de.example.domain.entities.machines.Command;
 import de.example.domain.entities.machines.Decoder;
 
@@ -13,6 +14,9 @@ public class RandomAccessMachineDecoder implements Decoder {
             List<String> cmd = Stream.of(command.split(" "))
                     .filter(c -> !c.strip().equals(""))
                     .toList();
+
+            if (cmd.isEmpty())
+                return new RandomAccessMachineCommand(Status.HOP.name().toLowerCase(), 0);
 
             if (cmd.size() != 2)
                 return null;

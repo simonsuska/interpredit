@@ -134,8 +134,7 @@ public class Model {
         if (result)
             appendOutput("Received input: " + input); // TODO: Implement output
         else {
-            this.stop();
-            appendOutput("Received invalid input: " + input); // TODO: Implement output
+            appendOutput("Did not receive input: " + input); // TODO: Implement output
         }
     }
 }

@@ -16,15 +16,18 @@ public class RunUsecase implements Runnable {
     private final Machine machine;
     private final Exchanger<Status> exchanger;
     private final CyclicBarrier cyclicBarrier;
+    private final CyclicBarrier stopSignal;
 
     @Inject
     public RunUsecase(@Named(Di.MACHINE) Machine machine,
                       @Named(Di.RUN_EXCHANGER) Exchanger<Status> exchanger,
-                      @Named(Di.RUN_CYCLIC_BARRIER) CyclicBarrier cyclicBarrier) {
+                      @Named(Di.RUN_CYCLIC_BARRIER) CyclicBarrier cyclicBarrier,
+                      @Named(Di.QUIT_CYCLIC_BARRIER) CyclicBarrier stopSignal) {
         this.program = new ArrayList<>();
         this.machine = Objects.requireNonNull(machine);
         this.exchanger = Objects.requireNonNull(exchanger);
         this.cyclicBarrier = Objects.requireNonNull(cyclicBarrier);
+        this.stopSignal = Objects.requireNonNull(stopSignal);
     }
 
     public void setProgram(String program) {
@@ -35,7 +38,7 @@ public class RunUsecase implements Runnable {
     @Override
     public void run() {
         int pc;
-        Status status;
+        Status status = Status.FINISH;
 
         try {
             do {
@@ -46,12 +49,18 @@ public class RunUsecase implements Runnable {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    machine.reset();
                     return;
                 }
 
                 pc = this.machine.getPc();
-                String cmd = program.get(pc);
-                status = machine.run(cmd);
+                String cmd = "";
+
+                if (pc >= 0 && pc < program.size()) {
+                    cmd = program.get(pc);
+                    status = machine.run(cmd);
+                } else
+                    continue;
 
                 if (status != Status.OK) {
                     exchanger.exchange(status);
@@ -59,12 +68,13 @@ public class RunUsecase implements Runnable {
                 }
             } while (status == Status.OK ||
                      status == Status.OUTPUT ||
-                     status == Status.INPUT);
+                     status == Status.INPUT ||
+                     status == Status.HOP);
+
+            stopSignal.await();
+            machine.reset();
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
         }
-
-        machine.reset();
-        System.out.println("Runner thread DONE");
     }
 }

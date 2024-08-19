@@ -19,7 +19,7 @@ public class PrinterThread implements Runnable {
     @Inject
     public PrinterThread(@Named(Di.MODEL) Model model,
                          @Named(Di.RUN_EXCHANGER) Exchanger<Status> exchanger,
-                         @Named(Di.RUN_CYCLIC_BARRIER)CyclicBarrier cyclicBarrier) {
+                         @Named(Di.RUN_CYCLIC_BARRIER) CyclicBarrier cyclicBarrier) {
         this.model = Objects.requireNonNull(model);
         this.exchanger = Objects.requireNonNull(exchanger);
         this.cyclicBarrier = Objects.requireNonNull(cyclicBarrier);
@@ -32,7 +32,8 @@ public class PrinterThread implements Runnable {
 
         while (status == Status.OK ||
                status == Status.OUTPUT ||
-               status == Status.INPUT) {
+               status == Status.INPUT ||
+               status == Status.HOP) {
             try {
                 status = exchanger.exchange(Status.OK);
 
@@ -47,6 +48,7 @@ public class PrinterThread implements Runnable {
                     case COMMAND_ERROR -> () -> this.model.appendOutput("Command Error"); // TODO: Implement output
                     case DECODE_ERROR -> () -> this.model.appendOutput("Decode Error"); // TODO: Implement output
                     case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput("Division by Zero Error"); // TODO: Implement output
+                    case INPUT_ERROR -> () -> this.model.appendOutput("Input Error"); // TODO: Implement output
                     case FINISH -> () -> this.model.appendOutput("Quit"); // TODO: Implement output
                     default -> null;
                 };
@@ -60,7 +62,5 @@ public class PrinterThread implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Printer thread DONE");
     }
 }

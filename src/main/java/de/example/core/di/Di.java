@@ -2,7 +2,7 @@ package de.example.core.di;
 
 public class Di {
     public static final String MUTABLE_DATASOURCE = "0";
-    public static final String RAM_INT_BUFFER = "1";
+    public static final String RAM_STRING_BUFFER = "1";
     public static final String RAM_DECODER = "2";
     public static final String REPOSITORY = "3";
     public static final String DELETE_USECASE = "4";
@@ -18,4 +18,5 @@ public class Di {
     public static final String RUN_EXCHANGER = "14";
     public static final String PRINTER_THREAD = "15";
     public static final String RUN_CYCLIC_BARRIER = "16";
+    public static final String QUIT_CYCLIC_BARRIER = "17";
 }

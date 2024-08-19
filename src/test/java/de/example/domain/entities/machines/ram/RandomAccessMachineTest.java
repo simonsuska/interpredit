@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RandomAccessMachineTest {
-    private Buffer<Integer> buffer;
+    private Buffer<String> buffer;
     private RandomAccessMachine ram;
 
     private static final int MEMORY_SIZE = 5;
@@ -33,7 +33,7 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.DECODE_ERROR);
 
         status = ram.run("");
-        assertEquals(status, Status.DECODE_ERROR);
+        assertEquals(status, Status.HOP);
 
         status = ram.run("SET");
         assertEquals(status, Status.DECODE_ERROR);
@@ -76,7 +76,7 @@ class RandomAccessMachineTest {
 
     @Test
     void requestOutput() throws InterruptedException {
-        when(buffer.read()).thenReturn(174);
+        when(buffer.read()).thenReturn("174");
 
         String result = ram.requestOutput();
 
@@ -89,27 +89,23 @@ class RandomAccessMachineTest {
         boolean result;
 
         result = ram.deliverInput(null);
-        verify(buffer, never()).write(anyInt());
+        verify(buffer, never()).write(anyString());
         assertFalse(result);
 
         result = ram.deliverInput("");
-        verify(buffer, never()).write(anyInt());
-        assertFalse(result);
+        verify(buffer, times(1)).write("");
+        assertTrue(result);
 
         result = ram.deliverInput("A");
-        verify(buffer, never()).write(anyInt());
-        assertFalse(result);
+        verify(buffer, times(1)).write("A");
+        assertTrue(result);
 
         result = ram.deliverInput("1");
-        verify(buffer, times(1)).write(1);
+        verify(buffer, times(1)).write("1");
         assertTrue(result);
 
-        result = ram.deliverInput(" 2  ");
-        verify(buffer, times(1)).write(2);
-        assertTrue(result);
-
-        result = ram.deliverInput("17");
-        verify(buffer, times(1)).write(17);
+        result = ram.deliverInput(" 17  ");
+        verify(buffer, times(1)).write(" 17  ");
         assertTrue(result);
     }
 
@@ -125,6 +121,20 @@ class RandomAccessMachineTest {
 
         status = ram.set(1);
         assertEquals(status, Status.OK);
+    }
+
+    @Test
+    void hop() {
+        Status status;
+
+        status = ram.hop(-1);
+        assertEquals(status, Status.HOP);
+
+        status = ram.hop(0);
+        assertEquals(status, Status.HOP);
+
+        status = ram.hop(1);
+        assertEquals(status, Status.HOP);
     }
 
     @Test
@@ -348,27 +358,27 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.out(-1);
-        verify(buffer, never()).write(anyInt());
+        verify(buffer, never()).write(anyString());
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
         status = ram.out(0);
-        verify(buffer, never()).write(anyInt());
+        verify(buffer, never()).write(anyString());
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
 
         status = ram.out(1);
-        verify(buffer, times(1)).write(anyInt());
+        verify(buffer, times(1)).write(anyString());
         assertEquals(status, Status.OUTPUT);
 
         status = ram.out(MEMORY_SIZE-1);
-        verify(buffer, times(2)).write(anyInt());
+        verify(buffer, times(2)).write(anyString());
         assertEquals(status, Status.OUTPUT);
 
         status = ram.out(MEMORY_SIZE);
-        verify(buffer, times(3)).write(anyInt());
+        verify(buffer, times(3)).write(anyString());
         assertEquals(status, Status.OUTPUT);
 
         status = ram.out(MEMORY_SIZE+1);
-        verify(buffer, times(3)).write(anyInt());
+        verify(buffer, times(3)).write(anyString());
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 

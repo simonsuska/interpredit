@@ -5,8 +5,6 @@ import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.presentation.Model;
 import javafx.application.Platform;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -16,6 +14,8 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Controller {
     @FXML private MenuItem runFileMenuItem;
@@ -26,6 +26,9 @@ public class Controller {
     @FXML private TextField inputTextField;
     @FXML private TextArea editorTextArea;
     @FXML private TextArea outputTextArea;
+
+    @Inject @Named(Di.QUIT_CYCLIC_BARRIER)
+    private CyclicBarrier stopSignal;
 
     @Inject @Named(Di.MODEL)
     private Model model;
@@ -74,9 +77,15 @@ public class Controller {
         String program = this.editorTextArea.getText();
         this.model.run(program);
 
-        // TODO: Put in separate thread
-        this.runFileMenuItem.setDisable(false);
-        this.stopExecutionMenuItem.setDisable(true);
+        new Thread(() -> {
+            try {
+                stopSignal.await();
+                Platform.runLater(() -> runFileMenuItem.setDisable(false));
+                Platform.runLater(() -> stopExecutionMenuItem.setDisable(true));
+            } catch (InterruptedException | BrokenBarrierException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
     @FXML private void saveFile() {

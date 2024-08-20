@@ -11,6 +11,8 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Exchanger;
 
+import static de.example.presentation.Interpredit.s;
+
 public class PrinterThread implements Runnable {
     private final Model model;
     private final Exchanger<Status> exchanger;
@@ -42,14 +44,15 @@ public class PrinterThread implements Runnable {
                         String output = this.model.requestOutput();
                         yield () -> this.model.appendOutput(output);
                     }
-                    case INPUT -> () -> this.model.appendOutput("Enter input"); // TODO: Implement output
-                    case SET_ERROR -> () -> this.model.appendOutput("Set Error"); // TODO: Implement output
-                    case MEMORY_ADDRESS_ERROR -> () -> this.model.appendOutput("Memory Address Error"); // TODO: Implement output
-                    case COMMAND_ERROR -> () -> this.model.appendOutput("Command Error"); // TODO: Implement output
-                    case DECODE_ERROR -> () -> this.model.appendOutput("Decode Error"); // TODO: Implement output
-                    case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput("Division by Zero Error"); // TODO: Implement output
-                    case INPUT_ERROR -> () -> this.model.appendOutput("Input Error"); // TODO: Implement output
-                    case FINISH -> () -> this.model.appendOutput("Quit"); // TODO: Implement output
+                    case INPUT -> () -> this.model.appendOutput(s("inputHintMessage"));
+                    case SET_ERROR -> () -> this.model.appendOutput(s("setErrorHintMessage"));
+                    case MEMORY_ADDRESS_ERROR -> () -> this.model.appendOutput(s("memoryAddressErrorHintMessage"));
+                    case COMMAND_ERROR -> () -> this.model.appendOutput(s("commandErrorHintMessage"));
+                    case DECODE_ERROR -> () -> this.model.appendOutput(s("decodeErrorHintMessage"));
+                    case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput(s("divisionByZeroErrorHintMessage"));
+                    case INPUT_ERROR -> () -> this.model.appendOutput(s("inputErrorHintMessage"));
+                    case FINISH_SUCCESS -> () -> this.model.appendOutput(s("finishSuccessHintMessage"));
+                    case FINISH_FAILURE -> () -> this.model.appendOutput(s("finishFailureHintMessage"));
                     default -> null;
                 };
 

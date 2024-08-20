@@ -23,10 +23,10 @@ class ModelTest {
     @InjectMocks
     private Model model;
 
-    private static final String OPEN_FILENAME = "Open Filename";
-    private static final String RUN_PROGRAM = "Run Program";
-    private static final String SAVE_FILENAME = "Save Filename";
-    private static final String INPUT = "Input";
+    private static final String OPEN_FILENAME = "kro4E5pLzjtR";
+    private static final String RUN_PROGRAM = "pAiwXCSJxBLK";
+    private static final String SAVE_FILENAME = "sni5HwrxolvC";
+    private static final String INPUT = "xxbYWS3FwvTM";
 
     @Test
     void deleteFile() {

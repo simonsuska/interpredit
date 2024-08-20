@@ -18,7 +18,7 @@ class RandomAccessMachineDecoderTest {
         assertNull(result);
 
         result = decoder.decode("");
-        assertNull(result);
+        assertNotNull(result);
 
         result = decoder.decode("CMD");
         assertNull(result);

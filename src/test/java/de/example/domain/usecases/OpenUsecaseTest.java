@@ -15,8 +15,8 @@ class OpenUsecaseTest {
     private Repository repository;
     private OpenUsecase openUsecase;
 
-    private static final String FILENAME = "Filename";
-    private static final String FILE_CONTENTS = "File Contents";
+    private static final String FILENAME = "s5IshG0IFVrG";
+    private static final String FILE_CONTENTS = "CZAo0dckglp8";
 
     @BeforeEach
     void setUp() {

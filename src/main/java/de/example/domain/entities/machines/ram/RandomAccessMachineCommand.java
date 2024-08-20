@@ -24,6 +24,7 @@ public class RandomAccessMachineCommand implements Command {
             Method method = machine.getClass().getMethod(name, Integer.TYPE);
             status = (Status)method.invoke(machine, value);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
             status = Status.COMMAND_ERROR;
         }
 

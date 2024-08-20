@@ -15,7 +15,7 @@ class SaveUsecaseTest {
     private Repository repository;
     private SaveUsecase saveUsecase;
 
-    private static final String FILE_CONTENTS = "File Contents";
+    private static final String FILE_CONTENTS = "lPMrda9CVuWn";
 
     @BeforeEach
     void setUp() {

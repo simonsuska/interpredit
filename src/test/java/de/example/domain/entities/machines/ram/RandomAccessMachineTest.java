@@ -62,7 +62,7 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.OK);
 
         status = ram.run("HLT 99");
-        assertEquals(status, Status.FINISH);
+        assertEquals(status, Status.FINISH_SUCCESS);
 
         status = ram.run("SET -1");
         assertEquals(status, Status.SET_ERROR);
@@ -483,6 +483,6 @@ class RandomAccessMachineTest {
     @Test
     void hlt() {
         Status status = ram.hlt(99);
-        assertEquals(status, Status.FINISH);
+        assertEquals(status, Status.FINISH_SUCCESS);
     }
 }

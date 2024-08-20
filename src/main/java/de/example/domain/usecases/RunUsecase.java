@@ -38,23 +38,24 @@ public class RunUsecase implements Runnable {
     @Override
     public void run() {
         int pc;
-        Status status = Status.FINISH;
+        Status status = Status.FINISH_SUCCESS;
 
         try {
             do {
                 if (this.machine.isInterrupt()) {
                     try {
-                        exchanger.exchange(Status.FINISH);
+                        exchanger.exchange(Status.FINISH_FAILURE);
                         cyclicBarrier.await();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    stopSignal.await();
                     machine.reset();
                     return;
                 }
 
                 pc = this.machine.getPc();
-                String cmd = "";
+                String cmd;
 
                 if (pc >= 0 && pc < program.size()) {
                     cmd = program.get(pc);

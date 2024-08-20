@@ -5,18 +5,18 @@ import de.example.domain.entities.Status;
 public abstract class Machine {
     private boolean interrupted = false;
 
-    public void interrupt() {
+    public synchronized void interrupt() {
         this.interrupted = true;
     }
 
-    public boolean isInterrupt() {
+    public synchronized boolean isInterrupt() {
         return this.interrupted;
     }
 
     public abstract int getPc();
     public abstract Status run(String cmd);
 
-    public void reset() {
+    public synchronized void reset() {
         interrupted = false;
     }
 

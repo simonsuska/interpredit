@@ -14,7 +14,7 @@ class InputUsecaseTest {
     private Machine machine;
     private InputUsecase inputUsecase;
 
-    private static final String INPUT = "Input";
+    private static final String INPUT = "T4bFA5dWYTBd";
 
     @BeforeEach
     void setUp() {

@@ -58,12 +58,12 @@ class RandomAccessMachineCommandTest {
 
     @Test
     void executeWithStatusFinish() {
-        when(ram.hlt(HLT_VALUE)).thenReturn(Status.FINISH);
+        when(ram.hlt(HLT_VALUE)).thenReturn(Status.FINISH_SUCCESS);
 
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("HLT", HLT_VALUE);
         Status status = command.execute(ram);
 
         verify(ram, times(1)).hlt(HLT_VALUE);
-        assertEquals(status, Status.FINISH);
+        assertEquals(status, Status.FINISH_SUCCESS);
     }
 }

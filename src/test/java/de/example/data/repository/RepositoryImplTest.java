@@ -14,9 +14,9 @@ class RepositoryImplTest {
     private MutableDatasource mutableDatasource;
     private RepositoryImpl repository;
 
-    private static final String OPEN_FILE_CONTENTS = "Open file contents";
-    private static final String SAVE_FILE_CONTENTS = "Save file contents";
-    private static final String FILENAME = "Filename";
+    private static final String OPEN_FILE_CONTENTS = "70cwkfbc1sbZ";
+    private static final String SAVE_FILE_CONTENTS = "GHJE1TPP6dIy";
+    private static final String FILENAME = "eBmrl0JVUU0j";
 
     @BeforeEach
     void setUp() {

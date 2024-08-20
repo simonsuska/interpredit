@@ -18,18 +18,18 @@
 <AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.example.presentation.controller.Controller">
    <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Menu mnemonicParsing="false" text="Interpredit">
-         <MenuItem mnemonicParsing="false" text="Close" onAction="#close"/>
+      <Menu mnemonicParsing="false" fx:id="interpreditMenu">
+         <MenuItem mnemonicParsing="false" fx:id="closeAppMenuItem" onAction="#close"/>
       </Menu>
-      <Menu mnemonicParsing="false" text="File">
-         <MenuItem mnemonicParsing="false" text="Open..." onAction="#openFile"/>
-         <MenuItem mnemonicParsing="false" text="Close" onAction="#closeFile"/>
+      <Menu mnemonicParsing="false" fx:id="fileMenu">
+         <MenuItem mnemonicParsing="false" fx:id="openFileMenuItem" onAction="#openFile"/>
+         <MenuItem mnemonicParsing="false" fx:id="closeFileMenuItem" onAction="#closeFile"/>
          <SeparatorMenuItem mnemonicParsing="false" />
-         <MenuItem mnemonicParsing="false" text="Save" onAction="#saveFile"/>
-         <MenuItem mnemonicParsing="false" text="Delete" onAction="#deleteFile"/>
+         <MenuItem mnemonicParsing="false" fx:id="saveFileMenuItem" onAction="#saveFile"/>
+         <MenuItem mnemonicParsing="false" fx:id="deleteFileMenuItem" onAction="#deleteFile"/>
          <SeparatorMenuItem mnemonicParsing="false" />
-         <MenuItem mnemonicParsing="false" text="Run" fx:id="runFileMenuItem" onAction="#run"/>
-         <MenuItem disable="true" mnemonicParsing="false" text="Stop" fx:id="stopExecutionMenuItem" onAction="#stop"/>
+         <MenuItem mnemonicParsing="false"  fx:id="runFileMenuItem" onAction="#runFile"/>
+         <MenuItem disable="true" mnemonicParsing="false" fx:id="stopMenuItem" onAction="#stop"/>
       </Menu>
    </MenuBar>
    <SplitPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0"

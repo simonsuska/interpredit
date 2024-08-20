@@ -18,7 +18,7 @@ class OutputUsecaseTest {
     @InjectMocks
     private OutputUsecase outputUsecase;
 
-    private static final String OUTPUT = "Output";
+    private static final String OUTPUT = "rA2ggutvEgsT";
 
     @Test
     void get() {

@@ -11,5 +11,6 @@ public enum Status {
     DECODE_ERROR,
     DIVISION_BY_ZERO_ERROR,
     INPUT_ERROR,
-    FINISH
+    FINISH_SUCCESS,
+    FINISH_FAILURE
 }

@@ -6,10 +6,7 @@ import de.example.core.di.Di;
 import de.example.presentation.Model;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 
@@ -17,9 +14,20 @@ import java.io.File;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import static de.example.presentation.Interpredit.s;
+
 public class Controller {
+    @FXML private Menu interpreditMenu;
+    @FXML private Menu fileMenu;
+
+    @FXML private MenuItem closeAppMenuItem;
+
+    @FXML private MenuItem openFileMenuItem;
+    @FXML private MenuItem closeFileMenuItem;
+    @FXML private MenuItem saveFileMenuItem;
+    @FXML private MenuItem deleteFileMenuItem;
     @FXML private MenuItem runFileMenuItem;
-    @FXML private MenuItem stopExecutionMenuItem;
+    @FXML private MenuItem stopMenuItem;
 
     @FXML private Label fileLabel;
 
@@ -47,6 +55,18 @@ public class Controller {
                     }
                 })
         );
+
+        this.interpreditMenu.setText(s("interpreditMenuText"));
+        this.fileMenu.setText(s("fileMenuText"));
+
+        this.closeAppMenuItem.setText(s("closeMenuItemText"));
+
+        this.openFileMenuItem.setText(s("openFileMenuItemText"));
+        this.closeFileMenuItem.setText(s("closeFileMenuItemText"));
+        this.saveFileMenuItem.setText(s("saveFileMenuItemText"));
+        this.deleteFileMenuItem.setText(s("deleteFileMenuItemText"));
+        this.runFileMenuItem.setText(s("runFileMenuItemText"));
+        this.stopMenuItem.setText(s("stopMenuItemText"));
     }
 
     @FXML private void close() {
@@ -61,6 +81,7 @@ public class Controller {
         File file = new FileChooser().showOpenDialog(this.editorTextArea.getScene().getWindow());
 
         if (file != null) {
+            this.outputTextArea.setText("");
             this.model.openFile(file.getAbsolutePath());
         }
     }
@@ -69,19 +90,23 @@ public class Controller {
         this.model.closeFile();
     }
 
-    @FXML private void run() {
+    @FXML private void runFile() {
+        String program = this.editorTextArea.getText();
+        if (program.isBlank()) {
+            this.model.appendOutput(s("runFileFailureMessage"));
+            return;
+        }
+
         this.outputTextArea.setText("");
         this.runFileMenuItem.setDisable(true);
-        this.stopExecutionMenuItem.setDisable(false);
+        this.stopMenuItem.setDisable(false);
 
-        String program = this.editorTextArea.getText();
         this.model.run(program);
-
         new Thread(() -> {
             try {
                 stopSignal.await();
                 Platform.runLater(() -> runFileMenuItem.setDisable(false));
-                Platform.runLater(() -> stopExecutionMenuItem.setDisable(true));
+                Platform.runLater(() -> stopMenuItem.setDisable(true));
             } catch (InterruptedException | BrokenBarrierException e) {
                 throw new RuntimeException(e);
             }
@@ -95,7 +120,5 @@ public class Controller {
 
     @FXML private void stop() {
         this.model.stop();
-        this.runFileMenuItem.setDisable(false);
-        this.stopExecutionMenuItem.setDisable(true);
     }
 }

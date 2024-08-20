@@ -36,7 +36,7 @@ public class RandomAccessMachine extends Machine {
     }
 
     @Override
-    public void interrupt() {
+    public synchronized void interrupt() {
         super.interrupt();
         this.buffer.close();
     }
@@ -259,6 +259,6 @@ public class RandomAccessMachine extends Machine {
     }
 
     public Status hlt(int value) {
-        return Status.FINISH;
+        return Status.FINISH_SUCCESS;
     }
 }

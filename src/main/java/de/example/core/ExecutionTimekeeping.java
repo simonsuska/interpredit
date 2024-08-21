@@ -1,6 +1,7 @@
 package de.example.core;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * This type provides a time keeping mechanism to
@@ -11,20 +12,21 @@ public class ExecutionTimekeeping {
     private static long end;
 
     /** This method starts the time measurement. */
-    public static void start() {
+    public synchronized static void start() {
         start = new Date().getTime();
     }
 
     /** This method ends the time measurement. */
-    public static void end() {
+    public synchronized static void end() {
         end = new Date().getTime();
     }
 
+    // TODO: Adjust doc
     /**
      * This method calculates the duration between start and end in milliseconds.
      * @return The duration in milliseconds
      */
-    public static long getDuration() {
-        return end - start;
+    public synchronized static String getDuration() {
+        return String.format(Locale.getDefault(), "%d",  end - start);
     }
 }

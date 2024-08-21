@@ -40,6 +40,16 @@ public class Interpredit extends Application {
     public static void main(String[] args) {
         Locale locale = Locale.getDefault();
         bundle = ResourceBundle.getBundle("strings", locale);
+
+        System.out.print("\n");
+        System.out.println("+-+ +-+  +-+ +-----+ +-----+ +-----   +-----  +-----   +-----+ +----   +-+ +-----+");
+        System.out.println("| | |  \\ | | +-+ +-+ | +---+ |     \\  |     \\ |     \\  | +---+ |    \\  | | +-+ +-+");
+        System.out.println("| | |   \\| |   | |   | +--   |     /  |     / |     /  | +--   | |\\  | | |   | |     ");
+        System.out.println("| | | |\\   |   | |   | +--   | |\\ \\   | +---  | |\\ \\   | +--   | |/  | | |   | |");
+        System.out.println("| | | | \\  |   | |   | +---+ | | \\ \\  | |     | | \\ \\  | +---+ |    /  | |   | |");
+        System.out.println("+-+ +-+  +-+   +-+   +-----+ +-+  +-+ +-+     +-+  +-+ +-----+ +----   +-+   +-+");
+        System.out.print("\n");
+
         launch();
     }
 }

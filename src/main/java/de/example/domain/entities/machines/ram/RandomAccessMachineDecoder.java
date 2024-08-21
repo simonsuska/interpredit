@@ -16,7 +16,7 @@ public class RandomAccessMachineDecoder implements Decoder {
                     .toList();
 
             if (cmd.isEmpty())
-                return new RandomAccessMachineCommand(Status.HOP.name().toLowerCase(), 0);
+                return new RandomAccessMachineCommand(Status.HOP.name().toLowerCase(), 0, false);
 
             if (cmd.size() != 2)
                 return null;

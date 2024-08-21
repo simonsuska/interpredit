@@ -2,6 +2,7 @@ package de.example.domain.usecases;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import de.example.core.ExecutionTimekeeping;
 import de.example.core.di.Di;
 import de.example.domain.entities.Status;
 import de.example.domain.entities.machines.Machine;
@@ -37,6 +38,8 @@ public class RunUsecase implements Runnable {
 
     @Override
     public void run() {
+        ExecutionTimekeeping.start();
+
         int pc;
         Status status = Status.FINISH_SUCCESS;
 
@@ -64,6 +67,9 @@ public class RunUsecase implements Runnable {
                     continue;
 
                 if (status != Status.OK) {
+                    if (status == Status.FINISH_SUCCESS)
+                        ExecutionTimekeeping.end();
+
                     exchanger.exchange(status);
                     cyclicBarrier.await(); // prevents the RunnerThread from being too fast in writing the buffer
                 }

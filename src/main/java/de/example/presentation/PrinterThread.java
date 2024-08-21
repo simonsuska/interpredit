@@ -2,6 +2,7 @@ package de.example.presentation;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import de.example.core.ExecutionTimekeeping;
 import de.example.core.di.Di;
 import de.example.domain.entities.Status;
 import javafx.application.Platform;
@@ -51,7 +52,8 @@ public class PrinterThread implements Runnable {
                     case DECODE_ERROR -> () -> this.model.appendOutput(s("decodeErrorHintMessage"));
                     case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput(s("divisionByZeroErrorHintMessage"));
                     case INPUT_ERROR -> () -> this.model.appendOutput(s("inputErrorHintMessage"));
-                    case FINISH_SUCCESS -> () -> this.model.appendOutput(s("finishSuccessHintMessage"));
+                    case FINISH_SUCCESS -> () -> this.model.appendOutput(s("finishSuccessHintMessage") + "\n" +
+                                                                         s("executionDurationHintMessage", ExecutionTimekeeping.getDuration()));
                     case FINISH_FAILURE -> () -> this.model.appendOutput(s("finishFailureHintMessage"));
                     default -> null;
                 };

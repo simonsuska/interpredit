@@ -10,15 +10,24 @@ import java.lang.reflect.Method;
 public class RandomAccessMachineCommand implements Command {
     private final String name;
     private final int value;
+    private final boolean isUserGenerated;
 
-    public RandomAccessMachineCommand(String name, int value) {
+    public RandomAccessMachineCommand(String name, int value, boolean isUserGenerated) {
         this.name = name.toLowerCase();
         this.value = value;
+        this.isUserGenerated = isUserGenerated;
+    }
+
+    public RandomAccessMachineCommand(String name, int value) {
+        this(name, value, true);
     }
 
     @Override
     public Status execute(Machine machine) {
         Status status;
+
+        if (this.name.equals("hop") && this.isUserGenerated)
+            return Status.COMMAND_ERROR;
 
         try {
             Method method = machine.getClass().getMethod(name, Integer.TYPE);

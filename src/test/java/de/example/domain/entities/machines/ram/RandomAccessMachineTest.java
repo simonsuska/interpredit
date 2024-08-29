@@ -33,7 +33,7 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.DECODE_ERROR);
 
         status = ram.run("");
-        assertEquals(status, Status.HOP);
+        assertEquals(status, Status.OK);
 
         status = ram.run("SET");
         assertEquals(status, Status.DECODE_ERROR);
@@ -121,6 +121,12 @@ class RandomAccessMachineTest {
 
         status = ram.set(1);
         assertEquals(status, Status.OK);
+
+        status = ram.set(100);
+        assertEquals(status, Status.OK);
+
+        status = ram.set(101);
+        assertEquals(status, Status.SET_ERROR);
     }
 
     @Test
@@ -128,13 +134,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.hop(-1);
-        assertEquals(status, Status.HOP);
+        assertEquals(status, Status.OK);
 
         status = ram.hop(0);
-        assertEquals(status, Status.HOP);
+        assertEquals(status, Status.OK);
 
         status = ram.hop(1);
-        assertEquals(status, Status.HOP);
+        assertEquals(status, Status.OK);
     }
 
     @Test

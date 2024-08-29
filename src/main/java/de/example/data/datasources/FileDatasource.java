@@ -3,7 +3,6 @@ package de.example.data.datasources;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,8 +16,13 @@ import java.util.List;
  * the path to the file which is currently opened in the editor.
  */
 public class FileDatasource implements MutableDatasource {
+
+    //: SECTION: - ATTRIBUTES
+
     private Path filepath;
     private Path backupFilepath;
+
+    //: SECTION: - CONSTRUCTORS
 
     /** This constructor creates a new empty file datasource. */
     public FileDatasource() {
@@ -26,11 +30,13 @@ public class FileDatasource implements MutableDatasource {
         this.backupFilepath = null;
     }
 
+    //: SECTION: - METHODS
+
     /**
      * This method resolves the backup filepath from the file
      * referenced by the underlying path.
-     * @return The resolved backup filepath or `null`, if the
-     *         underlying filepath is `null`
+     * @return The resolved backup filepath or {@code null}, if the
+     *         underlying filepath is {@code null}
      */
     private Path resolveBackupFilepath() {
         if (this.filepath != null) {
@@ -41,7 +47,7 @@ public class FileDatasource implements MutableDatasource {
             String filename = (dotIndex == -1) ? fullFilename : fullFilename.substring(0, dotIndex);
             String extension = (dotIndex == -1) ? "" : fullFilename.substring(dotIndex);
 
-            String backupFilename = filename + "-A8sJ9kL3pQ" + extension;
+            String backupFilename = filename + "-A8sJ9kL3pQr2" + extension;
             return parentDirectory.resolve(backupFilename);
         }
 
@@ -57,8 +63,8 @@ public class FileDatasource implements MutableDatasource {
      * by the given one. It is not appended.
      *
      * @param content The content to be written
-     * @return `true` if the content was successfully written into
-     *         the file, otherwise `false`
+     * @return {@code true} if the content was successfully written into
+     *         the file, otherwise {@code false}
      */
     @Override
     public boolean write(String content) {
@@ -75,7 +81,7 @@ public class FileDatasource implements MutableDatasource {
     /**
      * This method reads the content from the file referenced by the
      * underlying path. Multiple lines are joined by the `\n` character.
-     * @return The content from the file or `null`, if the content could
+     * @return The content from the file or {@code null}, if the content could
      *         not been read successfully
      */
     @Override
@@ -93,8 +99,8 @@ public class FileDatasource implements MutableDatasource {
      * method calls will access the file referenced by this path rather than
      * the previous one.
      * @param datasource The absolute path to the new file
-     * @return `true` if the given path is valid and refers to a file,
-     *         otherwise `false`. If this method returns `true`, the
+     * @return {@code true} if the given path is valid and refers to a file,
+     *         otherwise {@code false}. If this method returns `{@code true}, the
      *         new path has successfully been set, otherwise the old
      *         path remains.
      */
@@ -116,7 +122,7 @@ public class FileDatasource implements MutableDatasource {
      * This method deletes the underlying path which will result
      * in an empty file datasource. The file itself will remain
      * in the file system.
-     * @return `true` if a path previously existed, otherwise `false`
+     * @return {@code true} if a path previously existed, otherwise {@code false}
      */
     @Override
     public boolean unset() {
@@ -132,8 +138,8 @@ public class FileDatasource implements MutableDatasource {
     /**
      * This method deletes both the underlying path and the file
      * from the file system which will result in an empty file datasource.
-     * @return `true` if both the underlying path and the file have
-     *         successfully been deleted, otherwise `false`
+     * @return {@code true} if both the underlying path and the file have
+     *         successfully been deleted, otherwise {@code false}
      */
     @Override
     public boolean delete() {
@@ -157,8 +163,8 @@ public class FileDatasource implements MutableDatasource {
     /**
      * This method creates a duplicate of the file referenced by the
      * underlying path for backup purposes.
-     * @return `true` if the duplicate was successfully created,
-     *         otherwise `false`
+     * @return {@code true} if the duplicate was successfully created,
+     *         otherwise {@code false}
      */
     public boolean backup() {
         try {
@@ -172,7 +178,7 @@ public class FileDatasource implements MutableDatasource {
     /**
      * This method restores the content from the backup file and
      * writes it to the file referenced by the underlying path.
-     * @return `true` if the restoration was successful, otherwise `false`
+     * @return {@code true} if the restoration was successful, otherwise {@code false}
      */
     public boolean restore() {
         try {
@@ -185,8 +191,8 @@ public class FileDatasource implements MutableDatasource {
 
     /**
      * This method deletes the backup file.
-     * @return `true` if the backup file was successfully deleted,
-     *         otherwise `false`
+     * @return {@code true} if the backup file was successfully deleted,
+     *         otherwise {@code false}
      */
     public boolean purge() {
         return this.backupFilepath.toFile().delete();

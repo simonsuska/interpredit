@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.usecases.*;
+import de.example.presentation.controller.Controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,7 +12,11 @@ import java.util.Objects;
 
 import static de.example.presentation.Interpredit.s;
 
+/** This type is a JavaFX model. */
 public class Model {
+
+    //: SECTION: - ATTRIBUTES
+
     private final DeleteUsecase deleteUsecase;
     private final OpenUsecase openUsecase;
     private final CloseUsecase closeUsecase;
@@ -24,6 +29,8 @@ public class Model {
     private final StringProperty editorTextAreaText;
     private final StringProperty outputTextAreaText;
     private final StringProperty fileLabelText;
+
+    //: SECTION: - CONSTRUCTORS
 
     @Inject
     public Model(@Named(Di.DELETE_USECASE) DeleteUsecase deleteUsecase,
@@ -48,6 +55,8 @@ public class Model {
         this.fileLabelText = new SimpleStringProperty();
     }
 
+    //: SECTION: - METHODS
+
     public StringProperty editorTextAreaTextProperty() {
         return editorTextAreaText;
     }
@@ -60,10 +69,20 @@ public class Model {
         return fileLabelText;
     }
 
+    /**
+     * This method appends the given string to the output text area.
+     *
+     * <br><br><b>Discussion</b><br>
+     * It is used by the {@code PrinterThread} to provide output to the
+     * user during the program execution.
+     * @param output The string to be appended
+     */
     public void appendOutput(String output) {
-        outputTextAreaText.set(outputTextAreaText.get() + output + "\n");
+        if (output != null)
+            outputTextAreaText.set(outputTextAreaText.get() + output + "\n");
     }
 
+    /** This method causes the file currently open in the editor to be deleted. */
     public void deleteFile() {
         boolean result = this.deleteUsecase.get();
 
@@ -76,6 +95,11 @@ public class Model {
         }
     }
 
+    /**
+     * This method causes the content of the file referenced by the
+     * given string to be displayed in the editor.
+     * @param filename The absolute path to the file
+     */
     public void openFile(String filename) {
         String content = this.openUsecase.apply(filename);
 
@@ -88,6 +112,10 @@ public class Model {
         }
     }
 
+    /**
+     * This method causes the file currently open in the editor
+     * to be closed, but not deleted
+     */
     public void closeFile() {
         boolean result = this.closeUsecase.get();
 
@@ -100,12 +128,25 @@ public class Model {
         }
     }
 
+    /**
+     * This method causes the given program to be executed.
+     *
+     * <br><br><b>Discussion</b><br>
+     * Among other things, this method starts two additional threads that
+     * are active during program execution. See {@link Controller#runFile()}
+     * to find out more
+     * @param program The program to be executed
+     */
     public void run(String program) {
         this.runUsecase.setProgram(program);
         new Thread(Interpredit.getPrinterThread(), "PrinterThread").start();
         new Thread(runUsecase, "RunnerThread").start();
     }
 
+    /**
+     * This method causes the file currently open in the editor to be saved.
+     * @param content The content to be saved
+     */
     public void saveFile(String content) {
         boolean result = this.saveUsecase.apply(content);
 
@@ -117,6 +158,7 @@ public class Model {
         }
     }
 
+    /** This method causes the currently running program to be interrupted. */
     public void stop() {
         boolean result = this.stopUsecase.get();
 
@@ -126,10 +168,25 @@ public class Model {
             appendOutput(s("stopFailureMessage"));
     }
 
+    /**
+     * This method causes an output to be requested from the random access machine.
+     *
+     * <br><br><b>Discussion</b><br>
+     * It is used by the {@code PrinterThread} to provide the user with the
+     * output of the random access machine after receiving a {@code Status.OUTPUT}.
+     * @return The output of the random access machine
+     */
     public String requestOutput() {
         return this.outputUsecase.get();
     }
 
+    /**
+     * This method causes an input to be delivered to the random access machine.
+     *
+     * <br><br><b>Discussion</b><br>
+     * This method is called when the user hits 'Enter' after an input.
+     * @param input The input to be delivered to the random access machine
+     */
     public void deliverInput(String input) {
         boolean result = this.inputUsecase.apply(input);
 

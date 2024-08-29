@@ -14,8 +14,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Interpredit extends Application {
+
+    //: SECTION: - ATTRIBUTES
+
     private static ResourceBundle bundle;
     private static final Injector injector = Guice.createInjector(new InterpreditModule());
+
+    //: SECTION: - METHODS
 
     @Override
     public void start(Stage stage) throws IOException, NoSuchMethodException {

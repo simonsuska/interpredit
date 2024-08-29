@@ -17,7 +17,12 @@ import java.util.Objects;
  * referencing to the file which is currently opened in the editor.
  */
 public class RepositoryImpl implements Repository {
+
+    //: SECTION: - ATTRIBUTES
+
     private final MutableDatasource datasource;
+
+    //: SECTION: - CONSTRUCTORS
 
     /**
      * This constructor creates a new repository with the given datasource.
@@ -28,6 +33,8 @@ public class RepositoryImpl implements Repository {
         this.datasource = Objects.requireNonNull(datasource);
     }
 
+    //: SECTION: - METHODS
+
     /**
      * This method opens the datasource identified by the given
      * path and subsequently reads its content. Multiple lines
@@ -37,7 +44,7 @@ public class RepositoryImpl implements Repository {
      * In the context of Interpredit, the datasource is equal
      * to the absolute path of a file in the file system.
      * @param filename The absolute path to the datasource
-     * @return The content from datasource or `null`, if the
+     * @return The content from the datasource or {@code null}, if the
      *         content could not been read successfully
      */
     @Override
@@ -57,8 +64,8 @@ public class RepositoryImpl implements Repository {
      * In the context of Interpredit, closing the file refers
      * to closing it in the editor. However, the file remains
      * in the file system.
-     * @return `true` if the datasource was successfully
-     *         closed, otherwise `false`
+     * @return {@code true} if the datasource was successfully
+     *         closed, otherwise {@code false}
      */
     @Override
     public boolean close() {
@@ -74,8 +81,8 @@ public class RepositoryImpl implements Repository {
      * aware that the previous content will not be accessible
      * after calling this method.
      * @param content The content to be saved
-     * @return `true` if the content was successfully saved in
-     *         the datasource, otherwise `false`
+     * @return {@code true} if the content was successfully saved in
+     *         the datasource, otherwise {@code false}
      */
     @Override
     public boolean save(String content) {
@@ -84,8 +91,12 @@ public class RepositoryImpl implements Repository {
 
     /**
      * This method deletes the datasource.
-     * @return `true` if the datasource was successfully deleted,
-     *         otherwise `false`
+     *
+     * <br><br><b>Discussion</b><br>
+     * In the context of Interpredit, it refers to deleting the
+     * currently opened file in the filesystem.
+     * @return {@code true} if the datasource was successfully deleted,
+     *         otherwise {@code false}
      */
     @Override
     public boolean delete() {

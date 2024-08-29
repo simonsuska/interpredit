@@ -1,19 +1,27 @@
 package de.example.domain.entities;
 
-// TODO: Adjust doc
 /**
  * This type stores a single generic data object
  * and grants read and write access to it.
+ *
+ * <br><br><b>Discussion</b><br>
+ * In the context of Interpredit, this buffer is used of type {@code Buffer<String>}
+ * by the {@code RandomAccessMachine} class for inputting and outputting values.
  * @param <T> The type of the data object to be stored
  */
 public class Buffer<T> {
+
+    //: SECTION: - ATTRIBUTES
+
     private T value;
-    private boolean closed;
+    private boolean isClosed;
+
+    //: SECTION: - CONSTRUCTORS
 
     /** This constructor creates an empty buffer. */
     public Buffer() {
         this.value = null;
-        this.closed = false;
+        this.isClosed = false;
     }
 
     /**
@@ -25,18 +33,29 @@ public class Buffer<T> {
         this.value = data;
     }
 
-    // TODO: Adjust doc
+    //: SECTION: - METHODS
+
     /**
-     * This method returns the stored data object or `null`, if
-     * the buffer is empty and subsequently clears the buffer.
-     * @return The stored data object or `null`, if
-     *         the buffer is empty
+     * This method returns the stored data object and subsequently
+     * clears the buffer or returns {@code null}, if the buffer was
+     * closed.
+     *
+     * <br><br><b>Discussion</b><br>
+     * Note that this method is blocking, which means it blocks the
+     * corresponding thread as long as the buffer is empty. It only
+     * continues when the buffer has either been filled by the {@code write(T data)}
+     * method or closed by the {@code close()} method.
+     * <br><br>
+     * In the context of Interpredit, the blocking mechanism is
+     * used to await an input from the user.
+     * @return The stored data object or {@code null}, if
+     *         the buffer was closed
      */
     public synchronized T read() throws InterruptedException {
-        while (this.value == null && !this.closed)
+        while (this.value == null && !this.isClosed)
             this.wait();
 
-        if (!this.closed) {
+        if (!this.isClosed) {
             T value = this.value;
             this.value = null;
             return value;
@@ -45,9 +64,13 @@ public class Buffer<T> {
         return null;
     }
 
-    // TODO: Adjust doc
     /**
      * This method stores the given data object in the buffer.
+     *
+     * <br><br><b>Discussion</b><br>
+     * In the context of Interpredit, this method is used to write the
+     * buffer which causes the program to continue if it has been
+     * waiting for input from the user.
      * @param data The data object to be stored
      */
     public synchronized void write(T data) {
@@ -55,24 +78,33 @@ public class Buffer<T> {
         this.notify();
     }
 
-    // TODO: Add doc
+    /**
+     * This method closes the buffer.
+     *
+     * <br><br><b>Discussion</b><br>
+     * In the context of Interpredit, this method is used to close the
+     * buffer and cause the program to continue if it has been
+     * waiting for input from the user.
+     */
     public synchronized void close() {
-        this.closed = true;
+        this.isClosed = true;
         this.notify();
     }
 
-    // TODO: Adjust doc
     /**
      * This method checks whether the buffer is empty or not.
-     * @return `true` if the buffer is empty, otherwise `false`
+     * @return {@code true} if the buffer is empty, otherwise {@code false}
      */
     public synchronized boolean isEmpty() {
         return value == null;
     }
 
-    // TODO: Add doc
+    /**
+     * This method resets the buffer, which is
+     * clearing and opening it.
+     */
     public synchronized void reset() {
         this.value = null;
-        this.closed = false;
+        this.isClosed = false;
     }
 }

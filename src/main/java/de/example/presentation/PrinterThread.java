@@ -14,10 +14,26 @@ import java.util.concurrent.Exchanger;
 
 import static de.example.presentation.Interpredit.s;
 
+/** This type prints messages about the current status to the user. */
 public class PrinterThread implements Runnable {
+
+    //: SECTION: - ATTRIBUTES
+
     private final Model model;
+
+    /**
+     * This attribute is used to receive the current status
+     * from the {@code RunnerThread} (aka {@code RunUsecase})
+     */
     private final Exchanger<Status> exchanger;
+
+    /**
+     * This attribute is used to prevent the {@code RunnerThread} (this class) from
+     * being too fast compared to the {@code PrinterThread} when writing the buffer.
+     */
     private final CyclicBarrier cyclicBarrier;
+
+    //: SECTION: - CONSTRUCTORS
 
     @Inject
     public PrinterThread(@Named(Di.MODEL) Model model,
@@ -28,6 +44,12 @@ public class PrinterThread implements Runnable {
         this.cyclicBarrier = Objects.requireNonNull(cyclicBarrier);
     }
 
+    //: SECTION: - METHODS
+
+    /**
+     * This method receives the current status from the {@code RunnerThread}
+     * and prints an appropriate message to the user.
+     */
     @Override
     public void run() {
         Runnable runnable;
@@ -35,32 +57,42 @@ public class PrinterThread implements Runnable {
 
         while (status == Status.OK ||
                status == Status.OUTPUT ||
-               status == Status.INPUT ||
-               status == Status.HOP) {
+               status == Status.INPUT) {
             try {
+                // Wait for the next status
                 status = exchanger.exchange(Status.OK);
 
+                // Determine the message based on the status
                 runnable = switch (status) {
                     case OUTPUT -> {
                         String output = this.model.requestOutput();
                         yield () -> this.model.appendOutput(output);
                     }
                     case INPUT -> () -> this.model.appendOutput(s("inputHintMessage"));
-                    case SET_ERROR -> () -> this.model.appendOutput(s("setErrorHintMessage"));
-                    case MEMORY_ADDRESS_ERROR -> () -> this.model.appendOutput(s("memoryAddressErrorHintMessage"));
-                    case COMMAND_ERROR -> () -> this.model.appendOutput(s("commandErrorHintMessage"));
-                    case DECODE_ERROR -> () -> this.model.appendOutput(s("decodeErrorHintMessage"));
-                    case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput(s("divisionByZeroErrorHintMessage"));
-                    case INPUT_ERROR -> () -> this.model.appendOutput(s("inputErrorHintMessage"));
+                    case SET_ERROR -> () -> this.model.appendOutput(s("setErrorHintMessage") + "\n" +
+                                                                    s("finishFailureHintMessage"));
+                    case MEMORY_ADDRESS_ERROR -> () -> this.model.appendOutput(s("memoryAddressErrorHintMessage") + "\n" +
+                                                                               s("finishFailureHintMessage"));
+                    case COMMAND_ERROR -> () -> this.model.appendOutput(s("commandErrorHintMessage") + "\n" +
+                                                                        s("finishFailureHintMessage"));
+                    case DECODE_ERROR -> () -> this.model.appendOutput(s("decodeErrorHintMessage") + "\n" +
+                                                                       s("finishFailureHintMessage"));
+                    case DIVISION_BY_ZERO_ERROR -> () -> this.model.appendOutput(s("divisionByZeroErrorHintMessage") + "\n" +
+                                                                                 s("finishFailureHintMessage"));
+                    case INPUT_ERROR -> () -> this.model.appendOutput(s("inputErrorHintMessage") + "\n" +
+                                                                      s("finishFailureHintMessage"));
                     case FINISH_SUCCESS -> () -> this.model.appendOutput(s("finishSuccessHintMessage") + "\n" +
-                                                                         s("executionDurationHintMessage", ExecutionTimekeeping.getDuration()));
+                                                                         s("executionDurationHintMessage",
+                                                                                ExecutionTimekeeping.getDuration()));
                     case FINISH_FAILURE -> () -> this.model.appendOutput(s("finishFailureHintMessage"));
                     default -> null;
                 };
 
+                // Issue the message
                 if (runnable != null)
                     Platform.runLater(runnable);
 
+                // Prevent the `RunnerThread` from being too fast
                 cyclicBarrier.await();
                 cyclicBarrier.reset();
             } catch (InterruptedException | BrokenBarrierException e) {

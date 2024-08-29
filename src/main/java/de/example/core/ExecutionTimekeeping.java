@@ -8,8 +8,13 @@ import java.util.Locale;
  * measure the execution time of a program.
  */
 public class ExecutionTimekeeping {
+
+    //: SECTION: - ATTRIBUTES
+
     private static long start;
     private static long end;
+
+    //: SECTION: - METHODS
 
     /** This method starts the time measurement. */
     public synchronized static void start() {
@@ -21,10 +26,10 @@ public class ExecutionTimekeeping {
         end = new Date().getTime();
     }
 
-    // TODO: Adjust doc
     /**
      * This method calculates the duration between start and end in milliseconds.
-     * @return The duration in milliseconds
+     *
+     * @return The duration in milliseconds formatted in the default locale
      */
     public synchronized static String getDuration() {
         return String.format(Locale.getDefault(), "%d",  end - start);

@@ -4,18 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.repository.Repository;
-
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * This type transmits the event for deleting the datasource to the
- * repository after the user has tapped the menu item.
- *
- * <br><br><b>Discussion</b><br>
- * In the context of Interpredit, it transmits the event for deleting the
- * file after the user has tapped the menu item.
- */
+/** This type notifies the repository to delete the file after the user has clicked on the delete menu item. */
 public class DeleteUsecase implements Supplier<Boolean> {
 
     //: SECTION: - ATTRIBUTES
@@ -33,9 +25,9 @@ public class DeleteUsecase implements Supplier<Boolean> {
     //: SECTION: - METHODS
 
     /**
-     * This method causes the repository to delete the datasource.
-     * @return {@code true} if the datasource was successfully deleted,
-     *         otherwise {@code false}
+     * This method notifies the repository to delete the file.
+     *
+     * @return {@code true} if the file was successfully deleted, otherwise {@code false}
      */
     @Override
     public Boolean get() {

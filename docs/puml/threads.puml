@@ -1,0 +1,33 @@
+@startuml Threads
+
+hide members
+skinparam linetype ortho
+
+' INTERFACES
+
+interface Runnable
+
+' CLASSES
+
+class Thread
+class RunUsecase
+class Controller
+class MessagePrinter
+class Finisher <<anonymous>>
+
+
+' ASSOCIATIONS
+
+Thread <..> RunUsecase : RunnerThread
+Thread <..> Finisher : FinisherThread
+Thread <..> MessagePrinter : PrinterThread
+Runnable <|-- RunUsecase
+Runnable <|-- Finisher
+Runnable <|-- MessagePrinter
+Controller +--> Finisher
+
+RunUsecase -[hidden]- Finisher
+MessagePrinter -[hidden]- Controller
+MessagePrinter -[hidden]- RunUsecase
+
+@enduml

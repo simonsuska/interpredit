@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.entities.machines.Machine;
-
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -27,9 +26,9 @@ public class InputUsecase implements Function<String, Boolean> {
 
     /**
      * This method transmits the user input to the machine.
+     *
      * @param s The user input
-     * @return {@code true}, if {@code s} is not {@code null},
-     *         otherwise {@code false}
+     * @return {@code true}, if {@code s} is not {@code null}, otherwise {@code false}
      */
     @Override
     public Boolean apply(String s) {

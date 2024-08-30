@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * This type represents a mutable file datasource.
  *
- * In the context of Interpredit, this datasource contains
- * the path to the file which is currently opened in the editor.
+ * <br><br><b>Discussion</b><br>
+ * In the context of Interpredit, this datasource contains the path to the file which is currently opened in the editor.
  */
 public class FileDatasource implements MutableDatasource {
 
@@ -33,8 +33,8 @@ public class FileDatasource implements MutableDatasource {
     //: SECTION: - METHODS
 
     /**
-     * This method resolves the backup filepath from the file
-     * referenced by the underlying path.
+     * This method resolves the backup filepath from the file referenced by the underlying path.
+     *
      * @return The resolved backup filepath or {@code null}, if the
      *         underlying filepath is {@code null}
      */
@@ -55,16 +55,13 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method writes the given content into the file
-     * referenced by the underlying path.
+     * This method writes the given content into the file referenced by the underlying path.
      *
      * <br><br><b>Discussion</b><br>
-     * Note that the content of the file will be completely overridden
-     * by the given one. It is not appended.
+     * Note that the content of the file will be completely overridden by the given one. It is not appended.
      *
      * @param content The content to be written
-     * @return {@code true} if the content was successfully written into
-     *         the file, otherwise {@code false}
+     * @return {@code true} if the content was successfully written into the file, otherwise {@code false}
      */
     @Override
     public boolean write(String content) {
@@ -75,14 +72,15 @@ public class FileDatasource implements MutableDatasource {
             } catch (IOException e) {
                 return false;
             }
+
         return false;
     }
 
     /**
-     * This method reads the content from the file referenced by the
-     * underlying path. Multiple lines are joined by the `\n` character.
-     * @return The content from the file or {@code null}, if the content could
-     *         not been read successfully
+     * This method reads the content from the file referenced by the underlying path. Multiple lines are joined
+     * by the {@code \n} character.
+     *
+     * @return The content from the file or {@code null}, if the content could not been read successfully
      */
     @Override
     public String read() {
@@ -95,14 +93,12 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method replaces the underlying path with the given one. Subsequent
-     * method calls will access the file referenced by this path rather than
-     * the previous one.
+     * This method replaces the underlying path with the given one. Subsequent method calls will access the
+     * file referenced by this path rather than the previous one.
+     *
      * @param datasource The absolute path to the new file
-     * @return {@code true} if the given path is valid and refers to a file,
-     *         otherwise {@code false}. If this method returns `{@code true}, the
-     *         new path has successfully been set, otherwise the old
-     *         path remains.
+     * @return {@code true} if the given path is valid and refers to a file, otherwise {@code false}. If this method
+     *         returns `{@code true}, the new path has successfully been set, otherwise the old path remains.
      */
     @Override
     public boolean set(String datasource) {
@@ -119,9 +115,9 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method deletes the underlying path which will result
-     * in an empty file datasource. The file itself will remain
-     * in the file system.
+     * This method deletes the underlying path which will result in an empty file datasource. The file itself will
+     * remain in the file system.
+     *
      * @return {@code true} if a path previously existed, otherwise {@code false}
      */
     @Override
@@ -136,10 +132,11 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method deletes both the underlying path and the file
-     * from the file system which will result in an empty file datasource.
-     * @return {@code true} if both the underlying path and the file have
-     *         successfully been deleted, otherwise {@code false}
+     * This method deletes both the underlying path and the file from the file system which will result in an empty
+     * file datasource.
+     *
+     * @return {@code true} if both the underlying path and the file have successfully been deleted, otherwise
+     *         {@code false}
      */
     @Override
     public boolean delete() {
@@ -161,10 +158,9 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method creates a duplicate of the file referenced by the
-     * underlying path for backup purposes.
-     * @return {@code true} if the duplicate was successfully created,
-     *         otherwise {@code false}
+     * This method creates a duplicate of the file referenced by the underlying path for backup purposes.
+     *
+     * @return {@code true} if the duplicate was successfully created, otherwise {@code false}
      */
     public boolean backup() {
         try {
@@ -176,8 +172,8 @@ public class FileDatasource implements MutableDatasource {
     }
 
     /**
-     * This method restores the content from the backup file and
-     * writes it to the file referenced by the underlying path.
+     * This method restores the content from the backup file and writes it to the file referenced by the underlying path.
+     *
      * @return {@code true} if the restoration was successful, otherwise {@code false}
      */
     public boolean restore() {
@@ -191,8 +187,8 @@ public class FileDatasource implements MutableDatasource {
 
     /**
      * This method deletes the backup file.
-     * @return {@code true} if the backup file was successfully deleted,
-     *         otherwise {@code false}
+     *
+     * @return {@code true} if the backup file was successfully deleted, otherwise {@code false}
      */
     public boolean purge() {
         return this.backupFilepath.toFile().delete();

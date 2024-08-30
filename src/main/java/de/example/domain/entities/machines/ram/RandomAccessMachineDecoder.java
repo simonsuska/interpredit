@@ -2,7 +2,6 @@ package de.example.domain.entities.machines.ram;
 
 import de.example.domain.entities.machines.Command;
 import de.example.domain.entities.machines.Decoder;
-
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -12,24 +11,23 @@ public class RandomAccessMachineDecoder implements Decoder {
      * This method decodes a random access machine command from the given string.
      *
      * <br><br><b>Discussion</b><br>
-     * Decoding, in this regard, means checking the amount of components and whether
-     * the operator is an integer.
+     * Decoding, in this regard, means checking the amount of components and whether the operator is an integer.
+     *
      * @param command The string to be decoded
-     * @return The decoded {@code RandomAccessMachineCommand} or {@code null}, if
-     *         the string could not be decoded successfully.
+     * @return The decoded random access machine command or {@code null}, if the string could not be decoded successfully.
      */
     @Override
     public Command decode(String command) {
         if (command != null) {
             List<String> cmd = Stream.of(command.split(" "))
-                    .filter(c -> !c.strip().equals(""))
+                    .filter(c -> !c.isBlank())
                     .toList();
 
             if (cmd.isEmpty())
                 return new RandomAccessMachineCommand("hop", 0, false);
 
             // Every random access machine command consists of two components:
-            // the command and the operator, like 'HLT 99'.
+            // the command and the operator, like 'HLT 0'.
             if (cmd.size() != 2)
                 return null;
 

@@ -7,7 +7,6 @@ import de.example.domain.usecases.*;
 import de.example.presentation.controller.Controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.util.Objects;
 
 import static de.example.presentation.Interpredit.s;
@@ -57,24 +56,33 @@ public class Model {
 
     //: SECTION: - METHODS
 
+    /** This method grants access to the content of the editor and is used by the controller to create a binding. */
     public StringProperty editorTextAreaTextProperty() {
         return editorTextAreaText;
     }
 
+    /**
+     * This method grants access to the content of the output text area and is used by the controller to create a
+     * binding.
+     */
     public StringProperty outputTextAreaTextProperty() {
         return outputTextAreaText;
     }
 
+    /**
+     * This method grants access to the name of the currently opened file and is used by the controller to create a
+     * binding.
+     */
     public StringProperty fileLabelTextProperty() {
         return fileLabelText;
     }
 
     /**
-     * This method appends the given string to the output text area.
+     * This method appends the given string to the output text area if it is not {@code null}.
      *
      * <br><br><b>Discussion</b><br>
-     * It is used by the {@code PrinterThread} to provide output to the
-     * user during the program execution.
+     * It is used by the printer thread to provide output to the user during the program execution.
+     *
      * @param output The string to be appended
      */
     public void appendOutput(String output) {
@@ -96,8 +104,8 @@ public class Model {
     }
 
     /**
-     * This method causes the content of the file referenced by the
-     * given string to be displayed in the editor.
+     * This method causes the content of the file referenced by the given string to be displayed in the editor.
+     *
      * @param filename The absolute path to the file
      */
     public void openFile(String filename) {
@@ -112,10 +120,7 @@ public class Model {
         }
     }
 
-    /**
-     * This method causes the file currently open in the editor
-     * to be closed, but not deleted
-     */
+    /** This method causes the file currently open in the editor to be closed, but not deleted. */
     public void closeFile() {
         boolean result = this.closeUsecase.get();
 
@@ -131,20 +136,17 @@ public class Model {
     /**
      * This method causes the given program to be executed.
      *
-     * <br><br><b>Discussion</b><br>
-     * Among other things, this method starts two additional threads that
-     * are active during program execution. See {@link Controller#runFile()}
-     * to find out more
      * @param program The program to be executed
      */
     public void run(String program) {
         this.runUsecase.setProgram(program);
-        new Thread(Interpredit.getPrinterThread(), "PrinterThread").start();
+        new Thread(Interpredit.getMessagePrinter(), "PrinterThread").start();
         new Thread(runUsecase, "RunnerThread").start();
     }
 
     /**
-     * This method causes the file currently open in the editor to be saved.
+     * This method causes the content of the file currently open in the editor to be saved.
+     *
      * @param content The content to be saved
      */
     public void saveFile(String content) {
@@ -172,8 +174,9 @@ public class Model {
      * This method causes an output to be requested from the random access machine.
      *
      * <br><br><b>Discussion</b><br>
-     * It is used by the {@code PrinterThread} to provide the user with the
-     * output of the random access machine after receiving a {@code Status.OUTPUT}.
+     * It is used by the printer thread to transmit the output of the random access machine to the user after
+     * receiving the status {@code OUTPUT}.
+     *
      * @return The output of the random access machine
      */
     public String requestOutput() {
@@ -184,7 +187,8 @@ public class Model {
      * This method causes an input to be delivered to the random access machine.
      *
      * <br><br><b>Discussion</b><br>
-     * This method is called when the user hits 'Enter' after an input.
+     * This method is called when the user hits <i>Enter</i> after an input.
+     *
      * @param input The input to be delivered to the random access machine
      */
     public void deliverInput(String input) {

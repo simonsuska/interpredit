@@ -16,8 +16,7 @@ import de.example.domain.entities.machines.ram.RandomAccessMachineDecoder;
 import de.example.domain.repository.Repository;
 import de.example.domain.usecases.*;
 import de.example.presentation.Model;
-import de.example.presentation.PrinterThread;
-
+import de.example.presentation.MessagePrinter;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Exchanger;
 
@@ -89,9 +88,9 @@ public class InterpreditModule extends AbstractModule {
                 .to(new TypeLiteral<>(){})
                 .in(Singleton.class);
 
-        bind(PrinterThread.class)
+        bind(MessagePrinter.class)
                 .annotatedWith(Names.named(Di.PRINTER_THREAD))
-                .to(PrinterThread.class);
+                .to(MessagePrinter.class);
 
         bind(CyclicBarrier.class)
                 .annotatedWith(Names.named(Di.RUN_CYCLIC_BARRIER))

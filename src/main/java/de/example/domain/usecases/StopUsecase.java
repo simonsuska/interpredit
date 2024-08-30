@@ -4,13 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.entities.machines.Machine;
-
 import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * This type interrupts the machine which will cause the program execution
- * to stop after the user has tapped the menu item.
+ * This type interrupts the machine which will cause the program execution to stop after the user has clicked on the
+ * stop menu item.
  */
 public class StopUsecase implements Supplier<Boolean> {
 
@@ -30,6 +29,7 @@ public class StopUsecase implements Supplier<Boolean> {
 
     /**
      * This method interrupts the machine which will cause the program execution to stop.
+     *
      * @return Always {@code true}
      */
     @Override

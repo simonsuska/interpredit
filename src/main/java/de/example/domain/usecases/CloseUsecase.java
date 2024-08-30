@@ -4,18 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.repository.Repository;
-
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * This type transmits the event for closing the datasource to the
- * repository after the user has tapped the menu item.
- *
- * <br><br><b>Discussion</b><br>
- * In the context of Interpredit, it transmits the event for closing the
- * file after the user has tapped the menu item.
- */
+/** This type notifies the repository to close the file after the user has clicked on the close menu item. */
 public class CloseUsecase implements Supplier<Boolean> {
 
     //: SECTION: - ATTRIBUTES
@@ -24,7 +16,7 @@ public class CloseUsecase implements Supplier<Boolean> {
 
     //: SECTION: - CONSTRUCTORS
 
-    /** This constructor initializes this use case with the appropriate repository. */
+     /** This constructor initializes this use case with the appropriate repository. */
     @Inject
     public CloseUsecase(@Named(Di.REPOSITORY) Repository repository) {
         this.repository = Objects.requireNonNull(repository);
@@ -33,9 +25,9 @@ public class CloseUsecase implements Supplier<Boolean> {
     //: SECTION: - METHODS
 
     /**
-     * This method causes the repository to close the datasource.
-     * @return {@code true} if the datasource was successfully
-     *         closed, otherwise {@code false}
+     * This method notifies the repository to close the file.
+     *
+     * @return {@code true} if the file was successfully closed, otherwise {@code false}
      */
     @Override
     public Boolean get() {

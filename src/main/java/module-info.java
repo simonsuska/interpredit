@@ -5,7 +5,6 @@ open module Interpredit {
     requires com.google.guice;
     requires jdk.jfr;
 
-    //opens de.example.presentation to javafx.fxml;
     exports de.example.core;
     exports de.example.presentation;
     exports de.example.presentation.controller;
@@ -13,5 +12,4 @@ open module Interpredit {
     exports de.example.domain.entities.machines;
     exports de.example.domain.repository;
     exports de.example.domain.usecases;
-    //opens de.example.presentation.controller to javafx.fxml;
 }

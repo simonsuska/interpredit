@@ -3,13 +3,13 @@ package de.example.presentation.controller;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
+import de.example.presentation.MessagePrinter;
 import de.example.presentation.Model;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -39,7 +39,7 @@ public class Controller {
     @FXML private TextArea editorTextArea;
     @FXML private TextArea outputTextArea;
 
-    /** This attribute is used to inform the {@code FinisherThread} that the program has ended. */
+    /** This attribute is used to inform the finisher thread that the program has ended. */
     @Inject @Named(Di.QUIT_CYCLIC_BARRIER)
     private CyclicBarrier stopSignal;
 
@@ -48,6 +48,7 @@ public class Controller {
 
     //: SECTION: - METHODS
 
+    /** This method initializes the user interface. */
     @FXML private void initialize() {
         this.editorTextArea.textProperty().bindBidirectional(this.model.editorTextAreaTextProperty());
         this.outputTextArea.textProperty().bindBidirectional(this.model.outputTextAreaTextProperty());
@@ -76,17 +77,17 @@ public class Controller {
         this.stopMenuItem.setText(s("stopMenuItemText"));
     }
 
-    /** This method is called when the user clicks on the {@code closeAppMenuItem} */
+    /** This method is called when the user clicks on the {@code closeAppMenuItem}. */
     @FXML private void close() {
         Platform.exit();
     }
 
-    /** This method is called when the user clicks on the {@code deleteFileMenuItem} */
+    /** This method is called when the user clicks on the {@code deleteFileMenuItem}. */
     @FXML private void deleteFile() {
         this.model.deleteFile();
     }
 
-    /** This method is called when the user clicks on the {@code openFileMenuItem} */
+    /** This method is called when the user clicks on the {@code openFileMenuItem}. */
     @FXML private void openFile() {
         File file = new FileChooser().showOpenDialog(this.editorTextArea.getScene().getWindow());
 
@@ -96,50 +97,12 @@ public class Controller {
         }
     }
 
-    /** This method is called when the user clicks on the {@code closeFileMenuItem} */
+    /** This method is called when the user clicks on the {@code closeFileMenuItem}. */
     @FXML private void closeFile() {
         this.model.closeFile();
     }
 
-    /**
-     * This method is called when the user clicks on the {@code runFileMenuItem}
-     *
-     * <br><br><b>Discussion</b><br>
-     * During the execution of the program, there are three further threads
-     * in addition to the main thread.
-     * <ol>
-     *     <li>
-     *         {@code RunnerThread} (aka. {@code RunUsecase})
-     *         <br>
-     *         This thread is started by the model and executes the program line by line.
-     *     </li>
-     *     <li>
-     *         {@code PrinterThread}
-     *         <br>
-     *         This thread is also started by the model, directly before the {@code RunnerThread},
-     *         and provides output to the user during the program execution. It receives the
-     *         current status of the {@code RunnerThread} via an exchanger object, whereupon it
-     *         triggers the output of a corresponding message in the main thread.
-     *     </li>
-     *     <li>
-     *         {@code FinisherThread}
-     *         <br>
-     *         This thread is started by the controller and waits for the program to finish. It is
-     *         informed of the end by the {@code RunnerThread} via a cyclic barrier, whereupon it
-     *         enables the {@code runFileMenuItem} and disables the {@code stopMenuItem}.
-     *     </li>
-     * </ol>
-     *
-     * After the {@code FinisherThread} has been notified via the cyclic barrier, it executes its
-     * commands and is thus terminated. The {@code RunnerThread} and the {@code PrinterThread} leave
-     * their loop as soon as a status indicates an error or the end of the program. As the
-     * {@code RunnerThread} transmits every status that is not 'OK' to the {@code PrinterThread},
-     * these two threads are also terminated at the end of a program, leaving only the main thread
-     * after the program execution.
-     * @see Model#run(String)
-     * @see de.example.presentation.PrinterThread
-     * @see de.example.domain.usecases.RunUsecase
-     */
+    /** This method is called when the user clicks on the {@code runFileMenuItem}. */
     @FXML private void runFile() {
         String program = this.editorTextArea.getText();
         if (program.isBlank()) {
@@ -163,13 +126,13 @@ public class Controller {
         }, "FinisherThread").start();
     }
 
-    /** This method is called when the user clicks on the {@code saveFileMenuItem} */
+    /** This method is called when the user clicks on the {@code saveFileMenuItem}. */
     @FXML private void saveFile() {
         String content = this.editorTextArea.getText();
         this.model.saveFile(content);
     }
 
-    /** This method is called when the user clicks on the {@code stopMenuItem} */
+    /** This method is called when the user clicks on the {@code stopMenuItem}. */
     @FXML private void stop() {
         this.model.stop();
     }

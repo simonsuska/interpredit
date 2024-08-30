@@ -13,7 +13,9 @@ Below you will find a detailed description of all commands.
 
 ## 🚦 Start and End
 
-### ▶️ `SET`
+### `SET`
+
+---
 
 **Description** \
 The SET command initializes the memory (the tape) with the given number of fields and must be the
@@ -27,7 +29,9 @@ first command in every program. All fields are initialized with the number 0.
 
 <img src="img/set_example.png" alt="SET example" width="630">
 
-### ▶️ `HLT`
+### `HLT`
+
+---
 
 **Description** \
 The HLT command marks the end of a program and must be the last command in every program. 
@@ -42,7 +46,9 @@ The HLT command marks the end of a program and must be the last command in every
 
 ## ➕ Arithmetic Operations
 
-### ▶️ `ADD`
+### `ADD`
+
+---
 
 **Description** \
 The ADD command adds the value stored in the given memory address to the value currently 
@@ -63,7 +69,9 @@ After the addition:
 
 <img src="img/add_example.png" alt="ADD example" width="630">
 
-### ▶️ `SUB`
+### `SUB`
+
+---
 
 **Description** \
 The SUB command subtracts the value stored in the given memory address from the value currently
@@ -84,7 +92,9 @@ After the subtraction:
 
 <img src="img/sub_example.png" alt="SUB example" width="630">
 
-### ▶️ `MUL`
+### `MUL`
+
+---
 
 **Description** \
 The MUL command multiplies the value stored in the given memory address to the value currently
@@ -105,7 +115,9 @@ After the multiplication:
 
 <img src="img/mul_example.png" alt="MUL example" width="630">
 
-### ▶️ `DIV`
+### `DIV`
+
+---
 
 **Description** \
 The DIV command divides the value stored in the given memory address from the value currently
@@ -131,7 +143,9 @@ After the division:
 
 ## 🧠 Save and Load
 
-### ▶️ `LDA`
+### `LDA`
+
+---
 
 **Description** \
 The LDA command loads the value stored in the given memory address into the accumulator and thus 
@@ -151,7 +165,9 @@ After loading:
 
 <img src="img/lda_example.png" alt="LDA example" width="630">
 
-### ▶️ `LDK`
+### `LDK`
+
+---
 
 **Description** \
 The LDK command loads the given value into the accumulator and thus overrides the currently stored 
@@ -171,7 +187,9 @@ After loading:
 
 <img src="img/ldk_example.png" alt="LDK example" width="630">
 
-### ▶️ `STA`
+### `STA`
+
+---
 
 **Description** \
 The STA command stores the currently stored value in the accumulator in the given memory address.
@@ -194,7 +212,9 @@ After storing:
 
 ## 📭 Input and Output
 
-### ▶️ `INP`
+### `INP`
+
+---
 
 **Description** \
 The INP command stores the user input in the given memory address. The program execution
@@ -206,7 +226,9 @@ is paused until a user input is made.
 **Example** \
 `INP 2` takes the user input and writes it in the memory address 2.
 
-### ▶️ `OUT`
+### `OUT`
+
+---
 
 **Description** \
 The OUT command outputs the value stored in the given memory address on the console.
@@ -221,7 +243,9 @@ The OUT command outputs the value stored in the given memory address on the cons
 
 ## 🐇 Jumps
 
-### ▶️ `JMP`
+### `JMP`
+
+---
 
 **Description** \
 The JMP command causes the program execution to continue in the given line of code. The program
@@ -242,7 +266,9 @@ is trapped in an infinite loop if the target line of code is beyond the SET or H
 `JMP 9` causes the program execution to continue in line 9. This results in the OUT command in 
 line 8 not being executed.
 
-### ▶️ `JEZ`
+### `JEZ`
+
+---
 
 **Description** \
 The JEZ command causes the program execution to continue in the given line of code, if the currently 
@@ -266,7 +292,9 @@ the SET or HLT command.
 currently stored value in the accumulator is equal to 0. Otherwise, the program execution continues 
 in line 9 (which is the `HLT 0` command).
 
-### ▶️ `JNE`
+### `JNE`
+
+---
 
 **Description** \
 The JNE command causes the program execution to continue in the given line of code, if the currently
@@ -290,7 +318,9 @@ the SET or HLT command.
 currently stored value in the accumulator is not equal to 0. Otherwise, the program execution 
 continues in line 9 (which is the `HLT 0` command).
 
-### ▶️ `JLZ`
+### `JLZ`
+
+---
 
 **Description** \
 The JLZ command causes the program execution to continue in the given line of code, if the currently
@@ -314,7 +344,9 @@ the SET or HLT command.
 currently stored value in the accumulator is less than 0. Otherwise, the program execution
 continues in line 9 (which is the `HLT 0` command).
 
-### ▶️ `JLE`
+### `JLE`
+
+---
 
 **Description** \
 The JLE command causes the program execution to continue in the given line of code, if the currently
@@ -338,7 +370,9 @@ beyond the SET or HLT command.
 currently stored value in the accumulator is less than or equal to 0. Otherwise, the program 
 execution continues in line 9 (which is the `HLT 0` command).
 
-### ▶️ `JGZ`
+### `JGZ`
+
+---
 
 **Description** \
 The JGZ command causes the program execution to continue in the given line of code, if the currently
@@ -362,7 +396,9 @@ the SET or HLT command.
 currently stored value in the accumulator is greater than 0. Otherwise, the program execution
 continues in line 9 (which is the `HLT 0` command).
 
-### ▶️ `JGE`
+### `JGE`
+
+---
 
 **Description** \
 The JGE command causes the program execution to continue in the given line of code, if the currently

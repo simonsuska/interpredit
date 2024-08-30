@@ -1,6 +1,6 @@
 package de.example.domain.entities.machines;
 
-/** A type which decodes string. */
+/** A type that decodes a string. */
 public interface Decoder {
     Command decode(String command);
 }

@@ -4,18 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import de.example.core.di.Di;
 import de.example.domain.repository.Repository;
-
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * This type transmits the event for saving the datasource to the
- * repository after the user has tapped the menu item.
- *
- * <br><br><b>Discussion</b><br>
- * In the context of Interpredit, it transmits the event for saving the
- * file after the user has tapped the menu item.
- */
+/** This type notifies the repository to save the file after the user has clicked on the save menu item. */
 public class SaveUsecase implements Function<String, Boolean> {
 
     //: SECTION: - ATTRIBUTES
@@ -33,10 +25,10 @@ public class SaveUsecase implements Function<String, Boolean> {
     //: SECTION: - METHODS
 
     /**
-     * This method causes the repository to save the datasource.
+     * This method notifies the repository to save the file.
+     *
      * @param content The content to be saved
-     * @return {@code true} if the content was successfully saved in
-     *         the datasource, otherwise {@code false}
+     * @return {@code true} if the content was successfully saved in the file, otherwise {@code false}
      */
     @Override
     public Boolean apply(String content) {

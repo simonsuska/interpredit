@@ -35,6 +35,15 @@ class RandomAccessMachineTest {
         status = ram.run("");
         assertEquals(status, Status.OK);
 
+        status = ram.run("   ");
+        assertEquals(status, Status.OK);
+
+        status = ram.run("\t");
+        assertEquals(status, Status.OK);
+
+        status = ram.run("  \t   ");
+        assertEquals(status, Status.OK);
+
         status = ram.run("SET");
         assertEquals(status, Status.DECODE_ERROR);
 
@@ -47,7 +56,10 @@ class RandomAccessMachineTest {
         status = ram.run(" SET 5  ");
         assertEquals(status, Status.OK);
 
-        status = ram.run(" SET  5  ");
+        status = ram.run(" SET   5  ");
+        assertEquals(status, Status.OK);
+
+        status = ram.run("\tSET 5");
         assertEquals(status, Status.OK);
 
         status = ram.run("OUT 1");
@@ -58,10 +70,11 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.INPUT);
 
         when(buffer.isEmpty()).thenReturn(false);
+        when(buffer.read()).thenReturn("174");
         status = ram.run("INP 1");
         assertEquals(status, Status.OK);
 
-        status = ram.run("HLT 99");
+        status = ram.run("HLT 0");
         assertEquals(status, Status.FINISH_SUCCESS);
 
         status = ram.run("SET -1");
@@ -98,6 +111,10 @@ class RandomAccessMachineTest {
 
         result = ram.deliverInput("A");
         verify(buffer, times(1)).write("A");
+        assertTrue(result);
+
+        result = ram.deliverInput("  A ");
+        verify(buffer, times(1)).write("  A ");
         assertTrue(result);
 
         result = ram.deliverInput("1");
@@ -313,8 +330,8 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
     }
 
-    // because when called twice, it will wait until an input occurs
-    // -> the test will be freezed
+    // Two different methods, as the test freezes if the INP command is called
+    // twice in succession, as it then waits for user input.
     @Test
     void inpWithEmptyBuffer1() {
         Status status;
@@ -324,8 +341,8 @@ class RandomAccessMachineTest {
         assertEquals(status, Status.INPUT);
     }
 
-    // because when called twice, it will wait until an input occurs
-    // -> the test will be freezed
+    // Two different methods, as the test freezes if the INP command is called
+    // twice in succession, as it then waits for user input.
     @Test
     void inpWithEmptyBuffer2() {
         Status status;
@@ -336,9 +353,10 @@ class RandomAccessMachineTest {
     }
 
     @Test
-    void inpWithFilledBuffer() {
+    void inpWithFilledBuffer() throws InterruptedException {
         Status status;
         when(buffer.isEmpty()).thenReturn(false);
+        when(buffer.read()).thenReturn("174");
 
         status = ram.inp(-1);
         assertEquals(status, Status.MEMORY_ADDRESS_ERROR);

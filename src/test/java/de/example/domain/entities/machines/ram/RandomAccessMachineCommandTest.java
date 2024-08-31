@@ -14,9 +14,7 @@ class RandomAccessMachineCommandTest {
     private RandomAccessMachine ram;
 
     private static final int SET_VALUE = 1;
-    private static final int INP_VALUE = 2;
-    private static final int OUT_VALUE = 3;
-    private static final int HLT_VALUE = 4;
+    private static final int HOP_VALUE = 2;
 
     @BeforeEach
     void setUp() {
@@ -24,7 +22,7 @@ class RandomAccessMachineCommandTest {
     }
 
     @Test
-    void executeWithStatusContinue() {
+    void execute() {
         when(ram.set(SET_VALUE)).thenReturn(Status.OK);
 
         RandomAccessMachineCommand command = new RandomAccessMachineCommand("SET", SET_VALUE);
@@ -35,35 +33,22 @@ class RandomAccessMachineCommandTest {
     }
 
     @Test
-    void executeWithStatusInput() {
-        when(ram.inp(INP_VALUE)).thenReturn(Status.INPUT);
-
-        RandomAccessMachineCommand command = new RandomAccessMachineCommand("INP", INP_VALUE);
+    void executeUserGeneratedHop() {
+        RandomAccessMachineCommand command = new RandomAccessMachineCommand("HOP", HOP_VALUE);
         Status status = command.execute(ram);
 
-        verify(ram, times(1)).inp(INP_VALUE);
-        assertEquals(status, Status.INPUT);
+        verify(ram, times(0)).hop(HOP_VALUE);
+        assertEquals(status, Status.COMMAND_ERROR);
     }
 
     @Test
-    void executeWithStatusOutput() {
-        when(ram.out(OUT_VALUE)).thenReturn(Status.OUTPUT);
+    void executeMachineGeneratedHop() {
+        when(ram.hop(HOP_VALUE)).thenReturn(Status.OK);
 
-        RandomAccessMachineCommand command = new RandomAccessMachineCommand("OUT", OUT_VALUE);
+        RandomAccessMachineCommand command = new RandomAccessMachineCommand("HOP", HOP_VALUE, false);
         Status status = command.execute(ram);
 
-        verify(ram, times(1)).out(OUT_VALUE);
-        assertEquals(status, Status.OUTPUT);
-    }
-
-    @Test
-    void executeWithStatusFinish() {
-        when(ram.hlt(HLT_VALUE)).thenReturn(Status.FINISH_SUCCESS);
-
-        RandomAccessMachineCommand command = new RandomAccessMachineCommand("HLT", HLT_VALUE);
-        Status status = command.execute(ram);
-
-        verify(ram, times(1)).hlt(HLT_VALUE);
-        assertEquals(status, Status.FINISH_SUCCESS);
+        verify(ram, times(1)).hop(HOP_VALUE);
+        assertEquals(status, Status.OK);
     }
 }

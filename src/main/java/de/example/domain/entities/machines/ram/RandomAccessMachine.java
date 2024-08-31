@@ -397,7 +397,7 @@ public class RandomAccessMachine extends Machine {
 
     /**
      * This method stores the user input in the given memory address. The program execution is paused until a user
-     * input is made.
+     * input is made. User input made before the program is actually executed is also taken into account.
      *
      * <br><br><b>Discussion</b><br>
      * This method is a command that the user can access via the keyword INP. Note that this method is blocking, which
@@ -433,20 +433,20 @@ public class RandomAccessMachine extends Machine {
                     notifiedAboutInput = true;
                     return Status.INPUT;
                 }
+            }
 
-                notifiedAboutInput = false;
+            notifiedAboutInput = false;
 
-                try {
-                    String input = this.buffer.read();
+            try {
+                String input = this.buffer.read();
 
-                    if (input == null)
-                        return Status.INPUT_ERROR;
-
-                    int intInput = Integer.parseInt(input.trim());
-                    this.memory[address] = intInput;
-                } catch (InterruptedException | NumberFormatException e) {
+                if (input == null)
                     return Status.INPUT_ERROR;
-                }
+
+                int intInput = Integer.parseInt(input.trim());
+                this.memory[address] = intInput;
+            } catch (InterruptedException | NumberFormatException e) {
+                return Status.INPUT_ERROR;
             }
 
             this.forward();

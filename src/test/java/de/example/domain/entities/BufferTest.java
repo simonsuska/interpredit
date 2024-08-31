@@ -31,6 +31,14 @@ class BufferTest {
     }
 
     @Test
+    void readClosed() throws InterruptedException {
+        Buffer<Integer> buffer = new Buffer<>(174);
+        buffer.close();
+        Integer result = buffer.read();
+        assertNull(result);
+    }
+
+    @Test
     void write() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>();
         buffer.write(174);

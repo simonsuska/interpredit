@@ -19,12 +19,15 @@ public class RandomAccessMachineDecoder implements Decoder {
     @Override
     public Command decode(String command) {
         if (command != null) {
+            command = command.replace("\t", "");
+
             List<String> cmd = Stream.of(command.split(" "))
                     .filter(c -> !c.isBlank())
                     .toList();
 
-            if (cmd.isEmpty())
+            if (cmd.isEmpty()) {
                 return new RandomAccessMachineCommand("hop", 0, false);
+            }
 
             // Every random access machine command consists of two components:
             // the command and the operator, like 'HLT 0'.

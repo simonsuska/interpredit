@@ -218,7 +218,8 @@ After storing:
 
 **Description** \
 The INP command stores the user input in the given memory address. The program execution
-is paused until a user input is made.
+is paused until a user input is made. User input made before the program is actually executed is also taken into 
+account.
 
 - **Value**: The memory address the user input is stored in
 - **Value range**: `[1;SET_VALUE]`

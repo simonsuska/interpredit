@@ -20,6 +20,15 @@ class RandomAccessMachineDecoderTest {
         result = decoder.decode("");
         assertNotNull(result);
 
+        result = decoder.decode("   ");
+        assertNotNull(result);
+
+        result = decoder.decode("\t");
+        assertNotNull(result);
+
+        result = decoder.decode("  \t   ");
+        assertNotNull(result);
+
         result = decoder.decode("CMD");
         assertNull(result);
 
@@ -36,6 +45,9 @@ class RandomAccessMachineDecoderTest {
         assertNotNull(result);
 
         result = decoder.decode(" CMD   1  ");
+        assertNotNull(result);
+
+        result = decoder.decode("\tCMD 1");
         assertNotNull(result);
     }
 }

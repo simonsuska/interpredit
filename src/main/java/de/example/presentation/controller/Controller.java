@@ -2,24 +2,36 @@ package de.example.presentation.controller;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import de.example.core.FontChecker;
 import de.example.core.di.Di;
-import de.example.presentation.MessagePrinter;
 import de.example.presentation.Model;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import static de.example.core.FontChecker.COURIER_NEW_FONT_NAME;
+import static de.example.core.FontChecker.SF_MONO_FONT_NAME;
 import static de.example.presentation.Interpredit.s;
 
 /** This type is a JavaFX controller. */
 public class Controller {
 
     //: SECTION: - ATTRIBUTES
+
+    private static final Font SF_MONO = Font.font(SF_MONO_FONT_NAME, FontWeight.NORMAL, FontPosture.REGULAR, 12);
+    private static final Font COURIER_NEW = Font.font(COURIER_NEW_FONT_NAME, FontWeight.BOLD, FontPosture.REGULAR, 13);
 
     @FXML private Menu interpreditMenu;
     @FXML private Menu fileMenu;
@@ -38,6 +50,10 @@ public class Controller {
     @FXML private TextField inputTextField;
     @FXML private TextArea editorTextArea;
     @FXML private TextArea outputTextArea;
+
+    /** This attribute is used to check whether a given font is available on the system. */
+    @Inject @Named(Di.FONT_CHECKER)
+    private FontChecker fontChecker;
 
     /** This attribute is used to inform the finisher thread that the program has ended. */
     @Inject @Named(Di.QUIT_CYCLIC_BARRIER)
@@ -75,6 +91,16 @@ public class Controller {
         this.deleteFileMenuItem.setText(s("deleteFileMenuItemText"));
         this.runFileMenuItem.setText(s("runFileMenuItemText"));
         this.stopMenuItem.setText(s("stopMenuItemText"));
+
+        if (fontChecker.isFontAvailable(SF_MONO_FONT_NAME)) {
+            this.editorTextArea.setFont(SF_MONO);
+            this.inputTextField.setFont(SF_MONO);
+            this.outputTextArea.setFont(SF_MONO);
+        } else if (fontChecker.isFontAvailable(COURIER_NEW_FONT_NAME)) {
+            this.editorTextArea.setFont(COURIER_NEW);
+            this.inputTextField.setFont(COURIER_NEW);
+            this.outputTextArea.setFont(COURIER_NEW);
+        }
     }
 
     /** This method is called when the user clicks on the {@code closeAppMenuItem}. */

@@ -27,11 +27,37 @@ Interpredit also has the option of saving the written programs so that no brilli
 
 The following program in the preview represents a loop that counts from 1 to the input value.
 
-<img src="img/interpredit_preview.png" alt="Description" style="border-radius: 15px;">
+<img src="img/interpredit_preview.png" alt="Interpredit" style="border-radius: 15px;">
 
 <div id="getting_started"></div>
 
 ## 🚀 Getting Started
+
+### Standalone (mac-aarch64 only)
+
+Download the latest Interpredit release from the [releases page](https://github.com/simonsuska/interpredit/releases) and
+run it with `java -jar Interpredit-1.0.0.jar`. Unfortunately, this is currently only possible for Macs with an M 
+processor, as the JAR contains platform-specific graphics libraries.
+
+### Run from the sources
+
+#### Prerequisites
+- Java 22
+- Maven 3.9.6 (at least)
+- Git
+- Your favorite IDE
+
+Open a PowerShell or Terminal window.
+
+```
+git clone https://github.com/simonsuska/interpredit.git
+cd Interpredit
+git checkout main
+mvn clean package
+```
+
+This generates the platform-specific JAR that can be executed on your target system. If you are using IntelliJ, the JAR 
+is located in the `/target` folder in the project root. You can execute it with `java -jar Interpredit-1.0.0.jar`.
 
 <div id="resources"></div>
 

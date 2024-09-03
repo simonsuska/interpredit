@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
+import de.example.core.FontChecker;
 import de.example.data.datasources.FileDatasource;
 import de.example.data.datasources.MutableDatasource;
 import de.example.data.repository.RepositoryImpl;
@@ -99,5 +100,9 @@ public class InterpreditModule extends AbstractModule {
         bind(CyclicBarrier.class)
                 .annotatedWith(Names.named(Di.QUIT_CYCLIC_BARRIER))
                 .toInstance(new CyclicBarrier(2));
+
+        bind(FontChecker.class)
+                .annotatedWith(Names.named(Di.FONT_CHECKER))
+                .to(FontChecker.class);
     }
 }

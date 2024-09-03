@@ -46,18 +46,12 @@
             </Label>
             <HBox style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
                <TextArea promptText="&gt;" HBox.hgrow="ALWAYS" fx:id="editorTextArea">
-                  <font>
-                     <Font name="SF Mono Regular" size="12.0" />
-                  </font>
                </TextArea>
             </HBox>
             <BorderPane maxHeight="-Infinity" minHeight="-Infinity" VBox.vgrow="NEVER">
                <center>
                   <TextField maxHeight="-Infinity" minHeight="-Infinity" promptText="&gt;" BorderPane.alignment="CENTER"
                              fx:id="inputTextField">
-                     <font>
-                        <Font name="SF Mono Regular" size="12.0" />
-                     </font>
                      <BorderPane.margin>
                         <Insets left="2.0" right="2.0" />
                      </BorderPane.margin>
@@ -68,9 +62,6 @@
          <VBox>
             <TextArea style="-fx-control-inner-background: #eeeeee; -fx-background-color: #eeeeee;" editable="false"
                       VBox.vgrow="ALWAYS" fx:id="outputTextArea">
-               <font>
-                  <Font name="SF Mono Regular" size="12.0" />
-               </font>
             </TextArea>
          </VBox>
       </SplitPane>

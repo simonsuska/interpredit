@@ -35,7 +35,6 @@ public class OpenUsecase implements Function<String, String> {
      */
     @Override
     public String apply(String filename) {
-        System.out.println(filename);
         return this.repository.open(filename);
     }
 }

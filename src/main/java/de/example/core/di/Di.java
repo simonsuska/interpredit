@@ -19,4 +19,5 @@ public class Di {
     public static final String PRINTER_THREAD = "15";
     public static final String RUN_CYCLIC_BARRIER = "16";
     public static final String QUIT_CYCLIC_BARRIER = "17";
+    public static final String FONT_CHECKER = "18";
 }

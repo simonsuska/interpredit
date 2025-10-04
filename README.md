@@ -58,8 +58,9 @@ git checkout main
 mvn clean package
 ```
 
-This generates the platform-specific JAR that can be executed on your target system. If you are using IntelliJ, the JAR 
-is located in the `/target` folder in the project root. You can execute it with `java -jar Interpredit-1.0.1.jar`.
+This generates the platform-specific JAR that can be executed on your target system. Subsequently, the JAR is located in 
+the `/target` folder in the project root. From the project root, you can execute it with 
+`java -jar target/Interpredit-1.0.1.jar `.
 
 <div id="resources"></div>
 

@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Simon Suska
+// SPDX-License-Identifier: MIT
+
 package de.example.presentation.controller;
 
 import com.google.inject.Inject;

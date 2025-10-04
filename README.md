@@ -29,6 +29,8 @@ The following program in the preview represents a loop that counts from 1 to the
 
 <img src="img/interpredit_preview.png" alt="Interpredit" style="border-radius: 15px;">
 
+This project uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) since October 4, 2025.
+
 <div id="getting_started"></div>
 
 ## 🚀 Getting Started
@@ -36,7 +38,7 @@ The following program in the preview represents a loop that counts from 1 to the
 ### Standalone (mac-aarch64 only)
 
 Download the latest Interpredit release from the [releases page](https://github.com/simonsuska/interpredit/releases) and
-run it with `java -jar Interpredit-1.0.0.jar`. Unfortunately, this is currently only possible for Macs with an M 
+run it with `java -jar Interpredit-1.0.1.jar`. Unfortunately, this is currently only possible for Macs with an M 
 processor, as the JAR contains platform-specific graphics libraries.
 
 ### Run from the sources
@@ -47,7 +49,7 @@ processor, as the JAR contains platform-specific graphics libraries.
 - Git
 - Your favorite IDE
 
-Open a PowerShell or Terminal window.
+Open a PowerShell or Terminal window. Make sure `JAVA_HOME` is set correctly.
 
 ```
 git clone https://github.com/simonsuska/interpredit.git
@@ -57,7 +59,7 @@ mvn clean package
 ```
 
 This generates the platform-specific JAR that can be executed on your target system. If you are using IntelliJ, the JAR 
-is located in the `/target` folder in the project root. You can execute it with `java -jar Interpredit-1.0.0.jar`.
+is located in the `/target` folder in the project root. You can execute it with `java -jar Interpredit-1.0.1.jar`.
 
 <div id="resources"></div>
 
@@ -72,4 +74,4 @@ is located in the `/target` folder in the project root. You can execute it with 
 
 ## ⚖️ License
 
-Interpredit is released under the GNU GPL-3.0 license. See [LICENSE](LICENSE) for details.
+Interpredit is released under the MIT license. See [LICENSE](LICENSE) for details.

@@ -3,9 +3,9 @@
 
   **Interpredit** is a simple editor for writing and running random access machine programs.
 
-  [![GitHub Release](https://img.shields.io/github/v/release/simonsuska/interpredit?style=flat&labelColor=B55400&color=BF8F00)](https://github.com/simonsuska/interpredit/releases)
-  [![Static Badge](https://img.shields.io/badge/java-22-important?style=flat&labelColor=B55400&color=BF8F00)](https://www.oracle.com/java/)
-  [![GitHub License](https://img.shields.io/github/license/simonsuska/interpredit?style=flat&labelColor=B55400&color=BF8F00)](https://github.com/simonsuska/interpredit/blob/main/LICENSE)
+  [![GitHub Release](https://img.shields.io/github/v/release/simonsuska/interpredit?style=flat&color=BF8F00)](https://github.com/simonsuska/interpredit/releases)
+  [![Static Badge](https://img.shields.io/badge/java-22-important?style=flat&color=BF8F00)](https://www.oracle.com/java/)
+  [![GitHub License](https://img.shields.io/github/license/simonsuska/interpredit)](https://github.com/simonsuska/interpredit/blob/main/LICENSE)
 </div>
 
 ---

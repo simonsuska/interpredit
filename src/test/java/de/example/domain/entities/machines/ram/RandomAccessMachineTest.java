@@ -33,61 +33,61 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.run(null);
-        assertEquals(status, Status.DECODE_ERROR);
+        assertEquals(Status.DECODE_ERROR, status);
 
         status = ram.run("");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("   ");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("\t");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("  \t   ");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("SET");
-        assertEquals(status, Status.DECODE_ERROR);
+        assertEquals(Status.DECODE_ERROR, status);
 
         status = ram.run("SET A");
-        assertEquals(status, Status.DECODE_ERROR);
+        assertEquals(Status.DECODE_ERROR, status);
 
         status = ram.run("SET 5");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run(" SET 5  ");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run(" SET   5  ");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("\tSET 5");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("OUT 1");
-        assertEquals(status, Status.OUTPUT);
+        assertEquals(Status.OUTPUT, status);
 
         when(buffer.isEmpty()).thenReturn(true);
         status = ram.run("INP 1");
-        assertEquals(status, Status.INPUT);
+        assertEquals(Status.INPUT, status);
 
         when(buffer.isEmpty()).thenReturn(false);
         when(buffer.read()).thenReturn("174");
         status = ram.run("INP 1");
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.run("HLT 0");
-        assertEquals(status, Status.FINISH_SUCCESS);
+        assertEquals(Status.FINISH_SUCCESS, status);
 
         status = ram.run("SET -1");
-        assertEquals(status, Status.SET_ERROR);
+        assertEquals(Status.SET_ERROR, status);
 
         status = ram.run("ADD " + MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.run("CMD 1");
-        assertEquals(status, Status.COMMAND_ERROR);
+        assertEquals(Status.COMMAND_ERROR, status);
     }
 
     @Test
@@ -97,7 +97,7 @@ class RandomAccessMachineTest {
         String result = ram.requestOutput();
 
         verify(buffer, times(1)).read();
-        assertEquals(result, "174");
+        assertEquals("174", result);
     }
 
     @Test
@@ -134,19 +134,19 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.set(-1);
-        assertEquals(status, Status.SET_ERROR);
+        assertEquals(Status.SET_ERROR, status);
 
         status = ram.set(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.set(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.set(100);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.set(101);
-        assertEquals(status, Status.SET_ERROR);
+        assertEquals(Status.SET_ERROR, status);
     }
 
     @Test
@@ -154,13 +154,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.hop(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.hop(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.hop(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -168,22 +168,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.add(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.add(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.add(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.add(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.add(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.add(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -191,22 +191,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.sub(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.sub(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.sub(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sub(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sub(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sub(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -214,22 +214,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.mul(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.mul(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.mul(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.mul(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.mul(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.mul(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -237,22 +237,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.div(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.div(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.div(1);
-        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
+        assertEquals(Status.DIVISION_BY_ZERO_ERROR, status);
 
         status = ram.div(MEMORY_SIZE-1);
-        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
+        assertEquals(Status.DIVISION_BY_ZERO_ERROR, status);
 
         status = ram.div(MEMORY_SIZE);
-        assertEquals(status, Status.DIVISION_BY_ZERO_ERROR);
+        assertEquals(Status.DIVISION_BY_ZERO_ERROR, status);
 
         status = ram.div(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -260,22 +260,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.lda(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.lda(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.lda(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.lda(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.lda(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.lda(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -283,13 +283,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.ldk(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.ldk(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.ldk(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -297,22 +297,22 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.sta(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.sta(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.sta(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sta(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sta(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.sta(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -321,16 +321,16 @@ class RandomAccessMachineTest {
         when(buffer.isEmpty()).thenReturn(true);
 
         status = ram.inp(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.inp(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.inp(1);
-        assertEquals(status, Status.INPUT);
+        assertEquals(Status.INPUT, status);
 
         status = ram.inp(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     // Two different methods, as the test freezes if the INP command is called
@@ -341,7 +341,7 @@ class RandomAccessMachineTest {
         when(buffer.isEmpty()).thenReturn(true);
 
         status = ram.inp(MEMORY_SIZE-1);
-        assertEquals(status, Status.INPUT);
+        assertEquals(Status.INPUT, status);
     }
 
     // Two different methods, as the test freezes if the INP command is called
@@ -352,7 +352,7 @@ class RandomAccessMachineTest {
         when(buffer.isEmpty()).thenReturn(true);
 
         status = ram.inp(MEMORY_SIZE);
-        assertEquals(status, Status.INPUT);
+        assertEquals(Status.INPUT, status);
     }
 
     @Test
@@ -362,22 +362,22 @@ class RandomAccessMachineTest {
         when(buffer.read()).thenReturn("174");
 
         status = ram.inp(-1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.inp(0);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.inp(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.inp(MEMORY_SIZE-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.inp(MEMORY_SIZE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.inp(MEMORY_SIZE+1);
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -386,27 +386,27 @@ class RandomAccessMachineTest {
 
         status = ram.out(-1);
         verify(buffer, never()).write(anyString());
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.out(0);
         verify(buffer, never()).write(anyString());
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
 
         status = ram.out(1);
         verify(buffer, times(1)).write(anyString());
-        assertEquals(status, Status.OUTPUT);
+        assertEquals(Status.OUTPUT, status);
 
         status = ram.out(MEMORY_SIZE-1);
         verify(buffer, times(2)).write(anyString());
-        assertEquals(status, Status.OUTPUT);
+        assertEquals(Status.OUTPUT, status);
 
         status = ram.out(MEMORY_SIZE);
         verify(buffer, times(3)).write(anyString());
-        assertEquals(status, Status.OUTPUT);
+        assertEquals(Status.OUTPUT, status);
 
         status = ram.out(MEMORY_SIZE+1);
         verify(buffer, times(3)).write(anyString());
-        assertEquals(status, Status.MEMORY_ADDRESS_ERROR);
+        assertEquals(Status.MEMORY_ADDRESS_ERROR, status);
     }
 
     @Test
@@ -414,13 +414,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jmp(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jmp(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jmp(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -428,13 +428,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jez(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jez(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jez(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -442,13 +442,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jne(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jne(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jne(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -456,13 +456,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jlz(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jlz(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jlz(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -470,13 +470,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jle(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jle(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jle(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -484,13 +484,13 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jgz(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jgz(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jgz(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -498,18 +498,18 @@ class RandomAccessMachineTest {
         Status status;
 
         status = ram.jge(-1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jge(0);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
 
         status = ram.jge(1);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
     void hlt() {
         Status status = ram.hlt(99);
-        assertEquals(status, Status.FINISH_SUCCESS);
+        assertEquals(Status.FINISH_SUCCESS, status);
     }
 }

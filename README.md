@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
   <img src="Interpredit.svg" alt="Interpredit" width="168"><br><br>
 
   **Interpredit** is a simple editor for writing and running random access machine programs.
@@ -47,7 +47,6 @@ processor, as the JAR contains platform-specific graphics libraries.
 - Java 25
 - Maven 3.9.6 (at least)
 - Git
-- Your favorite IDE
 
 Open a PowerShell or Terminal window. Make sure `JAVA_HOME` is set correctly.
 
@@ -59,17 +58,19 @@ mvn clean package
 ```
 
 This generates the platform-specific JAR that can be executed on your target system. Subsequently, the JAR is located in 
-the `/target` folder in the project root. From the project root, you can execute it with 
-`java -jar target/interpredit-1.0.1.jar `.
+the target folder in the project root. From the project root, you can execute it with
+
+```bash
+java -jar target/interpredit-1.0.1.jar
+```
 
 <div id="resources"></div>
 
 ## 📦 Resources
 
-- [Inside Interpredit](docs/INSIDE_INTERPREDIT.md)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To learn more about the architecture 
-                                                                                and implementation of Interpredit
-- [Documentation](docs/DOCUMENTATION.md)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A description of all commands and how they 
-                                                                      manipulate the tape
+- See *[Inside Interpredit](docs/INSIDE_INTERPREDIT.md)* to learn more about the architecture and implementation of 
+  Interpredit.
+- See *[Documentation](docs/DOCUMENTATION.md)* to get a description of all available commands and how they manipulate the tape.
 
 <div id="license"></div>
 

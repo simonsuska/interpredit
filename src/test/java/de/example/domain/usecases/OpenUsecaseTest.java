@@ -33,7 +33,7 @@ class OpenUsecaseTest {
 
         String content = openUsecase.apply(FILENAME);
         verify(repository, times(1)).open(FILENAME);
-        assertEquals(content, FILE_CONTENTS);
+        assertEquals(FILE_CONTENTS, content);
     }
 
     @Test

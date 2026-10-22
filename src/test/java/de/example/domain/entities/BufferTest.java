@@ -13,17 +13,17 @@ class BufferTest {
     void readFilled() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>(174);
         Integer result = buffer.read();
-        assertEquals(result, 174);
+        assertEquals(174, result);
     }
 
     @Test
     void readEmpty() throws InterruptedException {
         Buffer<Integer> buffer = new Buffer<>();
 
-        new Thread(() -> {
+        Thread.ofVirtual().start(() -> {
             try {
                 Integer result = buffer.read();
-                assertEquals(result, 203);
+                assertEquals(203, result);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -47,7 +47,7 @@ class BufferTest {
         buffer.write(174);
 
         Integer result = buffer.read();
-        assertEquals(result, 174);
+        assertEquals(174, result);
     }
 
     @Test

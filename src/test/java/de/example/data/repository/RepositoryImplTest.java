@@ -36,7 +36,7 @@ class RepositoryImplTest {
 
         verify(mutableDatasource, times(1)).set(FILENAME);
         verify(mutableDatasource, times(1)).read();
-        assertEquals(fileContents, OPEN_FILE_CONTENTS);
+        assertEquals(OPEN_FILE_CONTENTS, fileContents);
     }
 
     @Test

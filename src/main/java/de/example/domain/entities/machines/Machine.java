@@ -5,6 +5,8 @@ package de.example.domain.entities.machines;
 
 import de.example.domain.entities.Status;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * A type that defines the basic functions of a machine.
  *
@@ -19,14 +21,18 @@ public abstract class Machine {
 
     //: SECTION: - ATTRIBUTES
 
+    private final ReentrantLock lock = new ReentrantLock();
+
     /** This attribute stores whether the machine is interrupted or not. */
     private boolean isInterrupted = false;
 
     //: SECTION: - METHODS
 
     /** This method interrupts the machine. */
-    public synchronized void interrupt() {
+    public void interrupt() {
+        lock.lock();
         this.isInterrupted = true;
+        lock.unlock();
     }
 
     /**
@@ -34,13 +40,18 @@ public abstract class Machine {
      *
      * @return {@code true} if the machine is interrupted, otherwise {@code false}
      */
-    public synchronized boolean isInterrupted() {
-        return this.isInterrupted;
+    public boolean isInterrupted() {
+        lock.lock();
+        boolean isInterrupt = this.isInterrupted;
+        lock.unlock();
+        return isInterrupt;
     }
 
     /** This method resets the machine, which is restoring the uninterrupted state. */
-    public synchronized void reset() {
+    public void reset() {
+        lock.lock();
         isInterrupted = false;
+        lock.unlock();
     }
 
     public abstract int getPC();

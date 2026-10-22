@@ -144,7 +144,7 @@ public class Controller {
         this.stopMenuItem.setDisable(false);
 
         this.model.run(program);
-        new Thread(() -> {
+        Thread.ofVirtual().name("FinisherThread").start(() -> {
             try {
                 stopSignal.await();
                 Platform.runLater(() -> runFileMenuItem.setDisable(false));
@@ -152,7 +152,7 @@ public class Controller {
             } catch (InterruptedException | BrokenBarrierException e) {
                 throw new RuntimeException(e);
             }
-        }, "FinisherThread").start();
+        });
     }
 
     /** This method is called when the user clicks on the {@code saveFileMenuItem}. */

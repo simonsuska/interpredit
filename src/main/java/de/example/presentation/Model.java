@@ -143,8 +143,8 @@ public class Model {
      */
     public void run(String program) {
         this.runUsecase.setProgram(program);
-        new Thread(Interpredit.getMessagePrinter(), "PrinterThread").start();
-        new Thread(runUsecase, "RunnerThread").start();
+        Thread.ofVirtual().name("PrinterThread").start(Interpredit.getMessagePrinter());
+        Thread.ofVirtual().name("RunnerThread").start(runUsecase);
     }
 
     /**

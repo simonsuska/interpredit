@@ -30,6 +30,6 @@ class OutputUsecaseTest {
         String result = outputUsecase.get();
 
         verify(machine, times(1)).requestOutput();
-        assertEquals(result, OUTPUT);
+        assertEquals(OUTPUT, result);
     }
 }

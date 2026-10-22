@@ -32,7 +32,7 @@ class RandomAccessMachineCommandTest {
         Status status = command.execute(ram);
 
         verify(ram, times(1)).set(SET_VALUE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 
     @Test
@@ -41,7 +41,7 @@ class RandomAccessMachineCommandTest {
         Status status = command.execute(ram);
 
         verify(ram, times(0)).hop(HOP_VALUE);
-        assertEquals(status, Status.COMMAND_ERROR);
+        assertEquals(Status.COMMAND_ERROR, status);
     }
 
     @Test
@@ -52,6 +52,6 @@ class RandomAccessMachineCommandTest {
         Status status = command.execute(ram);
 
         verify(ram, times(1)).hop(HOP_VALUE);
-        assertEquals(status, Status.OK);
+        assertEquals(Status.OK, status);
     }
 }

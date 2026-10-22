@@ -3,6 +3,9 @@
 
 package de.example.domain.entities;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * This type stores a single generic data object and grants read and write access to it.
  *
@@ -15,13 +18,17 @@ package de.example.domain.entities;
  * program execution. The main thread also accesses the state by writing the entered value to the buffer after a
  * user input. Finally, the printer thread also uses the state to output the corresponding value on the console after
  * an OUT command. For this reason, all methods that access the {@code value} or {@code isClosed} attributes are
- * synchronized. The monitor here is the object itself.
+ * <s>synchronized. The monitor here is the object itself.</s> The legacy synchronized implementation has been updated
+ * with locks.
  *
  * @param <T> The type of the data object to be stored
  */
 public class Buffer<T> {
 
     //: SECTION: - ATTRIBUTES
+
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition readCondition = lock.newCondition();
 
     /** This attribute represents the value of the buffer. */
     private T value;
@@ -60,9 +67,10 @@ public class Buffer<T> {
      *
      * @return The stored data object or {@code null}, if the buffer was closed
      */
-    public synchronized T read() throws InterruptedException {
+    public T read() throws InterruptedException {
+        lock.lock();
         while (this.value == null && !this.isClosed) {
-            this.wait();
+            readCondition.await();
         }
 
         if (this.isClosed) {
@@ -71,6 +79,8 @@ public class Buffer<T> {
 
         T value = this.value;
         this.value = null;
+
+        lock.unlock();
         return value;
     }
 
@@ -83,9 +93,11 @@ public class Buffer<T> {
      *
      * @param data The data object to be stored
      */
-    public synchronized void write(T data) {
+    public void write(T data) {
+        lock.lock();
         this.value = data;
-        this.notify();
+        readCondition.signal();
+        lock.unlock();
     }
 
     /**
@@ -95,9 +107,11 @@ public class Buffer<T> {
      * In the context of Interpredit, this method is used to close the buffer and cause the program to continue if
      * it has been waiting for input from the user.
      */
-    public synchronized void close() {
+    public void close() {
+        lock.lock();
         this.isClosed = true;
-        this.notify();
+        readCondition.signal();
+        lock.unlock();
     }
 
     /**
@@ -105,13 +119,18 @@ public class Buffer<T> {
      *
      * @return {@code true} if the buffer is empty, otherwise {@code false}
      */
-    public synchronized boolean isEmpty() {
-        return value == null;
+    public boolean isEmpty() {
+        lock.lock();
+        boolean isEmpty = value == null;
+        lock.unlock();
+        return isEmpty;
     }
 
     /** This method resets the buffer, which is clearing and opening it. */
-    public synchronized void reset() {
+    public void reset() {
+        lock.lock();
         this.value = null;
         this.isClosed = false;
+        lock.unlock();
     }
 }

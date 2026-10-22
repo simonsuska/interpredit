@@ -179,6 +179,7 @@ public class RandomAccessMachine extends Machine {
         this.pc = 0;
         this.memory = null;
         this.buffer.reset();
+        this.isUserNotifiedAboutInput = false;
     }
 
     /**

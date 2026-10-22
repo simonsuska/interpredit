@@ -69,19 +69,24 @@ public class Buffer<T> {
      */
     public T read() throws InterruptedException {
         lock.lock();
-        while (this.value == null && !this.isClosed) {
-            readCondition.await();
+
+        // This try-block is crucial in order to unlock the lock in the case of an interrupted exception. This may
+        // happen when the user stops the program while it is waiting for user input.
+        try {
+            while (this.value == null && !this.isClosed) {
+                readCondition.await();
+            }
+
+            if (this.isClosed) {
+                return null;
+            }
+
+            T value = this.value;
+            this.value = null;
+            return value;
+        } finally {
+            lock.unlock();
         }
-
-        if (this.isClosed) {
-            return null;
-        }
-
-        T value = this.value;
-        this.value = null;
-
-        lock.unlock();
-        return value;
     }
 
     /**

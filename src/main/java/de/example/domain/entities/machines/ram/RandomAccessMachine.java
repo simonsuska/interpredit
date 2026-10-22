@@ -50,7 +50,7 @@ public class RandomAccessMachine extends Machine {
      * This attribute is used to check whether the user has already been informed to enter a value before the program
      * waits for it.
      */
-    private boolean notifiedAboutInput = false;
+    private boolean isUserNotifiedAboutInput = false;
 
     //: SECTION: - CONSTRUCTORS
 
@@ -92,13 +92,14 @@ public class RandomAccessMachine extends Machine {
 
     /**
      * This method checks if the given memory address is within the memory accessible to the user, which is in the
-     * interval between 1 and the set value, including the limits.
+     * interval between 1 and the set value, including the limits. The address of 0 is out of bounds because this
+     * corresponds to the accumulator.
      *
      * @param address The memory address to be checked
      * @return {@code true} if the memory address is within the memory accessible to the user, otherwise {@code false}
      */
-    private boolean isMemoryAddressWithinBounds(int address) {
-        return address > 0 && address < this.memory.length;
+    private boolean isMemoryAddressOutOfBounds(int address) {
+        return address <= 0 || address >= this.memory.length;
     }
 
     /**
@@ -115,22 +116,22 @@ public class RandomAccessMachine extends Machine {
      *         0, otherwise a {@code DIVISION_BY_ZERO_ERROR} is returned.
      */
     private Status performArithmetic(int address, Arithmetic arithmetic) {
-        if (this.isMemoryAddressWithinBounds(address)) {
-            switch (arithmetic) {
-                case ADD -> this.memory[0] += this.memory[address];
-                case SUB -> this.memory[0] -= this.memory[address];
-                case MUL -> this.memory[0] *= this.memory[address];
-                case DIV -> {
-                    if (this.memory[address] != 0) this.memory[0] /= this.memory[address];
-                    else return Status.DIVISION_BY_ZERO_ERROR;
-                }
-            }
-
-            this.forward();
-            return Status.OK;
+        if (this.isMemoryAddressOutOfBounds(address)) {
+            return Status.MEMORY_ADDRESS_ERROR;
         }
 
-        return Status.MEMORY_ADDRESS_ERROR;
+        switch (arithmetic) {
+            case ADD -> this.memory[0] += this.memory[address];
+            case SUB -> this.memory[0] -= this.memory[address];
+            case MUL -> this.memory[0] *= this.memory[address];
+            case DIV -> {
+                if (this.memory[address] != 0) this.memory[0] /= this.memory[address];
+                else return Status.DIVISION_BY_ZERO_ERROR;
+            }
+        }
+
+        this.forward();
+        return Status.OK;
     }
 
     /**
@@ -191,7 +192,7 @@ public class RandomAccessMachine extends Machine {
      * @return The current program counter
      */
     @Override
-    public int getPc() {
+    public int getPC() {
         return this.pc;
     }
 
@@ -264,8 +265,9 @@ public class RandomAccessMachine extends Machine {
      * @return {@code OK} if the memory was successfully initialized, otherwise {@code SET_ERROR}
      */
     public Status set(int value) {
-        if (value < 0 || value > 100)
+        if (value < 0 || value > 100) {
             return Status.SET_ERROR;
+        }
 
         this.memory = new int[value+1];
         this.forward();
@@ -354,13 +356,13 @@ public class RandomAccessMachine extends Machine {
      * @return {@code OK} if the memory address is within the accessible memory, otherwise {@code MEMORY_ADDRESS_ERROR}
      */
     public Status lda(int address) {
-        if (this.isMemoryAddressWithinBounds(address)) {
-            this.memory[0] = this.memory[address];
-            this.forward();
-            return Status.OK;
+        if (this.isMemoryAddressOutOfBounds(address)) {
+            return Status.MEMORY_ADDRESS_ERROR;
         }
 
-        return Status.MEMORY_ADDRESS_ERROR;
+        this.memory[0] = this.memory[address];
+        this.forward();
+        return Status.OK;
     }
 
     /**
@@ -389,13 +391,13 @@ public class RandomAccessMachine extends Machine {
      * @return {@code OK} if the memory address is within the accessible memory, otherwise {@code MEMORY_ADDRESS_ERROR}
      */
     public Status sta(int address) {
-        if (this.isMemoryAddressWithinBounds(address)) {
-            this.memory[address] = this.memory[0];
-            this.forward();
-            return Status.OK;
+        if (this.isMemoryAddressOutOfBounds(address)) {
+            return Status.MEMORY_ADDRESS_ERROR;
         }
 
-        return Status.MEMORY_ADDRESS_ERROR;
+        this.memory[address] = this.memory[0];
+        this.forward();
+        return Status.OK;
     }
 
     /**
@@ -430,33 +432,30 @@ public class RandomAccessMachine extends Machine {
      * </ul>
      */
     public Status inp(int address) {
-        if (this.isMemoryAddressWithinBounds(address)) {
-            if (buffer.isEmpty()) {
-                if (!notifiedAboutInput) {
-                    notifiedAboutInput = true;
-                    return Status.INPUT;
-                }
-            }
+        if (this.isMemoryAddressOutOfBounds(address)) {
+            return Status.MEMORY_ADDRESS_ERROR;
+        }
 
-            notifiedAboutInput = false;
+        if (buffer.isEmpty() && !isUserNotifiedAboutInput) {
+            isUserNotifiedAboutInput = true;
+            return Status.INPUT;
+        }
+        isUserNotifiedAboutInput = false;
 
-            try {
-                String input = this.buffer.read();
-
-                if (input == null)
-                    return Status.INPUT_ERROR;
-
-                int intInput = Integer.parseInt(input.trim());
-                this.memory[address] = intInput;
-            } catch (InterruptedException | NumberFormatException e) {
+        try {
+            String input = this.buffer.read();
+            if (input == null) {
                 return Status.INPUT_ERROR;
             }
 
-            this.forward();
-            return Status.OK;
+            int intInput = Integer.parseInt(input.trim());
+            this.memory[address] = intInput;
+        } catch (InterruptedException | NumberFormatException e) {
+            return Status.INPUT_ERROR;
         }
 
-        return Status.MEMORY_ADDRESS_ERROR;
+        this.forward();
+        return Status.OK;
     }
 
     /**
@@ -470,13 +469,13 @@ public class RandomAccessMachine extends Machine {
      * @return {@code OK} if the memory address is within the accessible memory, otherwise {@code MEMORY_ADDRESS_ERROR}
      */
     public Status out(int address) {
-        if (this.isMemoryAddressWithinBounds(address)) {
-            this.buffer.write(String.valueOf(this.memory[address]));
-            this.forward();
-            return Status.OUTPUT;
+        if (this.isMemoryAddressOutOfBounds(address)) {
+            return Status.MEMORY_ADDRESS_ERROR;
         }
 
-        return Status.MEMORY_ADDRESS_ERROR;
+        this.buffer.write(String.valueOf(this.memory[address]));
+        this.forward();
+        return Status.OUTPUT;
     }
 
     /**

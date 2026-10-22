@@ -21,9 +21,9 @@ class Finisher <<anonymous>>
 Thread <..> RunUsecase : RunnerThread
 Thread <..> Finisher : FinisherThread
 Thread <..> MessagePrinter : PrinterThread
-Runnable <|-- RunUsecase
-Runnable <|-- Finisher
-Runnable <|-- MessagePrinter
+Runnable <|.. RunUsecase
+Runnable <|.. Finisher
+Runnable <|.. MessagePrinter
 Controller +--> Finisher
 
 RunUsecase -[hidden]- Finisher

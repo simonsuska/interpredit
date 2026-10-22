@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.example</groupId>
-    <artifactId>Interpredit</artifactId>
+    <artifactId>interpredit</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
@@ -16,8 +16,10 @@
     </licenses>
 
     <properties>
-        <java.version>22</java.version>
-        <javafx.version>21.0.4</javafx.version>
+        <!--<java.version>22</java.version>
+        <javafx.version>21.0.4</javafx.version>-->
+        <java.version>25</java.version>
+        <javafx.version>27.0.1</javafx.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,13 +73,15 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.11.0</version>
+            <!--<version>5.11.0</version>-->
+            <version>5.24.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>5.11.0</version>
+            <!--<version>5.11.0</version>-->
+            <version>5.24.0</version>
         </dependency>
     </dependencies>
 

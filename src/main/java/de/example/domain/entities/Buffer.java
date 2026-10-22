@@ -61,16 +61,17 @@ public class Buffer<T> {
      * @return The stored data object or {@code null}, if the buffer was closed
      */
     public synchronized T read() throws InterruptedException {
-        while (this.value == null && !this.isClosed)
+        while (this.value == null && !this.isClosed) {
             this.wait();
-
-        if (!this.isClosed) {
-            T value = this.value;
-            this.value = null;
-            return value;
         }
 
-        return null;
+        if (this.isClosed) {
+            return null;
+        }
+
+        T value = this.value;
+        this.value = null;
+        return value;
     }
 
     /**

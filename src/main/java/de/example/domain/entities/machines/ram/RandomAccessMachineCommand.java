@@ -59,8 +59,9 @@ public class RandomAccessMachineCommand implements Command {
     public Status execute(Machine machine) {
         Status status;
 
-        if (this.name.equals("hop") && this.isUserGenerated)
+        if (this.name.equals("hop") && this.isUserGenerated) {
             return Status.COMMAND_ERROR;
+        }
 
         try {
             Method method = machine.getClass().getMethod(name, Integer.TYPE);

@@ -56,14 +56,13 @@ public class Interpredit extends Application {
         Locale locale = Locale.getDefault();
         bundle = ResourceBundle.getBundle("strings", locale);
 
-        System.out.print("\n");
-        System.out.println("+-+ +-+  +-+ +-----+ +-----+ +-----   +-----  +-----   +-----+ +----   +-+ +-----+");
-        System.out.println("| | |  \\ | | +-+ +-+ | +---+ |     \\  |     \\ |     \\  | +---+ |    \\  | | +-+ +-+");
-        System.out.println("| | |   \\| |   | |   | +--   |     /  |     / |     /  | +--   | |\\  | | |   | |     ");
-        System.out.println("| | | |\\   |   | |   | +--   | |\\ \\   | +---  | |\\ \\   | +--   | |/  | | |   | |");
-        System.out.println("| | | | \\  |   | |   | +---+ | | \\ \\  | |     | | \\ \\  | +---+ |    /  | |   | |");
-        System.out.println("+-+ +-+  +-+   +-+   +-----+ +-+  +-+ +-+     +-+  +-+ +-----+ +----   +-+   +-+");
-        System.out.print("\n");
+        System.out.println("    ____      __                                ___ __");
+        System.out.println("   /  _/___  / /____  _________  ________  ____/ (_) /_");
+        System.out.println("   / // __ \\/ __/ _ \\/ ___/ __ \\/ ___/ _ \\/ __  / / __/");
+        System.out.println(" _/ // / / / /_/  __/ /  / /_/ / /  /  __/ /_/ / / /_");
+        System.out.println("/___/_/ /_/\\__/\\___/_/  / .___/_/   \\___/\\__,_/_/\\__/");
+        System.out.println("                       /_/");
+        System.out.println();
 
         launch();
     }

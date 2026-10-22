@@ -1,10 +1,10 @@
-<div align="center">
+<div style="text-align: center;">
   <img src="Interpredit.svg" alt="Interpredit" width="168"><br><br>
 
   **Interpredit** is a simple editor for writing and running random access machine programs.
 
   [![GitHub Release](https://img.shields.io/github/v/release/simonsuska/interpredit?style=flat&color=BF8F00)](https://github.com/simonsuska/interpredit/releases)
-  [![Static Badge](https://img.shields.io/badge/java-22-important?style=flat&color=BF8F00)](https://www.oracle.com/java/)
+  [![Static Badge](https://img.shields.io/badge/java-25-important?style=flat&color=BF8F00)](https://www.oracle.com/java/)
   [![GitHub License](https://img.shields.io/github/license/simonsuska/interpredit)](https://github.com/simonsuska/interpredit/blob/main/LICENSE)
 </div>
 
@@ -44,7 +44,7 @@ processor, as the JAR contains platform-specific graphics libraries.
 ### Run from the sources
 
 #### Prerequisites
-- Java 22
+- Java 25
 - Maven 3.9.6 (at least)
 - Git
 - Your favorite IDE
@@ -53,14 +53,14 @@ Open a PowerShell or Terminal window. Make sure `JAVA_HOME` is set correctly.
 
 ```
 git clone https://github.com/simonsuska/interpredit.git
-cd Interpredit
+cd interpredit
 git checkout main
 mvn clean package
 ```
 
 This generates the platform-specific JAR that can be executed on your target system. Subsequently, the JAR is located in 
 the `/target` folder in the project root. From the project root, you can execute it with 
-`java -jar target/Interpredit-1.0.1.jar `.
+`java -jar target/interpredit-1.0.1.jar `.
 
 <div id="resources"></div>
 

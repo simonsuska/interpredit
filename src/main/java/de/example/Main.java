@@ -10,7 +10,7 @@ import de.example.presentation.Interpredit;
  * instead of the module path. This makes it possible to use the maven shade plugin.
  */
 public class Main {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Interpredit.main(args);
     }
 }

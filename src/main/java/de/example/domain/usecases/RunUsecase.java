@@ -82,15 +82,11 @@ public class RunUsecase implements Runnable {
             do {
                 // If the machine has been interrupted, which only happens if the user has clicked on the stop menu
                 // item, transmit the final status and return.
-                if (this.machine.isInterrupt()) {
-                    try {
-                        // Inform the printer thread about the interruption which will cause it to return and print
-                        // an appropriate message.
-                        exchanger.exchange(Status.FINISH_FAILURE);
-                        cyclicBarrier.await();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                if (this.machine.isInterrupted()) {
+                    // Inform the printer thread about the interruption which will cause it to return and print
+                    // an appropriate message.
+                    exchanger.exchange(Status.FINISH_FAILURE);
+                    cyclicBarrier.await();
 
                     // Inform the finisher thread about the interruption which will cause it to enable/disable the
                     // appropriate menu items and return.
@@ -98,13 +94,12 @@ public class RunUsecase implements Runnable {
 
                     // Prepare the machine for the next program execution.
                     machine.reset();
-
                     return;
                 }
 
                 // If the program execution has not been interrupted by the user, execute the next line of code.
 
-                pc = this.machine.getPc();
+                pc = this.machine.getPC();
                 String cmd;
 
                 // If the program counter is out of program, the loop starts to iterate infinitely until the user
@@ -113,14 +108,16 @@ public class RunUsecase implements Runnable {
                 if (pc >= 0 && pc < program.size()) {
                     cmd = program.get(pc);
                     status = machine.run(cmd);
-                } else
+                } else {
                     continue;
+                }
 
                 // This condition is met if the program either requires an input or output, or it has to stop due to
                 // an error.
                 if (status != Status.OK) {
-                    if (status == Status.FINISH_SUCCESS)
+                    if (status == Status.FINISH_SUCCESS) {
                         ExecutionTimekeeping.end();
+                    }
 
                     // Transmit the status to the printer thread to print a message to the user.
                     exchanger.exchange(status);
@@ -139,6 +136,8 @@ public class RunUsecase implements Runnable {
 
             // Prepare the machine for the next program execution.
             machine.reset();
-        } catch (InterruptedException | BrokenBarrierException _) {}
+        } catch (InterruptedException | BrokenBarrierException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

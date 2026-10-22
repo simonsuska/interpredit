@@ -20,13 +20,13 @@ public abstract class Machine {
     //: SECTION: - ATTRIBUTES
 
     /** This attribute stores whether the machine is interrupted or not. */
-    private boolean interrupted = false;
+    private boolean isInterrupted = false;
 
     //: SECTION: - METHODS
 
     /** This method interrupts the machine. */
     public synchronized void interrupt() {
-        this.interrupted = true;
+        this.isInterrupted = true;
     }
 
     /**
@@ -34,16 +34,16 @@ public abstract class Machine {
      *
      * @return {@code true} if the machine is interrupted, otherwise {@code false}
      */
-    public synchronized boolean isInterrupt() {
-        return this.interrupted;
+    public synchronized boolean isInterrupted() {
+        return this.isInterrupted;
     }
 
     /** This method resets the machine, which is restoring the uninterrupted state. */
     public synchronized void reset() {
-        interrupted = false;
+        isInterrupted = false;
     }
 
-    public abstract int getPc();
+    public abstract int getPC();
     public abstract Status run(String cmd);
     public abstract String requestOutput();
     public abstract boolean deliverInput(String input);

@@ -8,31 +8,31 @@
 
 ## 🏗️ Architecture
 
-Interpredit is implemented according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html),
-with the presentation layer using the [MVC](https://de.wikipedia.org/wiki/Model_View_Controller) pattern.
+Interpredit is implemented according to the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) by Robert C. Martin, with the presentation layer 
+using the [MVC](https://de.wikipedia.org/wiki/Model_View_Controller) pattern.
 
 ### Data
 
-The data layer usually communicates with external data sources, such as databases. In the context of Interpredit, the 
-data source is a file. The “communication”, i.e. reading, writing and deleting, takes place via the `FileDatasource` 
+The data layer communicates with external data sources, such as databases. In the context of Interpredit, the data 
+source is a file. The “communication”, i.e., reading, writing, and deleting data, takes place via the `FileDatasource` 
 class. A special feature in this case is that the data source is not always available, e.g. if no file is open in the 
-editor. In this case, of course, reading, writing and deleting is also not possible. This has been solved by making the 
+editor. In this case, reading, writing, and deleting is also not possible. This has been solved by making the 
 `FileDatasource` a `MutableDatasource` as well. This enables a data source to be (un)set.
 
 ### Domain
 
 The domain layer represents the core of the architecture and contains the business logic and entities. Communication 
-with the data layer takes place via the repository. This ensures that there are no dependencies from the domain layer 
+with the data layer takes place via the repositories. This ensures that there are no dependencies from the domain layer 
 to the data layer. The entities represent the business objects and provide methods for modifying their state. The 
-entities are accessed exclusively via the `InputUsecase`, `OutputUsecase`, `RunUsecase` and `StopUsecase` classes. As 
+entities are accessed exclusively via the `InputUsecase`, `OutputUsecase`, `RunUsecase`, and `StopUsecase` classes. As 
 you may notice, these are exactly the use cases that use the random access machine. Apart from `Status`, all other 
 entities are used exclusively by the random access machine. The remaining use cases `CloseUsecase`, `DeleteUsecase`, 
-`OpenUsecase` and `SaveUsecase` use the repository internally to enable files to be closed, deleted, opened and saved.
+`OpenUsecase`, and `SaveUsecase` use the repository internally to enable files to be closed, deleted, opened, and saved.
 
 ### Presentation
 
-The presentation layer uses the MVC pattern. The controller has references to the FXML user interface. Furthermore,
-the controller contains all methods that are linked to UI elements, such as menu items and buttons. The model has an 
+The presentation layer uses the MVC pattern. The controller has references to the FXML user interface. Furthermore, the 
+controller contains all methods that are linked to UI elements, such as menu items and buttons. The model has an 
 analogous method for all of these methods. When the user clicks on a button, for example, the corresponding method in 
 the controller is called, which in turn calls the corresponding method in the model. The model then uses the appropriate 
 use case to execute the action. This ensures that there is no program-specific logic in the presentation layer.
@@ -41,7 +41,8 @@ use case to execute the action. This ensures that there is no program-specific l
 
 ## ⚙️ Program Execution
 
-During the execution of the program, there are three further threads in addition to the main thread.
+During the execution of the program, there are three further threads in addition to the main thread: (1) the runner
+thread, (2) the printer thread, and (3) the finisher thread.
 
 ### Runner Thread
 This thread is started by the model and executes the program line by line.

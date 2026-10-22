@@ -95,9 +95,9 @@ public class Model {
 
     /** This method causes the file currently open in the editor to be deleted. */
     public void deleteFile() {
-        boolean result = this.deleteUsecase.get();
+        boolean isDeleted = this.deleteUsecase.get();
 
-        if (result) {
+        if (isDeleted) {
             this.editorTextAreaText.set("");
             appendOutput(s("deleteFileSuccessMessage"));
             this.fileLabelText.set("");
@@ -125,9 +125,9 @@ public class Model {
 
     /** This method causes the file currently open in the editor to be closed, but not deleted. */
     public void closeFile() {
-        boolean result = this.closeUsecase.get();
+        boolean isClosed = this.closeUsecase.get();
 
-        if (result) {
+        if (isClosed) {
             this.editorTextAreaText.set("");
             appendOutput(s("closeFileSuccessMessage"));
             this.fileLabelText.set("");
@@ -153,9 +153,9 @@ public class Model {
      * @param content The content to be saved
      */
     public void saveFile(String content) {
-        boolean result = this.saveUsecase.apply(content);
+        boolean isSaved = this.saveUsecase.apply(content);
 
-        if (result) {
+        if (isSaved) {
             this.editorTextAreaText.set(content);
             appendOutput(s("saveFileSuccessMessage"));
         } else {
@@ -165,9 +165,9 @@ public class Model {
 
     /** This method causes the currently running program to be interrupted. */
     public void stop() {
-        boolean result = this.stopUsecase.get();
+        boolean isStopped = this.stopUsecase.get();
 
-        if (result)
+        if (isStopped)
             appendOutput(s("stopSuccessMessage"));
         else
             appendOutput(s("stopFailureMessage"));
@@ -195,9 +195,9 @@ public class Model {
      * @param input The input to be delivered to the random access machine
      */
     public void deliverInput(String input) {
-        boolean result = this.inputUsecase.apply(input);
+        boolean isInputDelivered = this.inputUsecase.apply(input);
 
-        if (result)
+        if (isInputDelivered)
             appendOutput(s("deliverInputSuccessMessage", input));
         else {
             appendOutput(s("deliverInputFailureMessage", input));

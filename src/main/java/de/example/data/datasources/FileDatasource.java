@@ -143,21 +143,39 @@ public class FileDatasource implements MutableDatasource {
      */
     @Override
     public boolean delete() {
-        if (this.filepath != null || this.backupFilepath != null)
-            if (this.backup()) // Backup the file content
-                if (this.filepath.toFile().delete()) { // Try to delete the file
-                    this.filepath = null; // Close the file in the editor
+        if (this.filepath == null && this.backupFilepath == null) {
+            return false;
+        }
 
-                    if (this.purge()) { // Delete the backup
-                        this.backupFilepath = null; // Delete the backup filepath
-                        return true;
-                    } else {
-                        if (this.restore()) // Restore the file content if closing the file fails
-                            return this.purge(); // Delete the backup after restoring the file content
-                    }
-                }
+        // Backup the file content
+        boolean isBackupSuccessful = this.backup();
+        if (!isBackupSuccessful) {
+            return false;
+        }
 
-        return false;
+        // Try to delete the file
+        boolean isFileDeletionSuccessful = this.filepath.toFile().delete();
+        if (!isFileDeletionSuccessful) {
+            return false;
+        }
+
+        // Close the file in the editor if deletion was successful
+        this.filepath = null;
+
+        // Delete the backup
+        boolean isBackupDeletionSuccessful = this.deleteBackup();
+        if (isBackupDeletionSuccessful) {
+            this.backupFilepath = null;
+            return true;
+        }
+
+        // If deleting the backup fails, restore the file content
+        boolean isRestorationSuccessful = this.restore();
+        if (!isRestorationSuccessful) {
+            return false;
+        }
+
+        return this.deleteBackup();
     }
 
     /**
@@ -193,7 +211,7 @@ public class FileDatasource implements MutableDatasource {
      *
      * @return {@code true} if the backup file was successfully deleted, otherwise {@code false}
      */
-    public boolean purge() {
+    public boolean deleteBackup() {
         return this.backupFilepath.toFile().delete();
     }
 }
